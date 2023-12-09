@@ -62,6 +62,14 @@ class MainActivity : AppCompatActivity() {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
             // ...
+            val intent = Intent(this, LoginActivity::class.java).apply {
+                putExtra("name", binding.editTextText.text.toString())
+                putExtra("number", binding.editTextNumber.text.toString())
+                putExtra("checked", binding.checkBox.isChecked)
+                putExtra("user", user.toString() )
+            }
+            startActivity(intent)
+            binding.textView2.text = user.toString()
         } else {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
@@ -77,7 +85,7 @@ class MainActivity : AppCompatActivity() {
 
         // Get an instance of AuthUI based on the default app
         // Get an instance of AuthUI based on the default app
-        val signInIntent = AuthUI.getInstance().createSignInIntentBuilder().build()
+        val signInIntent = AuthUI.getInstance().createSignInIntentBuilder().setTheme(R.style.GreenTheme).build()
 
         signInLauncher.launch(signInIntent)
     }

@@ -1,10 +1,8 @@
 package com.example.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.databinding.ActivityLoginBinding
-import com.example.myapplication.databinding.ActivityMainBinding
 
 const val REQUEST_CODE_SIGN_IN = 0
 
@@ -24,6 +22,9 @@ class LoginActivity : AppCompatActivity() {
         val intent = intent
         val strName = intent.getStringExtra("name")
         val strNum = intent.getStringExtra("number")
+        val user = intent.getStringExtra("user")
+
+        binding.textView5.text = user
 
         binding.textView4.text = strName
 
