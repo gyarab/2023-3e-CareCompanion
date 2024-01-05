@@ -10,8 +10,8 @@ def medical_cards(request):
     return render(request, 'medical_cards.html')
 
 
-def schedule(request):
-    return render(request, 'schedule.html')
+def shift_schedule(request):
+    return render(request, 'shift_schedule.html')
 
 
 def floor_map(request):

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'index_pacient.html')
+    return render(request, 'index_patient.html')
 
 
 def caretakers_list(request):
@@ -14,5 +14,5 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-def schedule(request):
-    return render(request, 'schedule.html')
+def day_schedule(request):
+    return render(request, 'day_schedule.html')
