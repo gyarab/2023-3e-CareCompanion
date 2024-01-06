@@ -1,0 +1,9 @@
+{% extends 'base_login.html' %}
+
+{% block content %}
+    <h1>info entrance</h1>
+    <a href="{% url 'index_caretaker' %}">Opatrovník</a>
+    <a href="{% url 'index_patient' %}">Klinet</a>
+    <br>
+    <a href="{% url 'help' %}">help</a>
+{% endblock %}

@@ -1,14 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MAPA POKOJŮ</title>
-</head>
-<body>
+{% extends 'base_caretaker.html' %}
+
+{% block content %}
     <h1>MAPA POKOJŮ</h1>
-    <a href="/opatrovnik">ZPÁTKY</a>
-</body>
-</html>
+    <a href="{% url 'index_caretaker' %}">ZPÁTKY</a>
+{% endblock %}

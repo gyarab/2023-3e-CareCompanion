@@ -1,17 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Domovská stránka</title>
-</head>
-<body>
+{% extends 'base_patient.html' %}
+
+{% block content %}
+
     <h1>Home</h1>
-    <br>
-    <a href="klient/seznam-opatrovniku">SEZNAM OPATROVNIKU</a>
-    <a href="klient/kontakty">KONTAKTY</a>
-    <a href="klient/rozvrh-dne">ROZVRH DNE</a>
-</body>
-</html>
+    <a href="{% url 'caretakers_list' %}">SEZNAM OPATROVNIKU</a>
+    <a href="{% url 'contacts' %}">KONTAKTY</a>
+    <a href="{% url 'day_schedule' %}">ROZVRH DNE</a>
+{% endblock %}
