@@ -10,10 +10,21 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'login/login.css' %}">
 
-    <title>Hello, world!</title>
+    <title>CareCompanion</title>
   </head>
   <body>
     <h1>Login</h1>
+
+    <div class="container">
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
 
     {% block content %}
     {% endblock %}

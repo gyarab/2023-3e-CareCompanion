@@ -10,9 +10,20 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'patient/patient.css' %}">
 
-    <title>Hello, world!</title>
+    <title>CareCompanion</title>
   </head>
   <body>
+
+    {% if user.is_authenticated %}
+      <div class="topnav">
+        <a class="active" href="/prihlaseni/odhlaseni">Odhlásit se</a>
+      </div>
+    {% else %}
+      <div class="topnav">
+        <a class="active" href="/prihlaseni">Přihlásit se</a>
+      </div>
+    {% endif %}
+
     <h1>Patient</h1>
 
     {% block content %}

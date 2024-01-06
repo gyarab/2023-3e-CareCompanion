@@ -42,7 +42,7 @@ class MedicationIntake(models.Model):
     HOW_CHOICES = (
         ('pred jidlem', 'Před jídlem'),
         ('s jídlem', 'S jídlem'),
-        ('po jidle', 'Po jidle'),
+        ('po jidle', 'Po jídle'),
         ('jine', 'Jiné'),
     )
     how = models.CharField(max_length=20, choices=HOW_CHOICES)
