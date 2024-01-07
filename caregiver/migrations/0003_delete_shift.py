@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('caretaker', '0002_rename_shifts_shift'),
+        ('caregiver', '0002_rename_shifts_shift'),
     ]
 
     operations = [

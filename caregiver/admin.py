@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Caretaker, Shift
+from .models import Caregiver, Shift
 
 
 class ShiftInline(admin.TabularInline):
@@ -7,9 +7,9 @@ class ShiftInline(admin.TabularInline):
     extra = 1
 
 
-class CaretakerAdmin(admin.ModelAdmin):
+class CaregiverAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'surname')
     inlines = [ShiftInline]
 
 
-admin.site.register(Caretaker, CaretakerAdmin)
+admin.site.register(Caregiver, CaregiverAdmin)

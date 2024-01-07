@@ -6,8 +6,8 @@ def index(request):
     return render(request, 'index_patient.html')
 
 
-def caretakers_list(request):
-    return render(request, 'caretakers_list.html')
+def caregivers_list(request):
+    return render(request, 'caregivers_list.html')
 
 
 def contacts(request):

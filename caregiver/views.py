@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return render(request, 'index_caretaker.html')
+    return render(request, 'index_caregiver.html')
 
 
 def medical_cards(request):

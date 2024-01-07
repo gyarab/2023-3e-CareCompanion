@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('caretaker', '0001_initial'),
+        ('caregiver', '0001_initial'),
     ]
 
     operations = [

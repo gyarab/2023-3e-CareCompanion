@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('caretaker', '0003_delete_shift'),
+        ('caregiver', '0003_delete_shift'),
     ]
 
     operations = [
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('start', models.TimeField()),
                 ('end', models.TimeField()),
                 ('date', models.DateField()),
-                ('caretaker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='caretaker.caretaker')),
+                ('caregiver', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='caregiver.caregiver')),
             ],
         ),
     ]
