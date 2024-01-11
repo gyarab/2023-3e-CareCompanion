@@ -16,20 +16,25 @@
 
     <div class="topnav">
         {% if user.is_authenticated %}
-          <a class="active" href="/prihlaseni/odhlaseni">Odhlásit se</a>
+          <a class="active" href="{% url 'logout_user' %}">Odhlásit se</a>
         </div>
         {% else %}
-          <a class="active" href="/prihlaseni">Přihlásit se</a>
+          <a class="active" href="{% url 'login_user' %}">Přihlásit se</a>
         </div>
         <div class="topnav">
-          <a href="/prihlaseni/registrace">Registrace</a>
+          <a href="{% url 'registration' %}">Registrace</a>
         </div>
       {% endif %}
 
     <h1>Patient</h1>
 
-    {% block content %}
-    {% endblock %}
+    {% if user.is_authenticated %}
+        {% block content %}
+        {% endblock %}
+    {% else %}
+        <h1>Nejste prihlasen</h1>
+        <a href="{% url 'login_user' %}">Prihlaste se</a>
+    {% endif %}
 
     <!-- Optional JavaScript; choose one of the two! -->
 

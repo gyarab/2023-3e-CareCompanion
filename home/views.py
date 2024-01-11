@@ -7,6 +7,10 @@ from .forms import RegisterUserForm
 
 
 def index(request):
+    return render(request, 'index.html')
+
+
+def login_user(request):
     if request.method == 'POST':
         username = request.POST.get("username", "")
         password = request.POST.get("password", "")
@@ -15,21 +19,22 @@ def index(request):
         # TODO: osetrit presmerovani po loginu
         if user is not None:
             login(request, user)
-            return redirect("/opatrovnik")
+            return redirect('index_caregiver')
         else:
             messages.success(request,
-                             'Při přihlašování nastala chyba, znova si zkontrolujte zadané údaje, případně se obraťte na IT podporu. ')
-            return redirect("/prihlaseni")
+                             'Při přihlašování nastala chyba, znova si zkontrolujte zadané údaje, případně se obraťte '
+                             'na IT podporu. ')
+            return redirect('login_user')
 
 
     else:
-        return render(request, 'index_login.html', {})
+        return render(request, 'login.html', {})
 
 
 def logout_user(request):
     logout(request)
     messages.success(request, 'Odhlášení proběhlo úspěšně')
-    return redirect('index_login')
+    return redirect('index')
 
 
 def register_user(request):
@@ -42,7 +47,7 @@ def register_user(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, 'Registrace proběhla úspěšně')
-            return redirect('/opatrovnik')
+            return redirect('index_caregiver')
 
     else:
         form = RegisterUserForm()
