@@ -1,10 +1,16 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
-    <h1>Home</h1>
-    <br>
-    <a href="{% url 'medical_cards' %}">KARTY PACIENTU</a>
-    <a href="{% url 'shift_schedule' %}">ROZVRH SMENY</a>
-    <a href="{% url 'floor_map' %}">MAPA POKOJU</a>
-    <a href="{% url 'manual' %}">PRIRUCKA</a>
+    {% if user.is_authenticated %}
+        <h1>Home</h1>
+        <br>
+        <a href="{% url 'medical_cards' %}">KARTY PACIENTU</a>
+        <a href="{% url 'shift_schedule' %}">ROZVRH SMENY</a>
+        <a href="{% url 'floor_map' %}">MAPA POKOJU</a>
+        <a href="{% url 'manual' %}">PRIRUCKA</a>
+    {% else %}
+        <h1>Nejste prihlasen</h1>
+        <a href="/prihlaseni">Prihlaste se</a>
+    {% endif %}
+
 {% endblock %}

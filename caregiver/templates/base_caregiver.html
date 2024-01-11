@@ -14,15 +14,17 @@
   </head>
   <body>
 
-    {% if user.is_authenticated %}
       <div class="topnav">
-        <a class="active" href="/prihlaseni/odhlaseni">Odhlásit se</a>
-      </div>
-    {% else %}
-      <div class="topnav">
-        <a class="active" href="/prihlaseni">Přihlásit se</a>
-      </div>
-    {% endif %}
+        {% if user.is_authenticated %}
+          <a class="active" href="/prihlaseni/odhlaseni">Odhlásit se</a>
+        </div>
+        {% else %}
+          <a class="active" href="/prihlaseni">Přihlásit se</a>
+        </div>
+        <div class="topnav">
+          <a href="/prihlaseni/registrace">Registrace</a>
+        </div>
+      {% endif %}
 
     <h1>Caregiver</h1>
 

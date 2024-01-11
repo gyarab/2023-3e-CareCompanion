@@ -1,6 +1,8 @@
 {% extends 'base_login.html' %}
 
 {% block content %}
+
+    <h1>Přihlášení</h1>
     <form action="" method="POST">
         {% csrf_token %}
 
@@ -21,6 +23,7 @@
     <br>
     <a href="{% url 'index_caregiver' %}">Opatrovník</a>
     <a href="{% url 'index_patient' %}">Klinet</a>
+    <a href="{% url 'registration' %}">Registrace</a>
     <br>
     <a href="{% url 'help' %}">help</a>
 {% endblock %}
