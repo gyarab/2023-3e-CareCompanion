@@ -28,13 +28,8 @@
 
     <h1>Caregiver</h1>
 
-    {% if user.is_authenticated %}
-        {% block content %}
-        {% endblock %}
-    {% else %}
-        <h1>Nejste prihlasen</h1>
-        <a href="{% url 'login_user' %}">Prihlaste se</a>
-    {% endif %}
+      {% block content %}
+      {% endblock %}
 
     <!-- Optional JavaScript; choose one of the two! -->
 
