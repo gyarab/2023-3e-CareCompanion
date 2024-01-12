@@ -23,7 +23,7 @@ def login_user(request):
             elif user.groups.filter(name='Patients').exists():
                 return redirect('index_patient')
             else:
-                return redirect('registration')
+                return redirect('administration')
 
         else:
             messages.success(request,
@@ -42,8 +42,18 @@ def logout_user(request):
 
 
 @admin_required
+def administration(request):
+    return render(request, 'administration.html')
+
+
+@admin_required
 def register_user(request):
     if request.method == 'POST':
+        path = request.path
+        if 'opatrovnika' in path:
+            print('yur')
+        else:
+            pass
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -53,8 +63,27 @@ def register_user(request):
     else:
         form = RegisterUserForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'registration.html', {'form': form})
 
 
-def help_w_registration(request):
-    return render(request, 'help.html')
+# @admin_required
+# def register_user(request):
+#     path = request.path
+#     if request.method == 'POST':
+#         if 'opatrovnik' in path:
+#             form = RegistrationCaregiverForm(request.POST)
+#         else:
+#             form = RegistrationPatientForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'Registrace proběhla úspěšně')
+#             return redirect('login_user')
+#
+#     else:
+#         if 'opatrovnik' in path:
+#             form = RegistrationCaregiverForm()
+#         else:
+#             form = RegistrationPatientForm()
+#
+#     return render(request, 'registration.html', {'form': form,
+#                                                  'caregiver': 'opatrovnik' in path})

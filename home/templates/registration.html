@@ -13,21 +13,19 @@
     {% endif %}
 
 
-    <div class="shadow p-4 mb-5 bg-body rounded">
+    <div class="container">
     <h1>Vytvoření nového účtu</h1>
 
-    <form action="{% url 'registration' %}" method="POST">
+    <form action="{% url 'account_creation' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-
-        <input type="submit" value="PŘIHLÁSIT SE" class="btn btn-secondary">
-
+        <input type="submit" value="REGISTROVAT" class="btn btn-secondary">
     </form>
-    </div>
 
     <br>
     <a href="{% url 'index_caregiver' %}">Opatrovník</a>
     <a href="{% url 'index_patient' %}">Klinet</a>
     <br>
-    <a href="{% url 'help' %}">help</a>
+    <a href="{% url 'administration' %}">administrace</a>
+    </div>
 {% endblock %}
