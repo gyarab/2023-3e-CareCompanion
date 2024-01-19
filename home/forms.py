@@ -38,6 +38,33 @@ class RegisterUserForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
 
+class PatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['user', 'first_name', 'surname', 'birthday', 'room_number', 'health_info', 'fav_activities']
+        widgets = {
+            'birthday': forms.TextInput(attrs={'class': 'datepicker'}),
+            'user': forms.Select(),  # You can customize this if needed
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
+        self.fields['user'].queryset = User.objects.filter(groups__name='Patients', patient__isnull=True)
+
+
+class CaregiverForm(forms.ModelForm):
+    class Meta:
+        model = Caregiver
+        fields = ['user', 'first_name', 'surname']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
+        self.fields['user'].queryset = User.objects.filter(groups__name='Caregivers', caregiver__isnull=True)
+
+        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Caregivers'))
+
 # class RegistrationCaregiverForm(forms.ModelForm):
 #     # Add additional fields for the user model
 #     username = forms.CharField()

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>registrace pacienta</h1>
+
+<form method="post" action="{% url 'patient_registration' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register Patient</button>
+</form>
+
+<script>
+    $(function() {
+        $('.datepicker').datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+        });
+    });
+</script>
+
+<!--<form method="post" action="{% url 'patient_registration' %}">-->
+<!--  {% csrf_token %}-->
+<!--  {{ patient_form.as_p }}-->
+
+<!--  <div id="contact_set">-->
+<!--    {{ contact_formset.management_form }}-->
+<!--    {% for contact_form in contact_formset.forms %}-->
+<!--      {{ contact_form.as_table }}-->
+<!--    {% endfor %}-->
+<!--    <button type="button" class="btn btn-secondary" onclick="addForm('contact_set', '{{ contact_formset.prefix }}')">Add Contact</button>-->
+<!--  </div>-->
+
+<!--  <div id="medication_set">-->
+<!--    {{ medication_formset.management_form }}-->
+<!--    {% for medication_form in medication_formset.forms %}-->
+<!--      {{ medication_form.as_table }}-->
+<!--    {% endfor %}-->
+<!--    <button type="button" class="btn btn-secondary" onclick="addForm('medication_set', '{{ medication_formset.prefix }}')">Add Medication</button>-->
+<!--  </div>-->
+
+<!--  <input type="submit" value="Submit">-->
+<!--</form>-->
+
+<!--&lt;!&ndash; Add this hidden empty form template at the end of the file &ndash;&gt;-->
+<!--<div id="empty_form" style="display:none;">-->
+<!--  {{ contact_formset.empty_form.as_table }}-->
+<!--</div>-->
+
+<!--<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>-->
+<!--<script>-->
+<!--  function addForm(containerId, formPrefix) {-->
+<!--    var form_idx = $('#id_' + formPrefix + '-TOTAL_FORMS').val();-->
+<!--    $('#' + containerId).append($('#empty_form').html().replace(/__prefix__/g, form_idx));-->
+<!--    $('#id_' + formPrefix + '-TOTAL_FORMS').val(parseInt(form_idx) + 1);-->
+<!--  }-->
+<!--</script>-->
+
+
+{% endblock %}

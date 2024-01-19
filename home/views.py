@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from .decorators import admin_required
-from .forms import RegisterUserForm
+from .forms import RegisterUserForm, PatientForm, CaregiverForm
 
 
 def index(request):
@@ -18,12 +18,12 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            if user.groups.filter(name='Caregivers').exists():
-                return redirect('index_caregiver')
-            elif user.groups.filter(name='Patients').exists():
-                return redirect('index_patient')
-            else:
+            if user.groups.filter(name='Admins').exists():
                 return redirect('administration')
+            elif user.groups.filter(name='Caregivers').exists():
+                return redirect('index_caregiver')
+            else:
+                return redirect('index_patient')
 
         else:
             messages.success(request,
@@ -47,7 +47,7 @@ def administration(request):
 
 
 @admin_required
-def register_user(request):
+def account_creation(request):
     if request.method == 'POST':
         path = request.path
         if 'opatrovnika' in path:
@@ -63,8 +63,64 @@ def register_user(request):
     else:
         form = RegisterUserForm()
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'acc_creation.html', {'form': form})
 
+
+@admin_required
+def register_patient(request):
+    if request.method == 'POST':
+        form = PatientForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('administration')  # Redirect to a success page or wherever you prefer
+    else:
+        form = PatientForm()
+
+    return render(request, 'register_patient.html', {'form': form})
+
+# ContactFormSet = inlineformset_factory(Patient, Contact, fields=('relationship', 'name', 'phone_number'), extra=1)
+# MedicationIntakeFormSet = inlineformset_factory(Patient, MedicationIntake, fields=('medication', 'when', 'how'), extra=1)
+
+@admin_required
+def register_caregiver(request):
+    if request.method == 'POST':
+        form = CaregiverForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('administration')  # Redirect to a success page or wherever you prefer
+    else:
+        form = CaregiverForm()
+
+    return render(request, 'register_caregiver.html', {'form': form})
+
+# @admin_required
+# def register_patient(request):
+#     if request.method == 'POST':
+#         patient_form = PatientForm(request.POST)
+#         contact_formset = ContactFormSet(request.POST, prefix='contact')
+#         medication_formset = MedicationIntakeFormSet(request.POST, prefix='medication')
+#
+#         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
+#             patient = patient_form.save(commit=False)  # Don't save to the database yet
+#             patient.user = request.user  # Set the user for the patient
+#             patient.save()  # Now save to the database
+#
+#             contact_formset.instance = patient
+#             contact_formset.save()
+#             medication_formset.instance = patient
+#             medication_formset.save()
+#             return redirect('success_page')
+#
+#     else:
+#         patient_form = PatientForm()
+#         contact_formset = ContactFormSet(prefix='contact')
+#         medication_formset = MedicationIntakeFormSet(prefix='medication')
+#
+#     return render(request, 'register_patient.html', {
+#         'patient_form': patient_form,
+#         'contact_formset': contact_formset,
+#         'medication_formset': medication_formset,
+#     })
 
 # @admin_required
 # def register_user(request):
@@ -85,5 +141,5 @@ def register_user(request):
 #         else:
 #             form = RegistrationPatientForm()
 #
-#     return render(request, 'registration.html', {'form': form,
+#     return render(request, 'acc_creation.html', {'form': form,
 #                                                  'caregiver': 'opatrovnik' in path})

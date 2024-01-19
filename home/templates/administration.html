@@ -3,6 +3,8 @@
 {% block content %}
     <h1>Jak zaregistrovat noveho klienta/opatrovnika?</h1>
     <p>info pro ajtaka (pres django admin)</p>
-    <a href="{% url 'account_creation' %}">Registrace prichoziho</a>
+    <a href="{% url 'account_creation' %}">Vutvoreni uctu nove prichozimu</a>
+    <a href="{% url 'patient_registration' %}">Registrace klienta</a> (mozne jenom s jiz uz vytorenym uctem)
+    <a href="{% url 'caregiver_registration' %}">Registrace opatrovnika</a> (mozne jenom s jiz uz vytorenym uctem)
     <a href="{% url 'login_user' %}">ZPÁTKY</a>
 {% endblock %}

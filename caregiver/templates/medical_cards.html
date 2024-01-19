@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <h1>KARTY PACIENTŮ</h1>
+    <h1>KARTY PACIENTŮ {{ caregiver.first_name }}</h1>
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
 
 {% endblock %}
