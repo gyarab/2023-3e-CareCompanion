@@ -1,9 +1,12 @@
+from django.db import transaction
+from django.forms import inlineformset_factory, modelformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
+from patient.models import Patient, MedicationIntake, Contact
 from .decorators import admin_required
-from .forms import RegisterUserForm, PatientForm, CaregiverForm
+from .forms import RegisterUserForm, PatientForm, CaregiverForm, ContactForm, MedicationIntakeForm
 
 
 def index(request):
@@ -49,11 +52,6 @@ def administration(request):
 @admin_required
 def account_creation(request):
     if request.method == 'POST':
-        path = request.path
-        if 'opatrovnika' in path:
-            print('yur')
-        else:
-            pass
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -68,18 +66,46 @@ def account_creation(request):
 
 @admin_required
 def register_patient(request):
+    ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=1)
+    MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=1)
+
     if request.method == 'POST':
-        form = PatientForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('administration')  # Redirect to a success page or wherever you prefer
+        patient_form = PatientForm(request.POST)
+        contact_formset = ContactFormSet(request.POST or None, prefix='contacts')
+        medication_formset = MedicationFormSet(request.POST or None, prefix='medications')
+
+        if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
+            with transaction.atomic():
+                patient = patient_form.save()
+
+                for contact_form in contact_formset:
+                    if contact_form.has_changed():
+                        contact = contact_form.save(commit=False)
+                        contact.patient = patient
+                        contact.save()
+
+                for medication_form in medication_formset:
+                    if medication_form.has_changed():
+                        medication = medication_form.save(commit=False)
+                        medication.patient = patient
+                        medication.save()
+
+            return redirect('administration')
+
     else:
-        form = PatientForm()
+        patient_form = PatientForm()
+        contact_formset = ContactFormSet(prefix='contacts')
+        medication_formset = MedicationFormSet(prefix='medications')
 
-    return render(request, 'register_patient.html', {'form': form})
+    success_message = messages.get_messages(request).__str__()
 
-# ContactFormSet = inlineformset_factory(Patient, Contact, fields=('relationship', 'name', 'phone_number'), extra=1)
-# MedicationIntakeFormSet = inlineformset_factory(Patient, MedicationIntake, fields=('medication', 'when', 'how'), extra=1)
+    return render(request, 'register_patient.html', {
+        'patient_form': patient_form,
+        'contact_formset': contact_formset,
+        'medication_formset': medication_formset,
+        'succes_message': success_message,
+    })
+
 
 @admin_required
 def register_caregiver(request):
@@ -87,59 +113,8 @@ def register_caregiver(request):
         form = CaregiverForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('administration')  # Redirect to a success page or wherever you prefer
+            return redirect('administration')
     else:
         form = CaregiverForm()
 
     return render(request, 'register_caregiver.html', {'form': form})
-
-# @admin_required
-# def register_patient(request):
-#     if request.method == 'POST':
-#         patient_form = PatientForm(request.POST)
-#         contact_formset = ContactFormSet(request.POST, prefix='contact')
-#         medication_formset = MedicationIntakeFormSet(request.POST, prefix='medication')
-#
-#         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
-#             patient = patient_form.save(commit=False)  # Don't save to the database yet
-#             patient.user = request.user  # Set the user for the patient
-#             patient.save()  # Now save to the database
-#
-#             contact_formset.instance = patient
-#             contact_formset.save()
-#             medication_formset.instance = patient
-#             medication_formset.save()
-#             return redirect('success_page')
-#
-#     else:
-#         patient_form = PatientForm()
-#         contact_formset = ContactFormSet(prefix='contact')
-#         medication_formset = MedicationIntakeFormSet(prefix='medication')
-#
-#     return render(request, 'register_patient.html', {
-#         'patient_form': patient_form,
-#         'contact_formset': contact_formset,
-#         'medication_formset': medication_formset,
-#     })
-
-# @admin_required
-# def register_user(request):
-#     path = request.path
-#     if request.method == 'POST':
-#         if 'opatrovnik' in path:
-#             form = RegistrationCaregiverForm(request.POST)
-#         else:
-#             form = RegistrationPatientForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             messages.success(request, 'Registrace proběhla úspěšně')
-#             return redirect('login_user')
-#
-#     else:
-#         if 'opatrovnik' in path:
-#             form = RegistrationCaregiverForm()
-#         else:
-#             form = RegistrationPatientForm()
-#
-#     return render(request, 'acc_creation.html', {'form': form,
-#                                                  'caregiver': 'opatrovnik' in path})

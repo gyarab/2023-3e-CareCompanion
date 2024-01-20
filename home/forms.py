@@ -50,7 +50,20 @@ class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
-        self.fields['user'].queryset = User.objects.filter(groups__name='Patients', patient__isnull=True)
+        self.fields['user'].queryset = User.objects.filter(groups__name='Patients').exclude(
+            patient_profile__isnull=False)
+
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['relationship', 'name', 'phone_number']
+
+
+class MedicationIntakeForm(forms.ModelForm):
+    class Meta:
+        model = MedicationIntake
+        fields = ['medication', 'when', 'how']
 
 
 class CaregiverForm(forms.ModelForm):
@@ -61,33 +74,5 @@ class CaregiverForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
-        self.fields['user'].queryset = User.objects.filter(groups__name='Caregivers', caregiver__isnull=True)
-
-        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Caregivers'))
-
-# class RegistrationCaregiverForm(forms.ModelForm):
-#     # Add additional fields for the user model
-#     username = forms.CharField()
-#     password = forms.CharField(widget=forms.PasswordInput)
-#
-#     # Add additional fields for the UserProfile model
-#     first_name = forms.CharField(max_length=15)
-#     surname = forms.CharField(max_length=20)
-#
-#     class Meta:
-#         model = Caregiver
-#         fields = ['username', 'password', 'first_name', 'surname']
-#
-#
-# class RegistrationPatientForm(forms.ModelForm):
-#     # Add additional fields for the user model
-#     username = forms.CharField()
-#     password = forms.CharField(widget=forms.PasswordInput)
-#
-#     # Add additional fields for the UserProfile model
-#     first_name = forms.CharField(max_length=15)
-#     surname = forms.CharField(max_length=20)
-#
-#     class Meta:
-#         model = Patient
-#         fields = ['username', 'password', 'first_name', 'surname']
+        self.fields['user'].queryset = User.objects.filter(groups__name='Caregivers').exclude(
+            caregiver_profile__isnull=False)

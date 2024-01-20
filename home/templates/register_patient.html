@@ -1,60 +1,203 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>registrace pacienta</h1>
-
-<form method="post" action="{% url 'patient_registration' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register Patient</button>
-</form>
 
 <script>
-    $(function() {
-        $('.datepicker').datepicker({
-            dateFormat: 'yy-mm-dd',
-            changeMonth: true,
-            changeYear: true,
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        // resetManagementForms('contacts');
+        // resetManagementForms('medications')
+        resetForm();  // or manually clear the form fields
     });
 </script>
 
-<!--<form method="post" action="{% url 'patient_registration' %}">-->
-<!--  {% csrf_token %}-->
-<!--  {{ patient_form.as_p }}-->
 
-<!--  <div id="contact_set">-->
-<!--    {{ contact_formset.management_form }}-->
-<!--    {% for contact_form in contact_formset.forms %}-->
-<!--      {{ contact_form.as_table }}-->
-<!--    {% endfor %}-->
-<!--    <button type="button" class="btn btn-secondary" onclick="addForm('contact_set', '{{ contact_formset.prefix }}')">Add Contact</button>-->
-<!--  </div>-->
+<h1>registrace pacienta</h1>
+<button type="submit" id="reset">Resetovat</button>
 
-<!--  <div id="medication_set">-->
-<!--    {{ medication_formset.management_form }}-->
-<!--    {% for medication_form in medication_formset.forms %}-->
-<!--      {{ medication_form.as_table }}-->
-<!--    {% endfor %}-->
-<!--    <button type="button" class="btn btn-secondary" onclick="addForm('medication_set', '{{ medication_formset.prefix }}')">Add Medication</button>-->
-<!--  </div>-->
+ <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
+    {% csrf_token %}
 
-<!--  <input type="submit" value="Submit">-->
-<!--</form>-->
+    {{ patient_form.as_p }}
 
-<!--&lt;!&ndash; Add this hidden empty form template at the end of the file &ndash;&gt;-->
-<!--<div id="empty_form" style="display:none;">-->
-<!--  {{ contact_formset.empty_form.as_table }}-->
-<!--</div>-->
+    <h3>Contacts</h3>
+    <div id="contacts-formset" data-form-prefix="contacts" class="formset">
+        {{ contact_formset.management_form }}
+        <div class="empty-form" style="display: none;">
+            {{ contact_formset.empty_form }}
+        </div>
+        {% for form in contact_formset %}
+            <div class="formset-contacts">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-contact">Add Contact</button>
 
-<!--<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>-->
-<!--<script>-->
-<!--  function addForm(containerId, formPrefix) {-->
-<!--    var form_idx = $('#id_' + formPrefix + '-TOTAL_FORMS').val();-->
-<!--    $('#' + containerId).append($('#empty_form').html().replace(/__prefix__/g, form_idx));-->
-<!--    $('#id_' + formPrefix + '-TOTAL_FORMS').val(parseInt(form_idx) + 1);-->
-<!--  }-->
-<!--</script>-->
+    <h3>Medications</h3>
+    <div id="medications-formset" data-form-prefix="medications" class="formset">
+        {{ medication_formset.management_form }}
+        <div class="empty-form" style="display: none;">
+            {{ medication_formset.empty_form }}
+        </div>
+        {% for form in medication_formset %}
+            <div class="formset-medications">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-medication">Add Medication</button>
 
+    <button type="submit" id="register-patient-btn">Register Patient</button>
+</form>
+
+
+<script>
+   function resetManagementForms(prefix) {
+        const totalFormsInput = $(`#${prefix}-formset [id$='-TOTAL_FORMS']`);
+        const initialFormsInput = $(`#${prefix}-formset [id$='-INITIAL_FORMS']`);
+
+        totalFormsInput.val('0');
+        initialFormsInput.val('1');
+    }
+
+   // Function to reset form fields
+    function resetForm() {
+       console.log('Resetting form...1');
+        $('#patient-registration-form')[0].reset();
+        $('#contacts-formset [id$="-TOTAL_FORMS"]').val(1);
+        $('#medications-formset [id$="-TOTAL_FORMS"]').val(1);
+        $('.formset-contacts:not(:first)').remove();
+        $('.formset-medications:not(:first)').remove();
+        console.log('Resetting form...2');
+    }
+
+    function updateFormsetTotalForms(prefix, totalForms) {
+        const formset = document.querySelector(`[id^="id_${prefix}-"][id$="-TOTAL_FORMS"]`);
+
+        if (formset) {
+            formset.value = totalForms;
+        } else {
+            console.error(`Formset element not found for ${prefix}`);
+        }
+    }
+
+    function addFormsetForm(formsetPrefix) {
+        const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
+        let totalForms = parseInt(managementForm.val());
+        const emptyForm = $(`#${formsetPrefix}-formset .empty-form`).html();
+
+        managementForm.val(totalForms + 1);
+        const newForm = emptyForm.replace(/__prefix__/g, totalForms);
+        $(`#${formsetPrefix}-formset`).append(newForm);
+
+        totalForms += 1;
+        updateFormsetTotalForms(formsetPrefix, totalForms);
+    }
+
+  $(document).ready(function() {
+
+    // $('.datepicker').datepicker({
+    //   dateFormat: 'yy-mm-dd',
+    //   changeMonth: true,
+    //   changeYear: true,
+    // });
+
+    $('#add-contact').on('click', function () {
+        addFormsetForm('contacts');
+    });
+
+    $('#add-medication').on('click', function () {
+        addFormsetForm('medications');
+    });
+
+    $('#patient-registration-form').submit(function(e) {
+        // Prevent the default form submission
+        e.preventDefault();
+
+        // Perform any pre-submission actions here if needed
+
+        // AJAX submission
+        $.ajax({
+        type: "POST",
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success: function(response) {
+            console.log('Form submitted successfully');
+            console.log(response);
+
+            resetForm()
+            resetManagementForms('contacts');
+            resetManagementForms('medications')
+
+            window.location.href = '';
+        },
+        error: function(error) {
+            console.log('Error submitting form:', error);
+        },
+        complete: function() {
+            console.log('AJAX request completed');
+        }
+    });
+    });
+
+    // $('#patient-registration-form').submit(function() {
+    //     event.preventDefault();
+    //
+    //     $(this).unbind('submit').submit();
+    //     // Reset the form after a brief delay to ensure the form data is submitted
+    //     setTimeout(function() {
+    //         resetForm()
+    //         console.log('Form submitted successfully');
+    //     }, 100);
+    //
+    //     return false;
+    // });
+    // $('#patient-registration-form').submit(function() {
+    //         resetForm()
+    //     });
+    //  $('#register-patient-btn').on('click', function () {
+    //         // Perform form submission via AJAX
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: $('#patient-registration-form').attr('action'),
+    //             data: $('#patient-registration-form').serialize(),
+    //             success: function (data) {
+    //                 // Reset the form after successful submission
+    //                 resetForm();
+    //             },
+    //             error: function (data) {
+    //                 // Handle error if needed
+    //             }
+    //         });
+    //     });
+
+    // $('#patient-registration-form').submit(function(event) {
+    //     // Prevent the default form submission
+    //     event.preventDefault();
+    //
+    //     // Serialize form data
+    //     var formData = $(this).serialize();
+    //
+    //     // Use AJAX to submit the form data
+    //     $.ajax({
+    //         url: $(this).attr('action'),
+    //         type: 'post',
+    //         data: formData,
+    //         success: function(data) {
+    //             console.log('Form submitted successfully');
+    //             // Handle the success response if needed
+    //
+    //             // Reset the management forms after successful submission
+    //             resetManagementForms('contacts');
+    //             resetManagementForms('medications')
+    //         },
+    //         error: function(error) {
+    //             // Handle errors if needed
+    //             console.error('Error:', error);
+    //         }
+    //     });
+    // });
+  });
+</script>
 
 {% endblock %}

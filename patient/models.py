@@ -11,6 +11,20 @@ class Patient(models.Model):
     health_info = models.CharField(max_length=255)
     fav_activities = models.TextField()
 
+    class ContactManager(models.Manager):
+        def create_contacts(self, contacts):
+            for contact_data in contacts:
+                self.create(**contact_data)
+
+    class MedicationIntakeManager(models.Manager):
+        def create_medications(self, medications):
+            for medication_data in medications:
+                self.create(**medication_data)
+
+    objects = models.Manager()
+    contacts = ContactManager()
+    medications = MedicationIntakeManager()
+
 
 class Contact(models.Model):
 
@@ -24,8 +38,9 @@ class Contact(models.Model):
     )
     relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES)
     name = models.CharField(max_length=25)
-    phone_number = models.IntegerField()
+    phone_number = models.IntegerField(null=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
 
 
 class MedicationIntake(models.Model):
