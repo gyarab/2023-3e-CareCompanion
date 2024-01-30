@@ -1,16 +1,29 @@
 from django.shortcuts import render
 
 from .decorators import caregiver_required
+from caregiver.models import Caregiver
+from patient.models import Patient
 
 
 @caregiver_required
 def index(request):
-    return render(request, 'index_caregiver.html')
+    first_name = request.user.caregiver_profile.first_name
+    surname = request.user.caregiver_profile.surname
+    return render(request, 'index_caregiver.html', {'first_name': first_name,
+                                                    'surname': surname})
 
 
 @caregiver_required
 def medical_cards(request):
-    return render(request, 'medical_cards.html')
+    patients = Patient.objects.all()
+    return render(request, 'medical_cards.html', {'patients': patients})
+
+
+@caregiver_required
+def patient_info(request, full_name_of_patient):
+    first_name, surname = full_name_of_patient.split('-')
+    patient = Patient.objects.get(first_name=first_name, surname=surname)
+    return render(request, 'patient_info.html', {'patient': patient})
 
 
 @caregiver_required

@@ -97,13 +97,11 @@ def register_patient(request):
         contact_formset = ContactFormSet(prefix='contacts')
         medication_formset = MedicationFormSet(prefix='medications')
 
-    success_message = messages.get_messages(request).__str__()
 
     return render(request, 'register_patient.html', {
         'patient_form': patient_form,
         'contact_formset': contact_formset,
         'medication_formset': medication_formset,
-        'succes_message': success_message,
     })
 
 

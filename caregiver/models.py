@@ -4,8 +4,8 @@ from django.db import models
 
 class Caregiver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='caregiver_profile')
-    first_name = models.CharField(max_length=15)
-    surname = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=150)
+    surname = models.CharField(max_length=150)
 
 
 class Shift(models.Model):

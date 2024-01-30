@@ -4,30 +4,28 @@ from django.db import models
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='patient_profile')
-    first_name = models.CharField(max_length=15)
-    surname = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=150)
+    surname = models.CharField(max_length=150)
     birthday = models.DateField()
     room_number = models.IntegerField()
     health_info = models.CharField(max_length=255)
-    fav_activities = models.TextField()
-
-    class ContactManager(models.Manager):
-        def create_contacts(self, contacts):
-            for contact_data in contacts:
-                self.create(**contact_data)
-
-    class MedicationIntakeManager(models.Manager):
-        def create_medications(self, medications):
-            for medication_data in medications:
-                self.create(**medication_data)
 
     objects = models.Manager()
-    contacts = ContactManager()
+
+    class ContactManager(models.Manager):
+        def create_contact(self, patient, relationship, name, phone_number):
+            return self.create(patient=patient, relationship=relationship, name=name, phone_number=phone_number)
+
+    class MedicationIntakeManager(models.Manager):
+        def create_medication(self, patient, medication, when, how):
+            return self.create(patient=patient, medication=medication, when=when, how=how)
+
     medications = MedicationIntakeManager()
+    contacts = ContactManager()
+    fav_activities = models.TextField()
 
 
 class Contact(models.Model):
-
     RELATIONSHIP_CHOICES = (
         ('pritel/kyne', 'Přítel/kyně'),
         ('sourozenec', 'Sourozenec'),
@@ -42,9 +40,7 @@ class Contact(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
 
-
 class MedicationIntake(models.Model):
-
     medication = models.CharField(max_length=50)
 
     WHEN_CHOICES = (

@@ -1,0 +1,21 @@
+{% extends 'base_caregiver.html' %}
+
+{% block content %}
+<h1>Spec patient: {{ patient.first_name }} {{ patient.surname }}</h1>
+<p>Datum narozeni {{ patient.birthday }}</p>
+<p>Cislo pokoje {{ patient.room_number }}</p>
+<p>Zdravotni info {{ patient.health_info }}</p>
+
+<h3>Prasky</h3>
+{% for medication_intake in patient.medicationintake_set.all %}
+    <p>{{ medication_intake.medication }} ( {{ medication_intake.when }}, {{ medication_intake.how }})</p>
+{% endfor %}
+
+<h3>Kontakty</h3>
+{% for contact in patient.contact_set.all %}
+    <p>{{ contact.name }} - {{ contact.get_relationship_display }}: {{ contact.phone_number }}</p>
+{% endfor %}
+<br>
+<p>Oblibene aktivity: {{ patient.fav_activities }}</p>
+
+{% endblock %}

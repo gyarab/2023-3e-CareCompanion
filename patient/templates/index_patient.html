@@ -1,7 +1,7 @@
 {% extends 'base_patient.html' %}
 
 {% block content %}
-
+<h2>logged in as {{ request.user.patient_profile.first_name }}</h2>
     <h1>Home</h1>
     <a href="{% url 'caregivers_list' %}">SEZNAM OPATROVNIKU</a>
     <a href="{% url 'contacts' %}">KONTAKTY</a>

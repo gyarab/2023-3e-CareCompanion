@@ -4,5 +4,10 @@
 
     <h1>KARTY PACIENTŮ {{ caregiver.first_name }}</h1>
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
+    {% for patient in patients %}
+        {% with full_name=patient.first_name|add:'-'|add:patient.surname %}
+            <a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a>
+        {% endwith %}
+    {% endfor %}
 
 {% endblock %}
