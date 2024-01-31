@@ -28,7 +28,9 @@ def patient_info(request, full_name_of_patient):
 
 @caregiver_required
 def shift_schedule(request):
-    return render(request, 'shift_schedule.html')
+    # caregivers = Caregiver.objects.all()
+    caregiver = request.user.caregiver_profile
+    return render(request, 'shift_schedule.html', {'caregiver': caregiver})
 
 
 @caregiver_required

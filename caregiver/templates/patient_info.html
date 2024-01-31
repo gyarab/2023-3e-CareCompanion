@@ -1,6 +1,7 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
+<a href="{% url 'medical_cards' %}">ZPÁTKY</a>
 <h1>Spec patient: {{ patient.first_name }} {{ patient.surname }}</h1>
 <p>Datum narozeni {{ patient.birthday }}</p>
 <p>Cislo pokoje {{ patient.room_number }}</p>
