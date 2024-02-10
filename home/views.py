@@ -66,13 +66,16 @@ def account_creation(request):
 
 @admin_required
 def register_patient(request):
-    ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=1)
-    MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=1)
+    ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=0)
+    MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)
 
     if request.method == 'POST':
         patient_form = PatientForm(request.POST)
-        contact_formset = ContactFormSet(request.POST or None, prefix='contacts')
-        medication_formset = MedicationFormSet(request.POST or None, prefix='medications')
+        contact_formset = ContactFormSet(request.POST, prefix='contacts')
+        medication_formset = MedicationFormSet(request.POST, prefix='medications')
+        print("Patient form is valid:", patient_form.is_valid())
+        print("Contact form is valid:", contact_formset.is_valid())
+        print("Med form is valid:", medication_formset.is_valid())
 
         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
             with transaction.atomic():
@@ -94,9 +97,8 @@ def register_patient(request):
 
     else:
         patient_form = PatientForm()
-        contact_formset = ContactFormSet(prefix='contacts')
-        medication_formset = MedicationFormSet(prefix='medications')
-
+        contact_formset = ContactFormSet(queryset=Contact.objects.none(), prefix='contacts')
+        medication_formset = MedicationFormSet(queryset=MedicationIntake.objects.none(), prefix='medications')
 
     return render(request, 'register_patient.html', {
         'patient_form': patient_form,

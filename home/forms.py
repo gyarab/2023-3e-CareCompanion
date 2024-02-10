@@ -49,7 +49,6 @@ class PatientForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
         self.fields['user'].queryset = User.objects.filter(groups__name='Patients').exclude(
             patient_profile__isnull=False)
 

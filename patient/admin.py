@@ -4,12 +4,12 @@ from .models import Patient, Contact, MedicationIntake
 
 class ContactInline(admin.TabularInline):
     model = Contact
-    extra = 1
+    extra = 0
 
 
 class MedicationIntakeInline(admin.TabularInline):
     model = MedicationIntake
-    extra = 1
+    extra = 0
 
 
 class PatientAdmin(admin.ModelAdmin):
