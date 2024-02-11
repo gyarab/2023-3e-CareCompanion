@@ -10,14 +10,14 @@ class Caregiver(models.Model):
     objects = models.Manager()
 
     class ShiftManager(models.Manager):
-        def create_shift(self, caregiver, date, start, end):
-            return self.create(caregiver=caregiver, date=date, start=start, end=end)
+        def create_shift(self, caregiver, date_of_shift, start, end):
+            return self.create(caregiver=caregiver, date_of_shift=date_of_shift, start=start, end=end)
 
     shifts = ShiftManager()
 
 
 class Shift(models.Model):
-    date = models.DateField()
+    date_of_shift = models.DateField()
     start = models.TimeField()
     end = models.TimeField()
 

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
 from .decorators import caregiver_required
-from caregiver.models import Caregiver
 from patient.models import Patient
 
 

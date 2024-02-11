@@ -38,12 +38,16 @@ class RegisterUserForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
         fields = ['user', 'first_name', 'surname', 'birthday', 'room_number', 'health_info', 'fav_activities']
         widgets = {
-            'birthday': forms.TextInput(attrs={'class': 'datepicker'}),
+            'birthday': DateInput(),
             'user': forms.Select(),  # You can customize this if needed
         }
 

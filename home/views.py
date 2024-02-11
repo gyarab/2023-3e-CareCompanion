@@ -1,10 +1,10 @@
 from django.db import transaction
-from django.forms import inlineformset_factory, modelformset_factory
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from patient.models import Patient, MedicationIntake, Contact
+from patient.models import MedicationIntake, Contact
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, CaregiverForm, ContactForm, MedicationIntakeForm
 
@@ -21,17 +21,23 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
+
+            # TODO:
+            # osetrit jestli ma user caregiver nebo patient PROFILE, ne group.
+            # to same v decorators.
+
             if user.groups.filter(name='Admins').exists():
                 return redirect('administration')
             elif user.groups.filter(name='Caregivers').exists():
                 return redirect('index_caregiver')
-            else:
+            elif user.groups.filter(name='Patients').exists():
                 return redirect('index_patient')
+            else:
+                messages.success(request, 'Obraťte se na IT podporu.')
+                return redirect('login_user')
 
         else:
-            messages.success(request,
-                             'Při přihlašování nastala chyba, znova si zkontrolujte zadané údaje, případně se obraťte '
-                             'na IT podporu. ')
+            messages.success(request, 'Účet s těmito údaji neexistuje, zkuste se přihlásit znovu nebo se obraťe na IT podporu.')
             return redirect('login_user')
 
     else:
@@ -73,9 +79,6 @@ def register_patient(request):
         patient_form = PatientForm(request.POST)
         contact_formset = ContactFormSet(request.POST, prefix='contacts')
         medication_formset = MedicationFormSet(request.POST, prefix='medications')
-        print("Patient form is valid:", patient_form.is_valid())
-        print("Contact form is valid:", contact_formset.is_valid())
-        print("Med form is valid:", medication_formset.is_valid())
 
         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
             with transaction.atomic():

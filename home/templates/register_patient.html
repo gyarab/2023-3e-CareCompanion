@@ -18,8 +18,6 @@
     {{ patient_form.as_p }}
 
     <h3>Contacts</h3>
-    {{ contact_formset.non_form_errors }}
-    {{ contact_formset.errors }}
 
     <div id="contacts-formset" data-form-prefix="contacts" class="formset">
         {{ contact_formset.management_form }}
@@ -29,15 +27,12 @@
         {% for form in contact_formset %}
             <div class="formset-contacts">
                 {{ form.empty_form.as_p }}
-                {{ form.errors }}
             </div>
         {% endfor %}
     </div>
     <button type="button" id="add-contact">Add Contact</button>
 
     <h3>Medications</h3>
-    {{ medication_formset.non_form_errors }}
-    {{ medication_formset.errors }}
 
     <div id="medications-formset" data-form-prefix="medications" class="formset">
         {{ medication_formset.management_form }}
@@ -47,7 +42,6 @@
         {% for form in medication_formset %}
             <div class="formset-medications">
                 {{ form.empty_form.as_p }}
-                {{ form.errors }}
             </div>
         {% endfor %}
     </div>

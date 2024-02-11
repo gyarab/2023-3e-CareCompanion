@@ -5,7 +5,7 @@
     <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.surname }}</h1>
 
     {% for shift in caregiver.shift_set.all %}
-        <h3>{{ shift.date.day }}. {{ shift.date|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
+        <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
 
         {% for activity in shift.activity_set.all %}
             <p>{{ activity.time }} -> {{ activity.description }}</p>
