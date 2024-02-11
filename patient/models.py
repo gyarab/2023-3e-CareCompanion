@@ -1,13 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from datetime import datetime
+
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='patient_profile')
     first_name = models.CharField(max_length=150)
     surname = models.CharField(max_length=150)
-    birthday = models.DateField()
+    date_of_admission = models.DateField(default=datetime.now())
     room_number = models.IntegerField()
+    birthday = models.DateField()
     health_info = models.CharField(max_length=255)
 
     objects = models.Manager()

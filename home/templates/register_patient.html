@@ -9,8 +9,7 @@
 </script>
 
 
-<h1>registrace pacienta</h1>
-<button type="submit" id="reset">Resetovat</button>
+<h1>Registrace pacienta</h1>
 
 <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
     {% csrf_token %}
@@ -26,7 +25,7 @@
         </div>
         {% for form in contact_formset %}
             <div class="formset-contacts">
-                {{ form.empty_form.as_p }}
+                {{ form.as_p }}
             </div>
         {% endfor %}
     </div>
@@ -41,7 +40,7 @@
         </div>
         {% for form in medication_formset %}
             <div class="formset-medications">
-                {{ form.empty_form.as_p }}
+                {{ form.as_p }}
             </div>
         {% endfor %}
     </div>
@@ -51,6 +50,9 @@
 </form>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        resetForm();
+    });
 
     function resetForm() {
         $('#patient-registration-form')[0].reset();
@@ -58,7 +60,7 @@
         $('.formset-medications').empty();
     }
 
-   function addFormsetForm(formsetPrefix) {
+    function addFormsetForm(formsetPrefix) {
         const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
         let totalForms = parseInt(managementForm.val());
 
@@ -68,16 +70,21 @@
 
         const newForm = emptyForm.replace(/__prefix__/g, totalForms);
         const formsetContainer = $(`#${formsetPrefix}-formset`);
-        formsetContainer.append(newForm);
+
+        {#<div class="formset-${formsetPrefix}">#}
+        {#    ${newForm}#}
+        {#    <button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button>#}
+        {#</div>#}
+        formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+
     }
 
-    $(document).ready(function() {
+    function deleteFormsetForm(btn) {
+        $(btn).closest('.formset-' + $(btn).parent().parent().data('form-prefix')).remove();
+    }
 
-        // $('.datepicker').datepicker({
-        //   dateFormat: 'yy-mm-dd',
-        //   changeMonth: true,
-        //   changeYear: true,
-        // });
+
+    $(document).ready(function() {
 
         $('#add-contact').on('click', function() {
             addFormsetForm('contacts');
@@ -88,5 +95,6 @@
         });
     });
 </script>
+
 
 {% endblock %}

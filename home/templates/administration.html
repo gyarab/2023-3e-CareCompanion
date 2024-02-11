@@ -2,9 +2,8 @@
 
 {% block content %}
     <h1>Jak zaregistrovat noveho klienta/opatrovnika?</h1>
-    <p>info pro ajtaka (pres django admin)</p>
-    <a href="{% url 'account_creation' %}">Vutvoreni uctu nove prichozimu</a>
-    <a href="{% url 'patient_registration' %}">Registrace klienta</a> (mozne jenom s jiz uz vytorenym uctem)
-    <a href="{% url 'caregiver_registration' %}">Registrace opatrovnika</a> (mozne jenom s jiz uz vytorenym uctem)
+    <p>Vytvorte ucet a profil opatrovnikovi/klientovy <a href="{% url 'account_creation' %}">ZDE</a></p>
+{#    <p>Upravte jiz existujici profily  <a href="{% url 'account_creation' %}">ZDE</a></p>#}
+{#    <p>Pridejte/odeberte/upravte smeny opatrovnikum <a href="">ZDE</a></p>#}
     <a href="{% url 'login_user' %}">ZPÁTKY</a>
 {% endblock %}

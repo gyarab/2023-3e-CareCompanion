@@ -15,21 +15,29 @@
   <body>
 
     <div class="topnav fixed-top">
-        {% if user.is_authenticated %}
           <a class="active" href="{% url 'logout_user' %}">Odhlásit se</a>
-        </div>
-        {% else %}
-          <a class="active" href="{% url 'login_user' %}">Přihlásit se</a>
-        </div>
-        <div class="topnav">
-          <a href="{% url 'registration' %}">Registrace</a>
-        </div>
+    </div>
+
+
+{#    TODO:#}
+{#    messages se zobrazuji pod navabrem.#}
+{#    to same u opatrovnika#}
+
+    <div class="container" name="messages">
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{msg}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
       {% endif %}
+    </div>
 
-    <h1>Patient</h1>
-
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

@@ -8,27 +8,25 @@ from patient.models import Patient, Contact, MedicationIntake
 
 
 class RegisterUserForm(UserCreationForm):
-    first_name = forms.CharField(max_length=15, widget=forms.TextInput(attrs={'class': 'form-control'}))
-    last_name = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
-    groups = forms.ModelMultipleChoiceField(
+    groups = forms.ModelChoiceField(
         queryset=Group.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.Select,
         required=True,
-        help_text="Select the groups for the user.",
+        help_text="Select the group for the user.",
     )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'groups', 'username', 'password1', 'password2')
+        fields = ('groups', 'username', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        groups = self.cleaned_data.get('groups')
+        group = self.cleaned_data.get('groups')
 
         if commit:
             user.save()
-            user.groups.set(groups)
+            user.groups.set([group])
         return user
 
     def __init__(self, *args, **kwargs):
@@ -45,10 +43,11 @@ class DateInput(forms.DateInput):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['user', 'first_name', 'surname', 'birthday', 'room_number', 'health_info', 'fav_activities']
+        fields = ['user', 'first_name', 'surname', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
         widgets = {
+            'user': forms.Select(),
+            'date_of_admission': DateInput(),
             'birthday': DateInput(),
-            'user': forms.Select(),  # You can customize this if needed
         }
 
     def __init__(self, *args, **kwargs):
@@ -72,10 +71,12 @@ class MedicationIntakeForm(forms.ModelForm):
 class CaregiverForm(forms.ModelForm):
     class Meta:
         model = Caregiver
-        fields = ['user', 'first_name', 'surname']
+        fields = ['user', 'first_name', 'surname', 'start_date']
+        widgets = {
+            'start_date': DateInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # user = forms.ModelChoiceField(queryset=User.objects.filter(groups__name='Patients'))
         self.fields['user'].queryset = User.objects.filter(groups__name='Caregivers').exclude(
             caregiver_profile__isnull=False)

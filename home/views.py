@@ -61,9 +61,15 @@ def account_creation(request):
         form = RegisterUserForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Registrace proběhla úspěšně')
-            return redirect('login_user')
+            messages.success(request, 'Vytvoření účtu proběhlo úspěšně')
 
+            selected_group = form.cleaned_data['groups']
+            if selected_group.name == 'Admins':
+                return redirect('administration')
+            elif selected_group.name == 'Caregivers':
+                return redirect('caregiver_registration')
+            elif selected_group.name == 'Patients':
+                return redirect('patient_registration')
     else:
         form = RegisterUserForm()
 
@@ -96,6 +102,7 @@ def register_patient(request):
                         medication.patient = patient
                         medication.save()
 
+            messages.success(request, 'Registrace klienta proběhla úspěšně')
             return redirect('administration')
 
     else:
@@ -116,6 +123,7 @@ def register_caregiver(request):
         form = CaregiverForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Registrace opatrovníka proběhla úspěšně')
             return redirect('administration')
     else:
         form = CaregiverForm()

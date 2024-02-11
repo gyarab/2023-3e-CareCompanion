@@ -3,12 +3,12 @@
     <h1>Home</h1>
     {% if user.is_authenticated  %}
         {% with group=request.user.groups.first %}
-            {% if 'Caregivers' == group.name  %}
+            {% if 'Admins' == group.name  %}
+                <a href="{% url 'administration' %}">Home</a>
+            {% elif 'Caregivers' == group.name %}
                 <a href="{% url 'index_caregiver' %}">Home</a>
             {% elif 'Patients' == group.name %}
                 <a href="{% url 'index_patient' %}">Home</a>
-            {% elif 'Admins' == group.name %}
-                <a href="{% url 'administration' %}">Home</a>
             {% endif %}
         {% endwith %}
     {% else %}

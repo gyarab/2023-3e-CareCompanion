@@ -17,6 +17,14 @@ body {
   font-size: 17px;
 }
 
+#messages {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure messages appear on top */
+}
+
 /* Change the color of links on hover */
 .topnav a:hover {
   background-color: #ddd;
