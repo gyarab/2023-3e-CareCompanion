@@ -3,6 +3,38 @@
 {% block content %}
 
     <h1>LIST OPATROVNÍKŮ</h1>
+    {# query table "caregivers" for all caregivers that have shift today (i suppose) #}
+    {# display cargiver's first name, last name, end of shift time #}
+
+<!--- code logic without the table below - to be deleted in the next commit
+    <ul>
+        {#% for user_info in users_last_shift_info %#}
+            <li>{{# user_info.first_name }} {{# user_info.last_name }} - Je na směně do: {{# user_info.last_shift_date }} {{# user_info.shift_end }}</li>
+        {#% endfor %#}
+    </ul> -->
+
+    <div class="container">
+        <h1>List Opatrovníků</h1>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Jméno</th>
+                    <th scope="col">Příjmení</th>
+                    <th scope="col">Je na směně do:</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_info in users_last_shift_info %}
+                    <tr>
+                        <td>{{ user_info.first_name }}</td>
+                        <td>{{ user_info.last_name }}</td>
+                        <td>{{ user_info.last_shift_date }} {{ user_info.shift_end }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
     <a href="{% url 'index_patient' %}">ZPÁTKY</a>
 
 {% endblock %}
