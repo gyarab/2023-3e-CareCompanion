@@ -16,9 +16,9 @@
 
   <div class="topnav fixed-top">
           <a class="active" href="{% url 'logout_user' %}">Odhlásit se</a>
-    </div>
+  </div>
 
-    <div class="container" name="messages">
+    <div class="container mt-5" name="messages">
       {% if messages %}
         {% for msg in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -29,7 +29,7 @@
       {% endif %}
     </div>
 
-    <div class="container">
+    <div class="container mt-5">
         {% block content %}
         {% endblock %}
     </div>

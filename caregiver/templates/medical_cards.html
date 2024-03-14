@@ -2,12 +2,13 @@
 
 {% block content %}
 
-    <h1>KARTY PACIENTŮ {{ caregiver.first_name }}</h1>
-    <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
+    <h1>KARTY PACIENTŮ</h1>
     {% for patient in patients %}
         {% with full_name=patient.first_name|add:'-'|add:patient.surname %}
             <p><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a></p>
         {% endwith %}
     {% endfor %}
+    <br>
+    <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
 
 {% endblock %}

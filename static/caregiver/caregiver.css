@@ -17,14 +17,6 @@ body {
   font-size: 17px;
 }
 
-#messages {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000; /* Ensure messages appear on top */
-}
-
 /* Change the color of links on hover */
 .topnav a:hover {
   background-color: #ddd;
@@ -35,4 +27,20 @@ body {
 .topnav a.active {
   background-color: #04AA6D;
   color: white;
+}
+
+.container {
+  margin-top: 60px; /* Adjust the value as needed */
+}
+
+.image-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.nice-image {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  height: auto;
 }

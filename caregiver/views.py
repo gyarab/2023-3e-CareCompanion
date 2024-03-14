@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 
 from .decorators import caregiver_required
@@ -29,7 +31,21 @@ def patient_info(request, full_name_of_patient):
 def shift_schedule(request):
     # caregivers = Caregiver.objects.all()
     caregiver = request.user.caregiver_profile
-    return render(request, 'shift_schedule.html', {'caregiver': caregiver})
+    current_date_time = datetime.now()
+    month = datetime.today().month
+    day = datetime.today().day
+    year = datetime.today().year
+    time = datetime.now().time()
+
+    context = {
+        'caregiver': caregiver,
+        'current_month': month,
+        'current_day': day,
+        'current_year': year,
+        'current_time': time,
+        'current_date_time': current_date_time
+    }
+    return render(request, 'shift_schedule.html', context)
 
 
 @caregiver_required

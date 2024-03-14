@@ -3,6 +3,9 @@
 {% block content %}
 
     <h1>KONTAKTY</h1>
+    {% for contact in patient.contact_set.all %}
+        <p>{{ contact.name }} - {{ contact.get_relationship_display }}: {{ contact.phone_number }}</p>
+    {% endfor %}
     <a href="{% url 'index_patient' %}">ZPÁTKY</a>
 
 {% endblock %}

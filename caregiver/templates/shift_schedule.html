@@ -1,15 +1,26 @@
 {% extends 'base_caregiver.html' %}
+{% load tz %}
 
 {% block content %}
 
     <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.surname }}</h1>
 
     {% for shift in caregiver.shift_set.all %}
-        <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
+        {% with shift.date_of_shift|date:"d-m-Y" as shift_date %}
+            {% if shift_date == current_date_time and current_time < shift.date_of_shift.end %}
+                <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
 
-        {% for activity in shift.activity_set.all %}
-            <p>{{ activity.time }} -> {{ activity.description }}</p>
-        {% endfor %}
+                {% for activity in shift.activity_set.all %}
+                    <p>{{ activity.time }} -> {{ activity.description }}</p>
+                {% endfor %}
+            {% elif shift_date < current_date_time %}
+                <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
+
+                {% for activity in shift.activity_set.all %}
+                    <p>{{ activity.time }} -> {{ activity.description }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <br>
     {% endfor %}
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>

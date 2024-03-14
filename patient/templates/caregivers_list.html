@@ -2,7 +2,49 @@
 
 {% block content %}
 
-    <h1>LIST OPATROVNÍKŮ</h1>
+    <div class="container">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Jméno</th>
+                <th scope="col">Příjmení</th>
+                <th scope="col">Na směně?</th>
+                <th scope="col">Info</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_info in users_shift_info %}
+            <tr>
+                <td>{{ user_info.first_name }}</td>
+                <td>{{ user_info.last_name }}</td>
+                <td>{% if user_info.on_shift %} Ano {% else %} Ne {% endif %}</td>
+                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }} {% else %} Dalsi smena: {{ user_info.next_shift_date }} {{ user_info.next_shift_start|time:"H:i" }} {% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+
     <a href="{% url 'index_patient' %}">ZPÁTKY</a>
 
 {% endblock %}
+
+ <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Jméno</th>
+                    <th scope="col">Příjmení</th>
+                    <th scope="col">Je na směně do:</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user_info in users_last_shift_info %}
+                    <tr>
+                        <td>{{ user_info.first_name }}</td>
+                        <td>{{ user_info.last_name }}</td>
+                        <td>{{ user_info.last_shift_date }} {{ user_info.shift_end }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+</table>

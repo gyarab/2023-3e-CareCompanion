@@ -11,7 +11,7 @@ class ActivityInline(NestedStackedInline):
 
 class ShiftInline(NestedStackedInline):
     model = Shift
-    extra = 1
+    extra = 0
     inlines = [ActivityInline]
 
 
