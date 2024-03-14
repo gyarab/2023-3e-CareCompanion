@@ -10,6 +10,7 @@ def index(request):
     return render(request, 'index_patient.html')
 
 
+# TODO: kdyz opatrovnik nema upcoming shift aby to napsalo neco ne jenom prazdny radek
 @patient_required
 def caregivers_list(request):
     now = datetime.now()
@@ -31,7 +32,7 @@ def caregivers_list(request):
         else:
             next_shift = caregiver.shift_set.filter(date_of_shift__gt=now.date()).order_by('date_of_shift',
                                                                                            'start').first()
-            if next_shift is not None:  # Check if next_shift is not None
+            if next_shift is not None:
                 users_shift_info.append({
                     'first_name': caregiver.first_name,
                     'last_name': caregiver.surname,

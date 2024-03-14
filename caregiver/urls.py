@@ -9,4 +9,7 @@ urlpatterns = [
     path('rozvrh-smeny/', views.shift_schedule, name='shift_schedule'),
     path('mapa-pokoju/', views.floor_map, name='floor_map'),
     path('prirucka/', views.manual, name='manual'),
+    path('prirucka/co-delat', views.what_to_do, name='what_to_do'),
+    path('prirucka/aktivity', views.activities, name='activities'),
+    path('prirucka/rozsirte-znalosti', views.education, name='education'),
 ]

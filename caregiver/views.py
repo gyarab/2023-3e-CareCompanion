@@ -56,3 +56,18 @@ def floor_map(request):
 @caregiver_required
 def manual(request):
     return render(request, 'manual.html')
+
+
+@caregiver_required
+def what_to_do(request):
+    return render(request, 'what_to_do.html')
+
+
+@caregiver_required
+def activities(request):
+    return render(request, 'activities.html')
+
+
+@caregiver_required
+def education(request):
+    return render(request, 'education.html')

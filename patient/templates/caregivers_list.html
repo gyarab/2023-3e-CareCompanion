@@ -29,22 +29,3 @@
     <a href="{% url 'index_patient' %}">ZPÁTKY</a>
 
 {% endblock %}
-
- <table class="table table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Jméno</th>
-                    <th scope="col">Příjmení</th>
-                    <th scope="col">Je na směně do:</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user_info in users_last_shift_info %}
-                    <tr>
-                        <td>{{ user_info.first_name }}</td>
-                        <td>{{ user_info.last_name }}</td>
-                        <td>{{ user_info.last_shift_date }} {{ user_info.shift_end }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-</table>
