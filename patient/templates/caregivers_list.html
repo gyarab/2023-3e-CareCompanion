@@ -18,7 +18,7 @@
                 <td>{{ user_info.first_name }}</td>
                 <td>{{ user_info.last_name }}</td>
                 <td>{% if user_info.on_shift %} Ano {% else %} Ne {% endif %}</td>
-                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }} {% else %} Dalsi smena: {{ user_info.next_shift_date }} {{ user_info.next_shift_start|time:"H:i" }} {% endif %}</td>
+                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }} {% else %} Dalsi smena: {{ user_info.next_shift_date }} {{ user_info.next_shift_start }} {% endif %}</td>
             </tr>
             {% endfor %}
         </tbody>
