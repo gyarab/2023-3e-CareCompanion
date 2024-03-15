@@ -23,7 +23,7 @@ def medical_cards(request):
 @caregiver_required
 def patient_info(request, full_name_of_patient):
     first_name, surname = full_name_of_patient.split('-')
-    patient = Patient.objects.get(first_name=first_name, surname=surname)
+    patient = Patient.objects.get(user__first_name=first_name, user__last_name=surname)
     return render(request, 'patient_info.html', {'patient': patient})
 
 

@@ -6,9 +6,7 @@ from datetime import datetime
 
 class Caregiver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='caregiver_profile')
-    first_name = models.CharField(max_length=150)
-    surname = models.CharField(max_length=150)
-    start_date = models.DateField(default=datetime.now())
+    start_date = models.DateField()
 
     objects = models.Manager()
 
@@ -17,6 +15,14 @@ class Caregiver(models.Model):
             return self.create(caregiver=caregiver, date_of_shift=date_of_shift, start=start, end=end)
 
     shifts = ShiftManager()
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def surname(self):
+        return self.user.last_name
 
 
 class Shift(models.Model):

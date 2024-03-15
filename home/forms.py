@@ -1,14 +1,12 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User, Group
 from django import forms
-from django.forms import inlineformset_factory
 
 from caregiver.models import Caregiver
 from patient.models import Patient, Contact, MedicationIntake
 
 
 class RegisterUserForm(UserCreationForm):
-
     groups = forms.ModelChoiceField(
         queryset=Group.objects.all(),
         widget=forms.Select,
@@ -17,11 +15,11 @@ class RegisterUserForm(UserCreationForm):
     )
 
     first_name = forms.CharField(max_length=30, required=True)
-    surname = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
 
     class Meta:
         model = User
-        fields = ('groups', 'first_name', 'surname','username', 'password1', 'password2')
+        fields = ('groups', 'first_name', 'last_name', 'username', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -46,7 +44,7 @@ class DateInput(forms.DateInput):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['user', 'first_name', 'surname', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
+        fields = ['user', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
         widgets = {
             'user': forms.Select(),
             'date_of_admission': DateInput(),
@@ -74,7 +72,7 @@ class MedicationIntakeForm(forms.ModelForm):
 class CaregiverForm(forms.ModelForm):
     class Meta:
         model = Caregiver
-        fields = ['user', 'first_name', 'surname', 'start_date']
+        fields = ['user', 'start_date']
         widgets = {
             'start_date': DateInput(),
         }
@@ -83,3 +81,17 @@ class CaregiverForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['user'].queryset = User.objects.filter(groups__name='Caregivers').exclude(
             caregiver_profile__isnull=False)
+
+
+class UpdateUsersInformationForm(UserChangeForm):
+    password = None
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username')
+
+    def __init__(self, *args, **kwargs):
+        super(UserChangeForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'form-control'

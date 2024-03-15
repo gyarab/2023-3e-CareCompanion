@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if form.errors %}
+
+    <div class="container">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Při úpravě profilu došlo k chybě
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="container">
+    <h1>Uprava profilu pro {{ user.first_name }} {{ user.last_name }}</h1>
+
+        <form action="{{ request.path }}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Upravit informace" class="btn btn-secondary">
+    </form>
+    </div>
+
+{% endblock %}

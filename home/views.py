@@ -2,11 +2,12 @@ from django.db import transaction
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.models import User
 from django.contrib import messages
 
 from patient.models import MedicationIntake, Contact
 from .decorators import admin_required
-from .forms import RegisterUserForm, PatientForm, CaregiverForm, ContactForm, MedicationIntakeForm
+from .forms import RegisterUserForm, PatientForm, CaregiverForm, ContactForm, MedicationIntakeForm, UpdateUsersInformationForm
 
 
 def index(request):
@@ -130,7 +131,6 @@ def register_caregiver(request):
 
 @admin_required
 def display_users(request):
-    User = get_user_model()
     users = User.objects.all()
 
     patients = []
@@ -155,3 +155,17 @@ def display_users(request):
     }
 
     return render(request, 'display_users.html', context)
+
+
+@admin_required
+def user_profile(request, info_on_user):
+    group, first_name, surname = info_on_user.split('-')
+    user = User.objects.get(first_name=first_name, last_name=surname)
+
+    form = UpdateUsersInformationForm(request.POST or None, instance=user)
+    if form.is_valid():
+        form.save()
+        messages.success(request,'Informace byly ulozeny!')
+        return redirect('display_users')
+    else:
+        return render(request, 'user_profile.html', {'user': user, 'group': group, 'form': form})

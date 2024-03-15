@@ -6,12 +6,10 @@ from datetime import datetime
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='patient_profile')
-    first_name = models.CharField(max_length=150)
-    surname = models.CharField(max_length=150)
-    date_of_admission = models.DateField(default=datetime.now())
+    date_of_admission = models.DateField()
     room_number = models.IntegerField()
     birthday = models.DateField()
-    health_info = models.CharField(max_length=255)
+    health_info = models.TextField()
 
     objects = models.Manager()
 
@@ -25,11 +23,20 @@ class Patient(models.Model):
 
     medications = MedicationIntakeManager()
     contacts = ContactManager()
-    fav_activities = models.TextField()
+    fav_activities = models.CharField(max_length=255)
+
+    @property
+    def first_name(self):
+        return self.user.first_name
+
+    @property
+    def surname(self):
+        return self.user.last_name
 
 
 class Contact(models.Model):
     RELATIONSHIP_CHOICES = (
+        ('syn/dcera', 'Syn/Dcera'),
         ('pritel/kyne', 'Přítel/kyně'),
         ('sourozenec', 'Sourozenec'),
         ('rodic', 'Rodič'),
