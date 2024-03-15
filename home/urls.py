@@ -10,7 +10,7 @@ urlpatterns = [
     path('sprava/registrace-opatrovnika/', views.register_caregiver, name='caregiver_registration'),
     # path('sprava/smeny/', views.register_caregiver, name='caregiver_registration'),
     # path('sprava/smeny/<str:full_name_of_caregiver>/', views.register_caregiver, name='caregiver_registration'),
-    # path('sprava/uzivatele/', views.register_caregiver, name='caregiver_registration'),
-    # path('sprava/uzivatele/<str:full_name_of_user>/', views.register_caregiver, name='caregiver_registration'),
+    path('sprava/uzivatele/', views.display_users, name='display_users'),
+    # path('sprava/uzivatele/<str:username>/', views.register_caregiver, name='caregiver_registration'),
     path('odhlaseni/', views.logout_user, name='logout_user'),
 ]

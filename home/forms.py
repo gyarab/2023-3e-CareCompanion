@@ -16,9 +16,12 @@ class RegisterUserForm(UserCreationForm):
         help_text="Select the group for the user.",
     )
 
+    first_name = forms.CharField(max_length=30, required=True)
+    surname = forms.CharField(max_length=30, required=True)
+
     class Meta:
         model = User
-        fields = ('groups', 'username', 'password1', 'password2')
+        fields = ('groups', 'first_name', 'surname','username', 'password1', 'password2')
 
     def save(self, commit=True):
         user = super().save(commit=False)

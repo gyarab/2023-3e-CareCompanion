@@ -21,7 +21,7 @@ def caregivers_list(request):
 
         # Saves the first upcoming/current shift (either today or in the future)
         next_shift = caregiver.shift_set.filter(
-            Q(date_of_shift__gt=now.date()) |  # Future shifts
+            Q(date_of_shift__gt=now.date()) |  # Future shifts OR
             (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
         ).order_by('date_of_shift', 'start').first()
 

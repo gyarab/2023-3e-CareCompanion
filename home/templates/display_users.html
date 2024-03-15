@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>LIST</h1>
+
+    <h5>Klienti</h5>
+    {% for patient in patients %}
+        <p><a href=""></a>{{ patient.first_name }} {{ patient.surname }}</p>
+    {% endfor %}
+    <br>
+
+    <h5>Opatrovnici</h5>
+    {% for caregiver in caregivers %}
+        <p><a href=""></a>{{ caregiver.first_name }} {{ caregiver.surname }}</p>
+    {% endfor %}
+    <br>
+
+    <h5>Admini</h5>
+    {% for admin in admins %}
+        <p><a href=""></a>{{ admin.first_name }} {{ admin.surname }}</p>
+    {% endfor %}
+    <br>
+
+    <h5>nedokoncene ucty</h5>
+    {% for unfinished_user in unfinished_users %}
+        <p><a href=""></a>{{ unfinished_user }}</p>
+    {% endfor %}
+    <br>
+
+
+
+    <p><a href="{% url 'administration' %}">ZPÁTKY</a></p>
+{% endblock %}

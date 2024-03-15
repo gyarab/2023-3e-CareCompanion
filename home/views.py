@@ -1,9 +1,7 @@
-from datetime import datetime
-
 from django.db import transaction
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 
 from patient.models import MedicationIntake, Contact
@@ -35,7 +33,8 @@ def login_user(request):
                 return redirect('login_user')
 
         else:
-            messages.success(request, 'Účet s těmito údaji neexistuje, zkuste se přihlásit znovu nebo se obraťe na IT podporu.')
+            messages.success(request,
+                             'Účet s těmito údaji neexistuje, zkuste se přihlásit znovu nebo se obraťe na IT podporu.')
             return redirect('login_user')
 
     else:
@@ -127,3 +126,32 @@ def register_caregiver(request):
         form = CaregiverForm()
 
     return render(request, 'register_caregiver.html', {'form': form})
+
+
+@admin_required
+def display_users(request):
+    User = get_user_model()
+    users = User.objects.all()
+
+    patients = []
+    caregivers = []
+    admins = []
+    unfinished_users = []
+    for user in users:
+        if getattr(user, 'patient_profile', None):
+            patients.append(user.patient_profile)
+        elif getattr(user, 'caregiver_profile', None):
+            caregivers.append(user.caregiver_profile)
+        elif 'Admins' in user.groups.values_list('name', flat=True):
+            admins.append(user)
+        else:
+            unfinished_users.append(user)
+
+    context = {
+        'patients': patients,
+        'caregivers': caregivers,
+        'admins': admins,
+        'unfinished_users': unfinished_users,
+    }
+
+    return render(request, 'display_users.html', context)
