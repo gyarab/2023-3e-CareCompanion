@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from babel.dates import format_date
+from django.db.models import Q
 
+from babel.dates import format_date
 from caregiver.models import Caregiver
 from .decorators import patient_required
 from datetime import datetime, time, date, timezone
@@ -18,10 +19,10 @@ def caregivers_list(request):
 
     for caregiver in Caregiver.objects.prefetch_related('shift_set'):
 
-        # Saves the first upcoming shift (either today or in the future)
+        # Saves the first upcoming/current shift (either today or in the future)
         next_shift = caregiver.shift_set.filter(
-            date_of_shift__gte=now.date(),
-            end__gt=now.time()  # Excludes shifts that have already ended
+            Q(date_of_shift__gt=now.date()) |  # Future shifts
+            (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
         ).order_by('date_of_shift', 'start').first()
 
         if next_shift:

@@ -24,10 +24,6 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            # TODO:
-            # osetrit jestli ma user caregiver nebo patient PROFILE, ne group.
-            # to same v decorators.
-
             if user.groups.filter(name='Admins').exists():
                 return redirect('administration')
             elif user.groups.filter(name='Caregivers').exists():
