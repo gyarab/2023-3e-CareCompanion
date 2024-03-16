@@ -1,10 +1,58 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
-<h2>logged in as {{ first_name }} {{ surname }}!</h2>
-    <a href="{% url 'medical_cards'%}">KARTY PACIENTU</a>
-    <a href="{% url 'shift_schedule' %}">ROZVRH SMENY</a>
-    <a href="{% url 'floor_map' %}">MAPA POKOJU</a>
-    <a href="{% url 'manual' %}">PRIRUCKA</a>
-
+<div class="container-fluid mt-4">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="tile">
+          <a href="{% url 'shift_schedule' %}">
+        <div class="tile-header">Rozvrh směny</div>
+        <div class="tile-body">
+          <div class="text-center">
+            <i class="bi bi-calendar2-week"></i> <!-- Use Bootstrap Icons class -->
+          </div>
+        </div>
+          </a>
+      </div>
+      <div class="tile">
+          <a href="{% url 'medical_cards'%}">
+        <div class="tile-header">Karty pacientů</div>
+        <div class="tile-body">
+          <div class="text-center">
+            <i class="bi bi-person-vcard"></i> <!-- Use Bootstrap Icons class -->
+          </div>
+        </div>
+              </a>
+      </div>
+      <div class="tile">
+          <a href="{% url 'floor_map' %}">
+        <div class="tile-header">Plánek pokojů</div>
+        <div class="tile-body">
+          <div class="text-center">
+            <i class="bi bi-map"></i> <!-- Use Bootstrap Icons class -->
+          </div>
+        </div>
+              </a>
+      </div>
+      <div class="tile">
+          <a href="{% url 'manual' %}">
+        <div class="tile-header">Příručka</div>
+        <div class="tile-body">
+          <div class="text-center">
+            <i class="bi bi-journal-text"></i> <!-- Use Bootstrap Icons class -->
+          </div>
+        </div>
+              </a>
+      </div>
+      <div class="tile">
+        <div class="tile-header">Tile 5</div>
+        <div class="tile-body">
+          <div class="text-center">
+            <i class="bi bi-calendar2-week"></i> <!-- Use Bootstrap Icons class -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

@@ -10,7 +10,7 @@ from patient.models import Patient
 def index(request):
     first_name = request.user.caregiver_profile.first_name
     surname = request.user.caregiver_profile.surname
-    return render(request, 'index_caregiver2.html', {'first_name': first_name,
+    return render(request, 'index_caregiver.html', {'first_name': first_name,
                                                     'surname': surname})
 
 
