@@ -1,24 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link rel="bootstrap stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareCompanion</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Include Bootstrap Icons library -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="path/to/your/favicon.ico" type="image/x-icon"> <!-- favicon -->
     {% load static %}
-    <link rel="stylesheet" href="{% static 'caregiver/caregiver.css' %}">
+  <style>
+    .tile {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 0px; /* Increased padding for the container */
+      border-radius: 10px; /* Rounded edges */
+    }
+    .tile-header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px; /* Adjusted padding to remove top padding */
+      font-size: 24px; /* Increased font size for the header */
+      border-top-left-radius: 10px; /* Rounded edges for top-left corner */
+      border-top-right-radius: 10px; /* Rounded edges for top-right corner */
+    }
+    .tile-body {
+      padding: 20px;
+      color: #fff; /* Text color */
+      border-bottom-left-radius: 10px; /* Rounded edges for bottom-left corner */
+      border-bottom-right-radius: 10px; /* Rounded edges for bottom-right corner */
+    }
+    .tile i {
+      font-size: 48px; /* Increased font size for the icons */
+    }
+    /* Customize gradient colors for each tile */
+    .tile:nth-child(1) .tile-body {
+      background: linear-gradient(to right, #20bf55, #01baef); /* Green gradient */
+    }
+    .tile:nth-child(2) .tile-body {
+      background: linear-gradient(to right, #f9ca24, #f0932b); /* Yellow gradient */
+    }
+    .tile:nth-child(3) .tile-body {
+      background: linear-gradient(to right, #ff7e5f, #d63031); /* Lighter to darker red gradient */
+    }
+    .tile:nth-child(4) .tile-body {
+      background: linear-gradient(to right, #d9d9d9, #5fa8d3); /* Gray to cyan gradient */
+    }
+    .tile:nth-child(5) .tile-body {
+      background: linear-gradient(to right, #ff6b81, #833ab4); /* Lighter to darker pink gradient */
+    }
+    /* Center the username */
+    .username-box {
+      display: flex;
+      justify-content: center;
+    }
+    .navbar .navbar-text {
+      flex-grow: 1;
+    }
+    /* Adjust spacing */
+    .navbar-nav .nav-item:last-child {
+      margin-left: auto; /* Push the logoff button to the right */
+    }
+  </style>
+</head>
+<body>
 
-    <title>CareCompanion</title>
-  </head>
-  <body>
-
-  <div class="topnav fixed-top">
-          <a class="active" href="{% url 'logout_user' %}">Odhlásit se</a>
-  </div>
-
-    <div class="container mt-5" name="messages">
+<div class="container mt-5" name="messages">
       {% if messages %}
         {% for msg in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -29,20 +77,24 @@
       {% endif %}
     </div>
 
-    <div class="container mt-5">
-        {% block content %}
-        {% endblock %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Care companion</a>
+      <span class="navbar-text center">
+    <div class="username-box">
+      {{ first_name }} {{ surname }}
     </div>
+          </span>
+    <a class="btn btn-danger" href="{% url 'logout_user' %}">Logoff</a>
+  </div>
+</nav>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+ {% block content %}
+ {% endblock %}
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
-  </body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
