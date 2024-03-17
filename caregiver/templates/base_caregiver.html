@@ -62,22 +62,32 @@
     .navbar-nav .nav-item:last-child {
       margin-left: auto; /* Push the logoff button to the right */
     }
+
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
   </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Care companion</a>
-      <span class="navbar-text center">
-    <div class="username-box">
-      {{ first_name }} {{ surname }}
+<!-- todo: move style attributes to css file. (keeping it here for now for readability -->
+<!-- custom bootstrap navbar -->
+<div class="container-fluid bg-light pt-1 pb-1">
+    <div class="row">
+        <div class="col">
+            <div class="p-1 ml-3 mt-1 navbar-brand">Care companion</div>
+        </div>
+        <div class="col text-center">
+            <div class="p-1 mt-2 text-muted">{{ first_name }} {{ surname }}</div>
+        </div>
+        <div class="col text-end d-flex justify-content-end">
+            <div class="p-1 mr-2"><a class="btn btn-danger" href="{% url 'logout_user' %}">Logoff</a></div>
+        </div>
     </div>
-          </span>
-    <a class="btn btn-danger" href="{% url 'logout_user' %}">Logoff</a>
-  </div>
-</nav>
+</div>
 
+<!-- display caregivers tiles -->
  {% block content %}
  {% endblock %}
 
