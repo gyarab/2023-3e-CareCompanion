@@ -23,16 +23,18 @@
 {#    messages se zobrazuji pod navabrem.#}
 {#    to same u opatrovnika#}
 
-    <div class="container mt-5" name="messages">
+
       {% if messages %}
+          <div class="container mt-5" name="messages">
         {% for msg in messages %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {{msg}}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         {% endfor %}
+          </div>
       {% endif %}
-    </div>
+
 
     <div class="container mt-5">
         {% block content %}
