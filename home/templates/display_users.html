@@ -13,8 +13,8 @@
 
     <h5>Opatrovnici</h5>
     {% for caregiver in caregivers %}
-      {% with full_name='opatrovnik'|add:'-'|add:caregiver.first_name|add:'-'|add:caregiver.surname %}
-            <p><a href="{% url 'user_update' full_name %}">{{ caregiver.first_name }} {{ caregiver.surname }}</a></p>
+      {% with full_name='opatrovnik'|add:'-'|add:caregiver.first_name|add:'-'|add:caregiver.last_name %}
+            <p><a href="{% url 'user_update' full_name %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
       {% endwith %}
     {% endfor %}
     <br>

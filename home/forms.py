@@ -11,6 +11,7 @@ class RegisterUserForm(UserCreationForm):
         queryset=Group.objects.all(),
         widget=forms.Select,
         required=True,
+        label='Typ uživatele',
     )
 
     first_name = forms.CharField(max_length=30, required=True)
@@ -19,6 +20,14 @@ class RegisterUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('groups', 'first_name', 'last_name', 'username', 'password1', 'password2')
+        labels = {
+            'groups': '',
+            'first_name': '',
+            'last_name': '',
+            'username': '',
+            'password1': '',
+            'password2': ''
+        }
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -59,10 +68,19 @@ class PatientForm(forms.ModelForm):
             'date_of_admission': DateInput(),
             'birthday': DateInput(),
         }
+        labels = {
+            'user': 'U',
+            'date_of_admission': '',
+            'room_number': 'Cislo pokoje',
+            'birthday': '',
+            'health_info': '',
+            'fav_activities': '',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['user'].widget.attrs['class'] = 'form-control'
+        self.fields['user'].widget.attrs['label'] = 'Uzivatel'
         self.fields['date_of_admission'].widget.attrs['class'] = 'form-control'
         self.fields['room_number'].widget.attrs['class'] = 'form-control'
         self.fields['birthday'].widget.attrs['class'] = 'form-control'
@@ -86,32 +104,17 @@ class MedicationIntakeForm(forms.ModelForm):
     class Meta:
         model = MedicationIntake
         fields = ['medication', 'when', 'how']
+    labels = {
+        'relationship': '',
+        'name': '',
+        'phone number': ''
+    }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['medication'].widget.attrs['class'] = 'form-control'
         self.fields['when'].widget.attrs['class'] = 'form-control'
         self.fields['how'].widget.attrs['class'] = 'form-control'
-
-
-class CaregiverForm(forms.ModelForm):
-    user = forms.ModelChoiceField(
-        queryset=User.objects.filter(groups__name='Caregivers').exclude(caregiver_profile__isnull=False),
-        widget=forms.Select,
-        required=True,
-    )
-
-    class Meta:
-        model = Caregiver
-        fields = ['user', 'start_date']
-        widgets = {
-            'start_date': DateInput(),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['user'].widget.attrs['class'] = 'form-control'
-        self.fields['start_date'].widget.attrs['class'] = 'form-control'
 
 
 class UpdateUsersInformationForm(UserChangeForm):
@@ -125,6 +128,8 @@ class UpdateUsersInformationForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
         self.fields['username'].widget.attrs['class'] = 'form-control'
 
 

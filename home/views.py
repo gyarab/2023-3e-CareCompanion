@@ -1,14 +1,16 @@
 from django.db import transaction
+from django.db.models.signals import post_save
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 
+from caregiver.models import Caregiver
 from patient.models import MedicationIntake, Contact
 from .decorators import admin_required
-from .forms import RegisterUserForm, PatientForm, CaregiverForm, ContactForm, MedicationIntakeForm, \
-    UpdateUsersInformationForm, ResetUserPasswordForm
+from .forms import RegisterUserForm, PatientForm, ContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
+    ResetUserPasswordForm
 
 
 def index(request):
@@ -58,16 +60,17 @@ def administration(request):
 def account_creation(request):
     form = RegisterUserForm(request.POST or None)
     if form.is_valid():
-        form.save()
+        user = form.save()
         messages.success(request, 'Vytvoření účtu proběhlo úspěšně')
 
         selected_group = form.cleaned_data['groups']
-        if selected_group.name == 'Admins':
-            return redirect('administration')
-        elif selected_group.name == 'Caregivers':
-            return redirect('caregiver_registration')
-        elif selected_group.name == 'Patients':
+        if selected_group.name == 'Patients':
             return redirect('patient_registration')
+        elif selected_group.name == 'Caregivers':
+            Caregiver.objects.create(user=user)
+            return redirect('administration')
+        else:
+            return redirect('administration')
     else:
         return render(request, 'acc_creation.html', {'form': form})
 
@@ -114,17 +117,6 @@ def register_patient(request):
 
 
 @admin_required
-def register_caregiver(request):
-    form = CaregiverForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        messages.success(request, 'Registrace opatrovníka proběhla úspěšně')
-        return redirect('administration')
-    else:
-        return render(request, 'register_caregiver.html', {'form': form})
-
-
-@admin_required
 def display_users(request):
     users = User.objects.all()
 
@@ -135,8 +127,8 @@ def display_users(request):
     for user in users:
         if getattr(user, 'patient_profile', None):
             patients.append(user.patient_profile)
-        elif getattr(user, 'caregiver_profile', None):
-            caregivers.append(user.caregiver_profile)
+        elif 'Caregivers' in user.groups.values_list('name', flat=True):
+            caregivers.append(user)
         elif 'Admins' in user.groups.values_list('name', flat=True):
             admins.append(user)
         else:
@@ -180,7 +172,15 @@ def user_reset_password(request, info_on_user):
     else:
         return render(request, 'user_reset_password.html', {'form': form, 'info_on_user': info_on_user})
 
-# def patient_update(request, info_on_user):
+
+@admin_required
+def patient_info_update(request, info_on_user):
+    group, first_name, surname = info_on_user.split('-')
+    patient = User.objects.get(first_name=first_name, last_name=surname)
+
+    return render(request, 'user_info_update.html', {'patient': patient})
+
+# def patient_update(request, info_on_user):,
 #     group, first_name, surname = info_on_user.split('-')
 #     user = User.objects.get(first_name=first_name, last_name=surname)
 #

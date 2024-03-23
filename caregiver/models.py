@@ -1,13 +1,10 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-from datetime import datetime
+from django.db.models.signals import post_save
 
 
 class Caregiver(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='caregiver_profile')
-    start_date = models.DateField()
-
     objects = models.Manager()
 
     class ShiftManager(models.Manager):
