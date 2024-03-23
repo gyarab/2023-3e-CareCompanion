@@ -18,24 +18,6 @@
           <a class="active" href="{% url 'logout_user' %}">Odhlásit se</a>
     </div>
 
-
-{#    TODO:#}
-{#    messages se zobrazuji pod navabrem.#}
-{#    to same u opatrovnika#}
-
-
-      {% if messages %}
-          <div class="container mt-5" name="messages">
-        {% for msg in messages %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{msg}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-          </div>
-      {% endif %}
-
-
     <div class="container mt-5">
         {% block content %}
         {% endblock %}
