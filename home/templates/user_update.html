@@ -18,8 +18,14 @@
         <form action="{{ request.path }}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Upravit informace" class="btn btn-secondary">
+        <p><button type="button" class="btn btn-danger" onclick="redirect()">Zmena hesla</button> <input type="submit" value="Upravit informace" class="btn btn-secondary"></p>
+        <p><a href="{% url 'display_users' %}">Zpatky</a></p>
     </form>
     </div>
 
+    <script>
+    function redirect() {
+        window.location.replace(window.location + 'zmena-hesla/');
+    }
+    </script>
 {% endblock %}

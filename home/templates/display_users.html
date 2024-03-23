@@ -6,7 +6,7 @@
     <h5>Klienti</h5>
     {% for patient in patients %}
         {% with full_name='klient'|add:'-'|add:patient.first_name|add:'-'|add:patient.surname %}
-            <p><a href="{% url 'user_profile' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a></p>
+            <p><a href="{% url 'user_update' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a></p>
         {% endwith %}
     {% endfor %}
     <br>
@@ -14,7 +14,7 @@
     <h5>Opatrovnici</h5>
     {% for caregiver in caregivers %}
       {% with full_name='opatrovnik'|add:'-'|add:caregiver.first_name|add:'-'|add:caregiver.surname %}
-            <p><a href="{% url 'user_profile' full_name %}">{{ caregiver.first_name }} {{ caregiver.surname }}</a></p>
+            <p><a href="{% url 'user_update' full_name %}">{{ caregiver.first_name }} {{ caregiver.surname }}</a></p>
       {% endwith %}
     {% endfor %}
     <br>
@@ -22,7 +22,7 @@
     <h5>Admini</h5>
     {% for admin in admins %}
              {% with full_name='admin'|add:'-'|add:admin.first_name|add:'-'|add:admin.last_name %}
-            <p><a href="{% url 'user_profile' full_name %}">{{ admin.first_name }} {{ admin.last_name }}</a></p>
+            <p><a href="{% url 'user_update' full_name %}">{{ admin.first_name }} {{ admin.last_name }}</a></p>
       {% endwith %}
     {% endfor %}
     <br>
