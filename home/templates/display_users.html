@@ -28,13 +28,9 @@
     <br>
 
     {% if unfinished_users %}
-    	<h5>nedokoncene ucty</h5>
+    	<h5>Nedokoncene ucty klientu</h5>
         {% for unfinished_user in unfinished_users %}
-           {% if unfinished_user.groups.all.0.name == 'Patients' %}
-           	    <p><a href="{% url 'patient_registration' %}">Klient {{ unfinished_user.first_name }} {{ unfinished_user.last_name }}</a></p>
-           {% elif unfinished_user.groups.all.0.name == 'Caregivers' %}
-                <p><a href="{% url 'caregiver_registration' %}">Opatrovnik {{ unfinished_user.first_name }} {{ unfinished_user.last_name }}</a></p>
-           {% endif %} 
+            <p><a href="{% url 'patient_registration' %}">{{ unfinished_user.first_name }} {{ unfinished_user.last_name }}</a></p>
         {% endfor %}
     {% endif %}
     <p><a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a></p>

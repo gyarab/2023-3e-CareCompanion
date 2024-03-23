@@ -2,8 +2,7 @@
 
 {% block content %}
 
-<h1>Registrace pacienta</h1>
-
+<h1>Uprava infa pro pacienta</h1>
 
 <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
     {% csrf_token %}
@@ -44,10 +43,6 @@
 </form>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        resetForm();
-    });
-
     function resetForm() {
         $('#patient-registration-form')[0].reset();
         $('.formset-contacts').empty();

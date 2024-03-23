@@ -17,7 +17,7 @@ class ShiftInline(NestedStackedInline):
 
 class CaregiverAdmin(NestedModelAdmin):
     inlines = [ShiftInline]
-    list_display = ('first_name', 'surname')
+    list_display = ('first_name', 'last_name')
 
 
 admin.site.register(Caregiver, CaregiverAdmin)
