@@ -2,7 +2,6 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django.contrib.auth.models import User, Group
 from django import forms
 
-from caregiver.models import Caregiver
 from patient.models import Patient, Contact, MedicationIntake
 
 
@@ -11,22 +10,17 @@ class RegisterUserForm(UserCreationForm):
         queryset=Group.objects.all(),
         widget=forms.Select,
         required=True,
-        label='Typ uživatele',
+        label='Typ uživatele'
     )
 
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
+    first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
+    last_name = forms.CharField(max_length=30, required=True, label='Příjmení')
 
     class Meta:
         model = User
         fields = ('groups', 'first_name', 'last_name', 'username', 'password1', 'password2')
         labels = {
-            'groups': '',
-            'first_name': '',
-            'last_name': '',
-            'username': '',
-            'password1': '',
-            'password2': ''
+            'username': 'Uživatelské jméno',
         }
 
     def save(self, commit=True):
@@ -58,6 +52,7 @@ class PatientForm(forms.ModelForm):
         queryset=User.objects.filter(groups__name='Patients').exclude(patient_profile__isnull=False),
         widget=forms.Select,
         required=True,
+        label='Uživatel'
     )
 
     class Meta:
@@ -66,15 +61,14 @@ class PatientForm(forms.ModelForm):
         widgets = {
             'user': forms.Select(),
             'date_of_admission': DateInput(),
-            'birthday': DateInput(),
+            'birthday': DateInput()
         }
         labels = {
-            'user': 'U',
-            'date_of_admission': '',
-            'room_number': 'Cislo pokoje',
-            'birthday': '',
-            'health_info': '',
-            'fav_activities': '',
+            'date_of_admission': 'Datum přijetí',
+            'room_number': 'Číslo pokoje',
+            'birthday': 'Datum narození',
+            'health_info': 'Informace o zdraví',
+            'fav_activities': 'Oblíbené aktivity'
         }
 
     def __init__(self, *args, **kwargs):
@@ -92,6 +86,11 @@ class ContactForm(forms.ModelForm):
     class Meta:
         model = Contact
         fields = ['relationship', 'name', 'phone_number']
+        labels = {
+            'relationship': 'Vztah',
+            'name': 'Jméno',
+            'phone number': 'Telefonní číslo'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -104,11 +103,11 @@ class MedicationIntakeForm(forms.ModelForm):
     class Meta:
         model = MedicationIntake
         fields = ['medication', 'when', 'how']
-    labels = {
-        'relationship': '',
-        'name': '',
-        'phone number': ''
-    }
+        labels = {
+            'medication': 'Lék',
+            'when': 'Kdy',
+            'how': 'Jak'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -119,12 +118,15 @@ class MedicationIntakeForm(forms.ModelForm):
 
 class UpdateUsersInformationForm(UserChangeForm):
     password = None
-    first_name = forms.CharField(max_length=30, required=True)
-    last_name = forms.CharField(max_length=30, required=True)
+    first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
+    last_name = forms.CharField(max_length=30, required=True, label='Příjmení')
 
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'username')
+        labels = {
+            'username': 'Uživatelské jméno'
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
