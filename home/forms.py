@@ -144,3 +144,29 @@ class ResetUserPasswordForm(SetPasswordForm):
         super().__init__(*args, **kwargs)
         self.fields['new_password1'].widget.attrs['class'] = 'form-control'
         self.fields['new_password2'].widget.attrs['class'] = 'form-control'
+
+
+class UpdatePatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
+        widgets = {
+            'date_of_admission': DateInput(),
+            'birthday': DateInput()
+        }
+        labels = {
+            'date_of_admission': 'Datum přijetí',
+            'room_number': 'Číslo pokoje',
+            'birthday': 'Datum narození',
+            'health_info': 'Informace o zdraví',
+            'fav_activities': 'Oblíbené aktivity'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['date_of_admission'].widget.attrs['class'] = 'form-control'
+        self.fields['room_number'].widget.attrs['class'] = 'form-control'
+        self.fields['birthday'].widget.attrs['class'] = 'form-control'
+        self.fields['health_info'].widget.attrs['class'] = 'form-control'
+        self.fields['fav_activities'].widget.attrs['class'] = 'form-control'
+

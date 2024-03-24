@@ -2,8 +2,11 @@
 
 {% block content %}
 
-<h1>Uprava pacienta</h1>
-
+{% if creating %}
+	<h1>Registrace pacienta</h1>
+    {% else %}
+    <h1>Uprava infa pacienta</h1>
+{% endif %}
 
 <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
     {% csrf_token %}
@@ -20,7 +23,6 @@
         {% for form in contact_formset %}
             <div class="formset-contacts">
                 {{ form.as_p }}
-                 <button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete Contact</button>
             </div>
         {% endfor %}
     </div>
@@ -36,7 +38,6 @@
         {% for form in medication_formset %}
             <div class="formset-medications">
                 {{ form.as_p }}
-                <button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete Contact</button>
             </div>
         {% endfor %}
     </div>
@@ -46,6 +47,18 @@
 </form>
 
 <script>
+
+    {% if creating %}
+        document.addEventListener('DOMContentLoaded', function() {
+        resetForm();
+    });
+
+    function resetForm() {
+        $('#patient-registration-form')[0].reset();
+        $('.formset-contacts').empty();
+        $('.formset-medications').empty();
+    }
+    {% endif %}
 
     function addFormsetForm(formsetPrefix) {
         const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
@@ -79,10 +92,6 @@
 
         $('#add-medication').on('click', function() {
             addFormsetForm('medications');
-        });
-
-        $(document).on('click', '.delete-medication', function() {
-            $(this).closest('.formset-medications').remove();
         });
     });
 </script>
