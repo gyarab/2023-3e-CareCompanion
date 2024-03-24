@@ -146,8 +146,9 @@ def display_users(request):
 
 @admin_required
 def user_update(request, info_on_user):
-    group, first_name, surname = info_on_user.split('-')
-    user = User.objects.get(first_name=first_name, last_name=surname)
+    group, first_name, last_name = info_on_user.split('-')
+    # TODO: osetrit uzivatele se stejnym krestnim jmenem a prijemenim?
+    user = User.objects.get(first_name=first_name, last_name=last_name)
     form = UpdateUsersInformationForm(request.POST or None, instance=user)
 
     if form.is_valid():
@@ -160,8 +161,8 @@ def user_update(request, info_on_user):
 
 @admin_required
 def user_reset_password(request, info_on_user):
-    group, first_name, surname = info_on_user.split('-')
-    user = User.objects.get(first_name=first_name, last_name=surname)
+    group, first_name, last_name = info_on_user.split('-')
+    user = User.objects.get(first_name=first_name, last_name=last_name)
     form = ResetUserPasswordForm(user, request.POST or None)
 
     if form.is_valid():
@@ -175,8 +176,8 @@ def user_reset_password(request, info_on_user):
 
 @admin_required
 def patient_update(request, info_on_user):
-    group, first_name, surname = info_on_user.split('-')
-    patient = User.objects.get(first_name=first_name, last_name=surname).patient_profile
+    group, first_name, last_name = info_on_user.split('-')
+    patient = User.objects.get(first_name=first_name, last_name=last_name).patient_profile
 
     ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=0)
     MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)

@@ -32,7 +32,7 @@ def caregivers_list(request):
                 # If the shift has already started but not ended, the caregiver is on shift
                 users_shift_info.append({
                     'first_name': caregiver.first_name,
-                    'last_name': caregiver.surname,
+                    'last_name': caregiver.last_name,
                     'on_shift': True,
                     'shift_end': next_shift.end,
                 })
@@ -41,7 +41,7 @@ def caregivers_list(request):
                 next_shift_date = format_date(next_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ')
                 users_shift_info.append({
                     'first_name': caregiver.first_name,
-                    'last_name': caregiver.surname,
+                    'last_name': caregiver.last_name,
                     'on_shift': False,
                     'next_shift_date': next_shift_date,
                     'next_shift_start': next_shift.start,
@@ -50,7 +50,7 @@ def caregivers_list(request):
             # If there are no upcoming shifts
             users_shift_info.append({
                 'first_name': caregiver.first_name,
-                'last_name': caregiver.surname,
+                'last_name': caregiver.last_name,
                 'on_shift': False,
                 'next_shift_date': '',
                 'next_shift_start': 'Zadne registrovane budouci smeny',

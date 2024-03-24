@@ -4,8 +4,8 @@
 
     <h1>KARTY PACIENTŮ</h1>
     {% for patient in patients %}
-        {% with full_name=patient.first_name|add:'-'|add:patient.surname %}
-            <p><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a></p>
+        {% with full_name=patient.first_name|add:'-'|add:patient.last_name %}
+            <p><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
         {% endwith %}
     {% endfor %}
     <br>

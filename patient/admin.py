@@ -13,7 +13,7 @@ class MedicationIntakeInline(admin.TabularInline):
 
 
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'surname', 'room_number')
+    list_display = ('first_name', 'last_name', 'room_number')
     inlines = [ContactInline, MedicationIntakeInline]
 
 

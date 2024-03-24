@@ -8,10 +8,10 @@ from patient.models import Patient
 
 @caregiver_required
 def index(request):
-    first_name = request.user.caregiver_profile.first_name
-    surname = request.user.caregiver_profile.surname
+    first_name = request.user.first_name
+    last_name = request.user.last_name
     return render(request, 'index_caregiver.html', {'first_name': first_name,
-                                                    'surname': surname})
+                                                    'last_name': last_name})
 
 
 @caregiver_required
@@ -22,8 +22,8 @@ def medical_cards(request):
 
 @caregiver_required
 def patient_info(request, full_name_of_patient):
-    first_name, surname = full_name_of_patient.split('-')
-    patient = Patient.objects.get(user__first_name=first_name, user__last_name=surname)
+    first_name, last_name = full_name_of_patient.split('-')
+    patient = Patient.objects.get(user__first_name=first_name, user__last_name=last_name)
     return render(request, 'patient_info.html', {'patient': patient})
 
 

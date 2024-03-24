@@ -5,8 +5,8 @@
 
     <h5>Klienti</h5>
     {% for patient in patients %}
-        {% with full_name='klient'|add:'-'|add:patient.first_name|add:'-'|add:patient.surname %}
-            <p><a href="{% url 'user_update' full_name %}">{{ patient.first_name }} {{ patient.surname }}</a></p>
+        {% with full_name='klient'|add:'-'|add:patient.first_name|add:'-'|add:patient.last_name %}
+            <p><a href="{% url 'user_update' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
         {% endwith %}
     {% endfor %}
     <br>

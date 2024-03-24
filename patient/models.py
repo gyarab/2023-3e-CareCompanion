@@ -30,7 +30,7 @@ class Patient(models.Model):
         return self.user.first_name
 
     @property
-    def surname(self):
+    def last_name(self):
         return self.user.last_name
 
 

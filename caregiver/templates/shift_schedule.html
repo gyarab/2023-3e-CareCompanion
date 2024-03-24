@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.surname }}</h1>
+    <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.last_name }}</h1>
 
     {% for shift in caregiver.shift_set.all %}
         {% with shift.date_of_shift|date:"d-m-Y" as shift_date %}
