@@ -35,20 +35,25 @@
       font-size: 48px; /* Increased font size for the icons */
     }
     /* Customize gradient colors for each tile */
-    .tile:nth-child(1) .tile-body {
-      background: linear-gradient(to right, #20bf55, #01baef); /* Green gradient */
+   .tile:nth-child(1) .tile-body {
+      background: url('{% static 'greenbg.png' %}') no-repeat center center;
+      background-size: cover; /* This will scale your image to cover the entire element */
     }
     .tile:nth-child(2) .tile-body {
-      background: linear-gradient(to right, #f9ca24, #f0932b); /* Yellow gradient */
+      background: url('{% static 'ylowbg.jpeg' %}') no-repeat center center;
+      background-size: cover; /* This will scale your image to cover the entire element */
     }
     .tile:nth-child(3) .tile-body {
-      background: linear-gradient(to right, #ff7e5f, #d63031); /* Lighter to darker red gradient */
+      background: url('{% static 'redbg.jpeg' %}') no-repeat center center;
+      background-size: cover;
     }
     .tile:nth-child(4) .tile-body {
-      background: linear-gradient(to right, #d9d9d9, #5fa8d3); /* Gray to cyan gradient */
+      background: url('{% static 'pplbg.jpeg' %}') no-repeat center center;
+      background-size: cover;
     }
     .tile:nth-child(5) .tile-body {
-      background: linear-gradient(to right, #ff6b81, #833ab4); /* Lighter to darker pink gradient */
+      background: url('y{% static 'ylowbg.jpeg' %}') no-repeat center center;
+      background-size: cover;
     }
     /* Center the username */
     .username-box {
