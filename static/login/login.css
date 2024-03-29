@@ -1,5 +1,5 @@
 body {
-  background-color: #232121;
+  background-color: #939393;
   font-family: "Asap", sans-serif;
 }
 
@@ -63,7 +63,7 @@ body {
 
 .login > input[type="text"],
 .login > input[type="password"] {
-  border: 1px solid #484747; /* Add red border */
+  border: 1px solid #b4b4b4; /* Add red border */
     width: calc(100% - 20px); /* Adjust the width as needed */
   /*margin: 0 auto;  Center the input fields horizontally */
 }
@@ -84,10 +84,11 @@ body {
   background-color: #f45b69;
   -webkit-transition: background-color 300ms;
   -moz-transition: background-color 300ms;
-  transition: background-color 300ms;
+  transition: background-color 300ms, transform 0.4s ease;
 }
 .login > button:hover {
   background-color: #f24353;
+  transform: translateY(-8px);
 }
 
 .login > h1{
