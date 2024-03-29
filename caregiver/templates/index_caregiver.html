@@ -1,56 +1,53 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-  <div class="row ml-0 mr-0 ml-sm-4 mr-sm-4">
-    <div class="col-md-6 offset-md-3">
-      <div class="tile">
 
-          <a href="{% url 'shift_schedule' %}">
-        <div class="tile-header">Rozvrh směny</div>
-              <div class="outer-circle">
-        <div class="tile-body">
-
-          <div class="text-center">
-            <i class="bi bi-calendar2-week"></i> <!-- Use Bootstrap Icons class -->
-          </div>
+    <div class="container-fluid mt-4">
+        <div class="row ml-0 mr-0 ml-sm-4 mr-sm-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="tile">
+                    <a href="{% url 'shift_schedule' %}">
+                        <div class="tile-header">Rozvrh směny</div>
+                        <div class="outer-circle">
+                            <div class="tile-body">
+                                <div class="text-center">
+                                    <i class="bi bi-calendar2-week"></i> <!-- Use Bootstrap Icons class -->
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="tile">
+                    <a href="{% url 'medical_cards'%}">
+                        <div class="tile-header">Karty pacientů</div>
+                        <div class="tile-body">
+                            <div class="text-center">
+                                <i class="bi bi-person-vcard"></i> <!-- Use Bootstrap Icons class -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="tile">
+                    <a href="{% url 'floor_map' %}">
+                        <div class="tile-header">Plánek pokojů</div>
+                        <div class="tile-body">
+                            <div class="text-center">
+                                <i class="bi bi-map"></i> <!-- Use Bootstrap Icons class -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="tile">
+                    <a href="{% url 'manual' %}">
+                        <div class="tile-header">Příručka</div>
+                        <div class="tile-body">
+                            <div class="text-center">
+                                <i class="bi bi-journal-text"></i> <!-- Use Bootstrap Icons class -->
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
-              </div>
-          </a>
-
-      </div>
-      <div class="tile">
-          <a href="{% url 'medical_cards'%}">
-        <div class="tile-header">Karty pacientů</div>
-        <div class="tile-body">
-          <div class="text-center">
-            <i class="bi bi-person-vcard"></i> <!-- Use Bootstrap Icons class -->
-          </div>
-        </div>
-              </a>
-      </div>
-      <div class="tile">
-          <a href="{% url 'floor_map' %}">
-        <div class="tile-header">Plánek pokojů</div>
-        <div class="tile-body">
-          <div class="text-center">
-            <i class="bi bi-map"></i> <!-- Use Bootstrap Icons class -->
-          </div>
-        </div>
-              </a>
-      </div>
-      <div class="tile">
-          <a href="{% url 'manual' %}">
-        <div class="tile-header">Příručka</div>
-        <div class="tile-body">
-          <div class="text-center">
-            <i class="bi bi-journal-text"></i> <!-- Use Bootstrap Icons class -->
-          </div>
-        </div>
-              </a>
-      </div>
-
     </div>
-  </div>
-</div>
 {% endblock %}

@@ -9,8 +9,10 @@
     {% load static %}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon"> <!-- favicon -->
+   <!--- <link  rel="stylesheet" href="{#% static '/caregiver/caregiver2.css' %#}"> -->
   <style>
-    .tile {
+
+   .tile {
       border: 1px solid #ccc;
       margin-bottom: 20px;
       text-align: center;
@@ -38,6 +40,14 @@
    .tile:nth-child(1) .tile-body {
       background: url('{% static 'greenbg.png' %}') no-repeat center center;
       background-size: cover; /* This will scale your image to cover the entire element */
+
+       /*
+       transition-property: transform;
+       transition-duration: 0.3s;
+       transition-timing-function: ease;
+       transition-delay: 0s;
+
+        */
     }
     .tile:nth-child(2) .tile-body {
       background: url('{% static 'ylowbg.jpeg' %}') no-repeat center center;
@@ -93,9 +103,10 @@
 </div>
 
 <!-- display caregivers tiles -->
+<div class="block-content">
  {% block content %}
  {% endblock %}
-
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
