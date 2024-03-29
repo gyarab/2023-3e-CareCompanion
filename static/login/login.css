@@ -65,7 +65,6 @@ body {
 .login > input[type="password"] {
   border: 1px solid #b4b4b4; /* Add red border */
     width: calc(100% - 20px); /* Adjust the width as needed */
-  /*margin: 0 auto;  Center the input fields horizontally */
 }
 
 
@@ -81,7 +80,7 @@ body {
   margin-top: 10px;
   margin-left: 40%;
   border-radius: 5px;
-  background-color: #f45b69;
+  background-color: #9b9a9a; /* background-color: #f45b69; */
   -webkit-transition: background-color 300ms;
   -moz-transition: background-color 300ms;
   transition: background-color 300ms, transform 0.4s ease;
