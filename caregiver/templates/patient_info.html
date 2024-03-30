@@ -1,5 +1,10 @@
 {% extends 'base_caregiver.html' %}
 
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="card">
