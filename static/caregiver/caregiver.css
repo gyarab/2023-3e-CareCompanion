@@ -71,3 +71,41 @@
     div .card {
         margin-top: 20px;
     }
+
+    div .manual{
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
+
+    div .manual-body {
+        background-color: #f4f4f4;
+        padding: 20px;
+    }
+
+    h1 .manual-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    p. manual-text {
+        margin: 0;
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    p. manual-text > a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    p. manual-text > a:hover {
+        color: #0056b3;
+    }
+
+
+

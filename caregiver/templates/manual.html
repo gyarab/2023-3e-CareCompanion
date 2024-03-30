@@ -2,11 +2,20 @@
 
 {% block content %}
 
-    <h1>MANUÁL</h1>
-    <p><a href="{% url 'what_to_do'%}">Co dělat když?</a></p>
-    <p><a href="{% url 'activities'%}">Společenské aktivity</a></p>
-    <p><a href="{% url 'education'%}">Rozšiřte si znalosti o době našich klientů</a></p>
-
-    <p><a href="{% url 'index_caregiver' %}">ZPÁTKY</a></p>
+     <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="manual">
+                    <div class="manual-body">
+                        <h1 class="manual-title text-center">MANUÁL</h1>
+                        <p class="manual-text text-left"><a href="{% url 'what_to_do'%}">Co dělat když?</a></p>
+                        <p class="manual-text text-left"><a href="{% url 'activities'%}">Společenské aktivity</a></p>
+                        <p class="manual-text text-left"><a href="{% url 'education'%}">Rozšiřte si znalosti o době našich klientů</a></p>
+                        <p class="manual-text text-left"><a href="{% url 'index_caregiver' %}">ZPÁTKY</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
