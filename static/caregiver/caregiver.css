@@ -67,3 +67,7 @@
     div .tile:hover {
         transform: translateY(-8px);
     }
+
+    div .card {
+        margin-top: 20px;
+    }

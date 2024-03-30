@@ -1,22 +1,31 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
-<h1>{{ patient.first_name }} {{ patient.last_name }}</h1>
-<p>Datum narozeni {{ patient.birthday }}</p>
-<p>Cislo pokoje {{ patient.room_number }}</p>
-<p>Zdravotni info {{ patient.health_info }}</p>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ patient.first_name }} {{ patient.last_name }}</h1>
+            <p class="card-text">Datum narození: {{ patient.birthday }}</p>
+            <p class="card-text">Číslo pokoje: {{ patient.room_number }}</p>
+            <p class="card-text">Zdravotní informace: {{ patient.health_info }}</p>
 
-<h3>Prasky</h3>
-{% for medication_intake in patient.medicationintake_set.all %}
-    <p>{{ medication_intake.medication }} ( {{ medication_intake.when }}, {{ medication_intake.how }})</p>
-{% endfor %}
+            <h3>Prášky</h3>
+            <ul class="list-group">
+                {% for medication_intake in patient.medicationintake_set.all %}
+                    <li class="list-group-item">{{ medication_intake.medication }} ({{ medication_intake.when }}, {{ medication_intake.how }})</li>
+                {% endfor %}
+            </ul>
 
-<h3>Kontakty</h3>
-{% for contact in patient.contact_set.all %}
-    <p>{{ contact.name }} - {{ contact.get_relationship_display }}: {{ contact.phone_number }}</p>
-{% endfor %}
-<br>
-<p>Oblibene aktivity: {{ patient.fav_activities }}</p>
-<a href="{% url 'medical_cards' %}">ZPÁTKY</a>
+            <h3>Kontakty</h3>
+            <ul class="list-group">
+                {% for contact in patient.contact_set.all %}
+                    <li class="list-group-item">{{ contact.name }} - {{ contact.get_relationship_display }}: {{ contact.phone_number }}</li>
+                {% endfor %}
+            </ul>
 
+            <p class="card-text">Oblíbené aktivity: {{ patient.fav_activities }}</p>
+            <a href="{% url 'medical_cards' %}" class="btn btn-primary">ZPÁTKY</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
