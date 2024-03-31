@@ -28,7 +28,7 @@
                 {% endfor %}
             </ul>
 
-            <p class="card-text">Oblíbené aktivity: {{ patient.fav_activities }}</p>
+            <p class="card-text" id="activity">Oblíbené aktivity: {{ patient.fav_activities }}</p>
             <a href="{% url 'medical_cards' %}" class="btn btn-primary">ZPÁTKY</a>
         </div>
     </div>

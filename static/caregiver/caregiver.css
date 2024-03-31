@@ -72,6 +72,10 @@
         margin-top: 20px;
     }
 
+    p .card-text #activity {
+        padding-top: 10px;
+    }
+
     div .manual{
         border: none;
         border-radius: 5px;
@@ -106,6 +110,58 @@
     p. manual-text > a:hover {
         color: #0056b3;
     }
+
+    div .map-container{
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        /*
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        apply if we want the map to be centred on the page
+         */
+    }
+
+    h1 .map-h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    div .image-container {
+      text-align: center;
+        margin-bottom: 20px;
+    }
+
+    img .nice-image {
+      max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    div .image-container #makebigger:hover {
+      transform: scale(1.05);
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        text-decoration: none;
+        color: #007bff;
+        font-weight: bold;
+    }
+
+   .back-link:hover {
+       text-decoration: underline;
+   }
+
 
 
 
