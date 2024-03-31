@@ -11,7 +11,7 @@
     <div class="container medical-card-container">
         <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
         <ul id="myUL">
-            {% for patient in patients %}
+            {% for patient in patients %} <!-- todo: ideally make the list alphabetical (preorder on back-end) -->
                 {% with full_name=patient.first_name|add:'-'|add:patient.last_name %}
                     <li><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></li>
                 {% endwith %}
