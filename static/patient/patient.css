@@ -1,34 +1,78 @@
 body {
-  background-color: burlywood;
-}
-/* Add a black background color to the top navigation */
-.topnav {
-  background-color: darkslateblue;
-  overflow: hidden;
-}
-
-/* Style the links inside the navigation bar */
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
 }
 
-/* Change the color of links on hover */
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+.tile {
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+      text-align: center;
+      padding: 0px; /* Increased padding for the container */
+      border-radius: 10px; /* Rounded edges */
+    }
+    .tile-header {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 20px; /* Adjusted padding to remove top padding */
+      font-size: 24px; /* Increased font size for the header */
+      border-top-left-radius: 10px; /* Rounded edges for top-left corner */
+      border-top-right-radius: 10px; /* Rounded edges for top-right corner */
+    }
+    .tile-body {
+      padding: 20px;
+      color: #fff; /* Text color */
+      border-bottom-left-radius: 10px; /* Rounded edges for bottom-left corner */
+      border-bottom-right-radius: 10px; /* Rounded edges for bottom-right corner */
+    }
+    .tile i {
+      font-size: 48px; /* Increased font size for the icons */
+    }
+    /* Customize gradient colors for each tile */
+   .tile:nth-child(1) .tile-body {
+      background: url(/static/greenbg.png) no-repeat center center;
+      background-size: cover; /* This will scale your image to cover the entire element */
+    }
+    .tile:nth-child(2) .tile-body {
+      background: url(/static/ylowbg.jpeg) no-repeat center center;
+      background-size: cover; /* This will scale your image to cover the entire element */
+    }
+    .tile:nth-child(3) .tile-body {
+      background: url(/static/redbg.jpeg) no-repeat center center;
+      background-size: cover;
+    }
+    .tile:nth-child(4) .tile-body {
+      background: url(/static/pplbg.jpeg) no-repeat center center;
+      background-size: cover;
+    }
+    .tile:nth-child(5) .tile-body {
+      background: url(/static/ylowbg.jpeg) no-repeat center center;
+      background-size: cover;
+    }
 
-/* Add a color to the active/current link */
-.topnav a.active {
-  background-color: #04AA6D;
-  color: white;
-}
+    /* Center the username comment to allow me to push to git?*/
+    .username-box {
+      display: flex;
+      justify-content: center;
+    }
+    .navbar .navbar-text {
+      flex-grow: 1;
+    }
+    /* Adjust spacing */
+    .navbar-nav .nav-item:last-child {
+      margin-left: auto; /* Push the logoff button to the right */
+    }
 
-.container {
-  margin-top: 60px; /* Adjust the value as needed */
-}
+    .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    div .tile{
+        transition: transform 1s ease;
+    }
+    div .tile:hover {
+        transform: translateY(-8px);
+    }
