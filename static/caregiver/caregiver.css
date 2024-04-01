@@ -162,7 +162,42 @@
        text-decoration: underline;
    }
 
+   div .text-container {
+       font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+   }
 
+   div .text-container > p {
+        font-size: 16px;
+    margin-bottom: 10px;
+   }
+
+   div .text-container > a {
+        color: #007bff;
+    text-decoration: none;
+   }
+
+   div .text-container > h1 {
+       font-size: 28px;
+    margin-bottom: 20px;
+   }
+
+   div .text-container > h2 {
+       font-size: 24px;
+    margin-bottom: 15px;
+   }
+
+   div .custom-center {
+        text-align: left;
+    }
+
+    div .custom-center h2 {
+        text-align: left; /* change if we want the text to be justified to center */
+    }
 
 
 

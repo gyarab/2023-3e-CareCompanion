@@ -1,7 +1,16 @@
 {% extends 'base_caregiver.html' %}
 
 {% block content %}
-    <p>Nasi klienti ......</p>
 
-    <p><a href="{% url 'manual' %}">ZPÁTKY</a></p>
+    <div class="container-fluid text-container justify-content-center">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col-6 custom-center">
+                <p>Nasi klienti ......</p>
+
+                <p><a href="{% url 'manual' %}">ZPÁTKY</a></p>
+            </div>
+            <div class="col-3"></div>
+        </div>
+    </div>
 {% endblock %}
