@@ -17,19 +17,19 @@
 <body>
 
 <!-- custom bootstrap navbar -->
-<div class="container-fluid bg-light pt-1 pb-1">
-    <div class="row">
-        <div class="col d-none d-md-block"> <!-- First column, hidden on mobile -->
-            <div class="p-1 ml-3 mt-1 navbar-brand">Care companion</div>
-        </div>
-        <div class="col-9 col-sm-4 text-left text-sm-center"> <!-- Second column -->
-            <div class="p-1 mt-1 mb-1 pl-3 pl-sm-0 text-muted">{% block navbar %}{% endblock %}</div>
-        </div>
-        <div class="col-3 col-sm-4 text-right"> <!-- Third column -->
-            <div class="p-1 mr-2 text-end"><a class="btn btn-danger btn-sm" href="{% url 'logout_user' %}">Logoff</a></div>
+    <div class="container-fluid bg-light pt-1 pb-1">
+        <div class="row">
+            <div class="col d-none d-md-block"> <!-- First column, hidden on mobile -->
+                <div class="p-1 ml-3 mt-1 navbar-brand">Care companion</div>
+            </div>
+            <div class="col-9 col-sm-4 text-left text-sm-center"> <!-- Second column -->
+                <div class="p-1 mt-1 mb-1 pl-3 pl-sm-0 text-muted">{% block navbar %}{% endblock %}</div>
+            </div>
+            <div class="col-3 col-sm-4 text-right"> <!-- Third column -->
+                <div class="p-1 mr-2 text-end"><a class="btn btn-danger btn-sm" href="{% url 'logout_user' %}">Logoff</a></div>
+            </div>
         </div>
     </div>
-</div>
 
 <!-- display caregivers tiles -->
 <div class="block-content">
