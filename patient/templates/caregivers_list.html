@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    <div class="container">
+    <div class="container pt-2">
       <table class="table table-striped">
         <thead class="thead-dark">
             <tr>
@@ -30,6 +30,10 @@
 
     </div>
 
-    <a href="{% url 'index_patient' %}">ZPÁTKY</a>
+    <div class="row justify-content-center mt-4"> <!-- Center the button -->
+        <div class="col-4 col-md-4">
+            <a href="{% url 'index_patient' %}" class="btn btn-secondary btn-block">ZPÁTKY</a>
+        </div>
+    </div>
 
 {% endblock %}
