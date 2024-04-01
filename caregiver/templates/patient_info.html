@@ -21,14 +21,14 @@
                 {% endfor %}
             </ul>
 
-            <h3>Kontakty</h3>
+            <h3 class="pt-2">Kontakty</h3>
             <ul class="list-group">
                 {% for contact in patient.contact_set.all %}
                     <li class="list-group-item">{{ contact.name }} - {{ contact.get_relationship_display }}: {{ contact.phone_number }}</li>
                 {% endfor %}
             </ul>
 
-            <p class="card-text" id="activity">Oblíbené aktivity: {{ patient.fav_activities }}</p>
+            <p class="card-text pt-2" id="activity">Oblíbené aktivity: {{ patient.fav_activities }}</p>
             <a href="{% url 'medical_cards' %}" class="btn btn-primary">ZPÁTKY</a>
         </div>
     </div>
