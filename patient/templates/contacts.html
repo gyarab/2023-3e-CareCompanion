@@ -1,4 +1,8 @@
 {% extends 'base_patient.html' %}
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_patient' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
 
 {% block content %}
 
