@@ -1,6 +1,11 @@
 {% extends 'base_caregiver.html' %}
 {% load tz %}
 
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
+
 {% block content %}
 
     <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.last_name }}</h1>
