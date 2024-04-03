@@ -31,53 +31,68 @@ def patient_info(request, full_name_of_patient):
 
 @caregiver_required
 def shift_schedule(request):
-    # caregivers = Caregiver.objects.all()
     caregiver = request.user.caregiver_profile
+    context = {'caregiver': caregiver}
     now = datetime.now()
 
     # Saves the first upcoming/current shift (either today or in the future)
-    next_shift = caregiver.shift_set.filter(
+    shifts = caregiver.shift_set.filter(
         Q(date_of_shift__gt=now.date()) |  # Future shifts OR
         (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
-    ).order_by('date_of_shift', 'start').first()
+    ).order_by('date_of_shift', 'start')
 
-    if next_shift:
-        shift_start = datetime.combine(next_shift.date_of_shift, next_shift.start)
-        shift_end = datetime.combine(next_shift.date_of_shift, next_shift.end)
-        if shift_start <= now <= shift_end:
+    if shifts:
+        context.update({'shifts': shifts})
+        soonest_shift = shifts.first()
+        shift_start = datetime.combine(soonest_shift.date_of_shift, soonest_shift.start)
+        shift_end = datetime.combine(soonest_shift.date_of_shift, soonest_shift.end)
 
-            # If the shift has already started but not ended, the caregiver is on shift
+        # smeny dnes (probihaji nebo jeste budou)
+        if shift_start <= now <= shift_end or soonest_shift.date_of_shift == now.date():
             context = {
-                'caregiver': caregiver,
-                'on_shift': True,
+                'today': True,
                 'shift_start': shift_start.time,
                 'shift_end': shift_end.time,
-                'activities':  next_shift.activity_set.all
+                'activities': soonest_shift.activity_set.all
             }
-        else:
-            # If the shift is upcoming, displaying its details
-            next_shift_date = format_date(next_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ')
-            context = {
-                'caregiver': caregiver,
-                'on_shift': False,
-                'next_shift_date': next_shift_date,
-                'next_shift_start': next_shift.start,
-                'activities': next_shift.activity_set.all
-            }
-    else:
-        context = {
-            'caregiver': caregiver,
-            'on_shift': False,
-            'next_shift_date': False
-        }
+            shifts = shifts[1:]
 
-    context.update({})
+        # nadchazejici smeny
+        if shifts:
+            upcoming_shifts_info = []
+            for upcoming_shift in shifts:
+                upcoming_shifts_info.append({
+                    'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ'),
+                    'upcom_shift_start': upcoming_shift.start,
+                    'upcom_shift_end': upcoming_shift.end,
+                    'activities': upcoming_shift.activity_set.all
+                })
+
+            context.update({'upcoming_shifts_info': upcoming_shifts_info})
+
+        else:
+            context.update({'shifts': shifts})
+
+        # next_shift_date = format_date(soonest_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ')
+        # context = {
+        #     'caregiver': caregiver,
+        #     'on_shift': False,
+        #     'shift_date': next_shift_date,
+        #     'shift_start': soonest_shift.start,
+        #     'shift_end': soonest_shift.end,
+        #     'today': soonest_shift.date_of_shift == now.date(),
+        #     'activities': soonest_shift.activity_set.all
+        # }
+    else:
+        context.update({'shifts': shifts})
+
     return render(request, 'shift_schedule.html', context)
 
 
 @caregiver_required
 def floor_map(request):
-    return render(request, 'floor_map.html')
+    patients = Patient.objects.all()
+    return render(request, 'floor_map.html', {'patients': patients})
 
 
 @caregiver_required

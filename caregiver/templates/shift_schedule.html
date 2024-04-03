@@ -8,24 +8,66 @@
 
 {% block content %}
 
-    <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.last_name }}</h1>
+    {% if shifts %}
+        {% if today %}
+        	<h3>Informace o vasi dnesni smene</h3>
+            <h6>Od {{ shift_start }} do {{ shift_end }}</h6>
+            {% if activities %}
+                <h6>Napln smeny:</h6>
+                {% for activity in activities %}
+                    <p>{{ activity.time }} -> {{ activity.description }}</p>
+                {% endfor %}
+            {% endif %}
 
-    {% if on_shift %}
-    	<h3>Informace k vasi dnesi smene</h3>
-        <p>dnes jste na smene od {{ shift_start }} do {{ shift_end }}</p>
-        {% if activities %}
-            <h6>Napln smeny:</h6>
-        	{% for activity in activities %}
-        		<p>{{ activity.time }} -> {{ activity.description }}</p>
-        	{% endfor %}
+            <p>------------------------------------------------------------------</p>
         {% endif %}
+
+        {% if upcoming_shifts_info %}
+            <h3>Vase nadchazejici smeny</h3>
+        	{% for shift_info in upcoming_shifts_info %}
+                <h6>{{ shift_info.upcom_shift_date }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h6>
+                <h8>Napl smeny:</h8>
+                <p>lalala</p>
+                <p>lalala</p>
+                <p>-----</p>
+            {% endfor %}
+            {% else %}
+                <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu.</h3>
+            {% endif %}
+
         {% else %}
-            <h3>Informace o nadchazejicich smene</h3>
-                {% if next_shift_date %}
-                	<p>Vase dlasi smena: {{ next_shift_date }} v {{ next_shift_start }}</p>
-                    {% else %}
-                    <p>Nemate zadne dalsi registrovane smeny.</p>
-                {% endif %}
+{#            z nejakeho duvodu se deje tahle else condition kdy ma user smenu dnes#}
+            <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu.</h3>
     {% endif %}
+
+{#    {% if on_shift or today %}#}
+{#    	<h3>Informace o vasi dnesni smene</h3>#}
+{#        <h6>Od {{ shift_start }} do {{ shift_end }}</h6>#}
+{#        {% if activities %}#}
+{#            <h6>Napln smeny:</h6>#}
+{#        	{% for activity in activities %}#}
+{#        		<p>{{ activity.time }} -> {{ activity.description }}</p>#}
+{#        	{% endfor %}#}
+{#        {% endif %}#}
+{#        {% else %}#}
+{#            <h3>Informace o nadchazejici smene</h3>#}
+{#                {% if shift_date %}#}
+{#                	<p>Vase dlasi smena: {{ shift_date }} v {{ shift_start }} do {{ shift_end }}</p>#}
+{#                    {% else %}#}
+{#                    <p>Nemate zadne dalsi registrovane smeny.</p>#}
+{#                {% endif %}#}
+{#        <p>------------------------------------------------------------------</p>#}
+{#        <br>#}
+{##}
+{#    {% endif %}#}
+{##}
+{#    info k naschazejicim smenam#}
+{#    {% if shift_start %}#}
+{##}
+{#    {% endif %}#}
+
+
+
+
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
 {% endblock %}
