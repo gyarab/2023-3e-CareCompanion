@@ -10,23 +10,22 @@
 
     <h1>ROZVRH SMĚNY pro {{ caregiver.first_name }} {{ caregiver.last_name }}</h1>
 
-    {% for shift in caregiver.shift_set.all %}
-        {% with shift.date_of_shift|date:"d-m-Y" as shift_date %}
-            {% if shift_date == current_date_time and current_time < shift.date_of_shift.end %}
-                <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
-
-                {% for activity in shift.activity_set.all %}
-                    <p>{{ activity.time }} -> {{ activity.description }}</p>
-                {% endfor %}
-            {% elif shift_date < current_date_time %}
-                <h3>{{ shift.date_of_shift.day }}. {{ shift.date_of_shift|date:"F" }}: {{ shift.start }} - {{shift.end}} </h3>
-
-                {% for activity in shift.activity_set.all %}
-                    <p>{{ activity.time }} -> {{ activity.description }}</p>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        <br>
-    {% endfor %}
+    {% if on_shift %}
+    	<h3>Informace k vasi dnesi smene</h3>
+        <p>dnes jste na smene od {{ shift_start }} do {{ shift_end }}</p>
+        {% if activities %}
+            <h6>Napln smeny:</h6>
+        	{% for activity in activities %}
+        		<p>{{ activity.time }} -> {{ activity.description }}</p>
+        	{% endfor %}
+        {% endif %}
+        {% else %}
+            <h3>Informace o nadchazejicich smene</h3>
+                {% if next_shift_date %}
+                	<p>Vase dlasi smena: {{ next_shift_date }} v {{ next_shift_start }}</p>
+                    {% else %}
+                    <p>Nemate zadne dalsi registrovane smeny.</p>
+                {% endif %}
+    {% endif %}
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
 {% endblock %}
