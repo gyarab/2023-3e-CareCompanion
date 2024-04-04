@@ -42,19 +42,19 @@ def shift_schedule(request):
     ).order_by('date_of_shift', 'start')
 
     if shifts:
-        context.update({'shifts': shifts})
+        context.update({'any_shifts': True})
         soonest_shift = shifts.first()
         shift_start = datetime.combine(soonest_shift.date_of_shift, soonest_shift.start)
         shift_end = datetime.combine(soonest_shift.date_of_shift, soonest_shift.end)
 
         # smeny dnes (probihaji nebo jeste budou)
         if shift_start <= now <= shift_end or soonest_shift.date_of_shift == now.date():
-            context = {
+            context.update({
                 'today': True,
                 'shift_start': shift_start.time,
                 'shift_end': shift_end.time,
                 'activities': soonest_shift.activity_set.all
-            }
+            })
             shifts = shifts[1:]
 
         # nadchazejici smeny
@@ -65,26 +65,13 @@ def shift_schedule(request):
                     'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ'),
                     'upcom_shift_start': upcoming_shift.start,
                     'upcom_shift_end': upcoming_shift.end,
-                    'activities': upcoming_shift.activity_set.all
+                    'upcom_activities': upcoming_shift.activity_set.all
                 })
 
             context.update({'upcoming_shifts_info': upcoming_shifts_info})
 
-        else:
-            context.update({'shifts': shifts})
-
-        # next_shift_date = format_date(soonest_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ')
-        # context = {
-        #     'caregiver': caregiver,
-        #     'on_shift': False,
-        #     'shift_date': next_shift_date,
-        #     'shift_start': soonest_shift.start,
-        #     'shift_end': soonest_shift.end,
-        #     'today': soonest_shift.date_of_shift == now.date(),
-        #     'activities': soonest_shift.activity_set.all
-        # }
     else:
-        context.update({'shifts': shifts})
+        context.update({'any_shifts': False})
 
     return render(request, 'shift_schedule.html', context)
 

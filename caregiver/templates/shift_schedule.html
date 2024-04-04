@@ -8,10 +8,10 @@
 
 {% block content %}
 
-    {% if shifts %}
+    {% if any_shifts %}
         {% if today %}
-        	<h3>Informace o vasi dnesni smene</h3>
-            <h6>Od {{ shift_start }} do {{ shift_end }}</h6>
+        	<h2>Informace o vasi dnesni smene</h2>
+            <h4>Od {{ shift_start }} do {{ shift_end }}</h4>
             {% if activities %}
                 <h6>Napln smeny:</h6>
                 {% for activity in activities %}
@@ -20,16 +20,22 @@
             {% endif %}
 
             <p>------------------------------------------------------------------</p>
+            <br>
         {% endif %}
 
         {% if upcoming_shifts_info %}
-            <h3>Vase nadchazejici smeny</h3>
+            <h2>Vase nadchazejici smeny</h2>
         	{% for shift_info in upcoming_shifts_info %}
-                <h6>{{ shift_info.upcom_shift_date }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h6>
-                <h8>Napl smeny:</h8>
-                <p>lalala</p>
-                <p>lalala</p>
-                <p>-----</p>
+                <h4>{{ shift_info.upcom_shift_date }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h4>
+
+                {% if shift_info.upcom_activities %}
+                    <h6>Napln smeny:</h6>
+                    {% for activity in shift_info.upcom_activities %}
+                        <p>{{ activity.time }} -> {{ activity.description }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                <p>--------</p>
             {% endfor %}
             {% else %}
                 <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu.</h3>
@@ -37,7 +43,7 @@
 
         {% else %}
 {#            z nejakeho duvodu se deje tahle else condition kdy ma user smenu dnes#}
-            <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu.</h3>
+            <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu...</h3>
     {% endif %}
 
 {#    {% if on_shift or today %}#}
