@@ -28,11 +28,42 @@
                 {% endfor %}
             </ul>
 
-            {% if patient.observations %}
-            	<p class="card-text pt-2" id="activity">Postřehy o klientovi: {{ patient.observations|linebreaks }}</p>
+            {# jestli Patient nema zadne observations tak se nic nezobrazi #}
+            <h3 class="pt-2">Postřehy o klientovi:</h3>
+            {% if not form.instance.observations %}
+                <div id="current-observations" style="display: none;">
+            {% else %}
+                <div id="current-observations">
             {% endif %}
+                <p>{{ patient.observations|linebreaks }}</p>
+            </div>
+
+            <button id="edit-observations" class="btn btn-primary">Přidat/upravit</button>
+            <div id="observations-form" style="display: none;">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if patient.observations %}
+                        <input type="hidden" name="observations" value="{{ patient.observations }}">
+                    {% endif %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Uložit</button>
+                </form>
+            </div>
+            <br>
             <a href="{% url 'medical_cards' %}" class="btn btn-primary">ZPÁTKY</a>
         </div>
     </div>
 </div>
+</div>
+
+<script>
+    document.getElementById("edit-observations").addEventListener("click", function() {
+        {#schova vypsane postrehy#}
+        document.getElementById("current-observations").style.display = "none";
+        {#schova button na editovani#}
+        document.getElementById("edit-observations").style.display = "none";
+        {#zobrazi formu#}
+        document.getElementById("observations-form").style.display = "block";
+    });
+</script>
 {% endblock %}

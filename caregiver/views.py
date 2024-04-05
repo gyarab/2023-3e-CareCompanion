@@ -2,10 +2,11 @@ from datetime import datetime
 from babel.dates import format_date
 
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .decorators import caregiver_required
 from patient.models import Patient
+from home.forms import ObservationForm
 
 
 @caregiver_required
@@ -26,7 +27,13 @@ def medical_cards(request):
 def patient_info(request, full_name_of_patient):
     first_name, last_name = full_name_of_patient.split('-')
     patient = Patient.objects.get(user__first_name=first_name, user__last_name=last_name)
-    return render(request, 'patient_info.html', {'patient': patient})
+    form = ObservationForm(request.POST or None, instance=patient)
+
+    if form.is_valid():
+        form.save()
+        return redirect('patient_info', full_name_of_patient)
+
+    return render(request, 'patient_info.html', {'patient': patient, 'form': form})
 
 
 @caregiver_required

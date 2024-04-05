@@ -176,3 +176,19 @@ class UpdatePatientForm(forms.ModelForm):
         self.fields['health_info'].widget.attrs['class'] = 'form-control'
         self.fields['observations'].widget.attrs['class'] = 'form-control'
 
+
+class ObservationForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['observations']
+        labels = {
+            'observations': ''
+        }
+        help_texts = {
+            'observations': 'Jakákoliv vypozorovaná zajímavá fakta ke klientovi (např. zájmy, oblícená témata a aktivty atd.)'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['observations'].widget.attrs['class'] = 'form-control'
+
