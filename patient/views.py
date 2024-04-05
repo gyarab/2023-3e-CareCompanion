@@ -45,6 +45,7 @@ def caregivers_list(request):
                     'on_shift': False,
                     'next_shift_date': next_shift_date,
                     'next_shift_start': next_shift.start,
+                    'next_shift_end': next_shift.end
                 })
         else:
             # If there are no upcoming shifts
@@ -52,8 +53,7 @@ def caregivers_list(request):
                 'first_name': caregiver.first_name,
                 'last_name': caregiver.last_name,
                 'on_shift': False,
-                'next_shift_date': '',
-                'next_shift_start': 'Zadne registrovane budouci smeny',
+                'no_upc_shifts': True
             })
 
     return render(request, 'caregivers_list.html', {'users_shift_info': users_shift_info})

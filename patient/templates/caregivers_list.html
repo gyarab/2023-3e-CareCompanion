@@ -22,7 +22,10 @@
                 <td>{{ user_info.first_name }}</td>
                 <td>{{ user_info.last_name }}</td>
                 <td>{% if user_info.on_shift %} Ano {% else %} Ne {% endif %}</td>
-                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }} {% else %} Dalsi smena: {{ user_info.next_shift_date }} {{ user_info.next_shift_start }} {% endif %}</td>
+                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }}
+                    {% elif user_info.no_upc_shifts %} Žádné nadcházející směny nejsou registrované
+                    {% else %} Další směna: {{ user_info.next_shift_date }} od {{ user_info.next_shift_start }} do {{ user_info.next_shift_end }} {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>

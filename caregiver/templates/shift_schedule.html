@@ -26,7 +26,7 @@
         {% if upcoming_shifts_info %}
             <h2>Vase nadchazejici smeny</h2>
         	{% for shift_info in upcoming_shifts_info %}
-                <h4>{{ shift_info.upcom_shift_date }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h4>
+                <h4>{{ shift_info.upcom_shift_date|capfirst }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h4>
 
                 {% if shift_info.upcom_activities %}
                     <h6>Napln smeny:</h6>
@@ -42,38 +42,8 @@
             {% endif %}
 
         {% else %}
-{#            z nejakeho duvodu se deje tahle else condition kdy ma user smenu dnes#}
             <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu...</h3>
     {% endif %}
-
-{#    {% if on_shift or today %}#}
-{#    	<h3>Informace o vasi dnesni smene</h3>#}
-{#        <h6>Od {{ shift_start }} do {{ shift_end }}</h6>#}
-{#        {% if activities %}#}
-{#            <h6>Napln smeny:</h6>#}
-{#        	{% for activity in activities %}#}
-{#        		<p>{{ activity.time }} -> {{ activity.description }}</p>#}
-{#        	{% endfor %}#}
-{#        {% endif %}#}
-{#        {% else %}#}
-{#            <h3>Informace o nadchazejici smene</h3>#}
-{#                {% if shift_date %}#}
-{#                	<p>Vase dlasi smena: {{ shift_date }} v {{ shift_start }} do {{ shift_end }}</p>#}
-{#                    {% else %}#}
-{#                    <p>Nemate zadne dalsi registrovane smeny.</p>#}
-{#                {% endif %}#}
-{#        <p>------------------------------------------------------------------</p>#}
-{#        <br>#}
-{##}
-{#    {% endif %}#}
-{##}
-{#    info k naschazejicim smenam#}
-{#    {% if shift_start %}#}
-{##}
-{#    {% endif %}#}
-
-
-
 
     <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
 {% endblock %}
