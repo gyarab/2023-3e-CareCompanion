@@ -57,7 +57,7 @@ class PatientForm(forms.ModelForm):
 
     class Meta:
         model = Patient
-        fields = ['user', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
+        fields = ['user', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
         widgets = {
             'user': forms.Select(),
             'date_of_admission': DateInput(),
@@ -68,7 +68,10 @@ class PatientForm(forms.ModelForm):
             'room_number': 'Číslo pokoje',
             'birthday': 'Datum narození',
             'health_info': 'Informace o zdraví',
-            'fav_activities': 'Oblíbené aktivity'
+            'observations': 'Postřehy'
+        }
+        help_texts = {
+            'observations': 'Postřehy opatrovníku nebo informace ke klientovi poskytnuté blízkými nebo jím samotným',
         }
 
     def __init__(self, *args, **kwargs):
@@ -79,7 +82,7 @@ class PatientForm(forms.ModelForm):
         self.fields['room_number'].widget.attrs['class'] = 'form-control'
         self.fields['birthday'].widget.attrs['class'] = 'form-control'
         self.fields['health_info'].widget.attrs['class'] = 'form-control'
-        self.fields['fav_activities'].widget.attrs['class'] = 'form-control'
+        self.fields['observations'].widget.attrs['class'] = 'form-control'
 
 
 class ContactForm(forms.ModelForm):
@@ -149,7 +152,7 @@ class ResetUserPasswordForm(SetPasswordForm):
 class UpdatePatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'fav_activities']
+        fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
         widgets = {
             'date_of_admission': DateInput(),
             'birthday': DateInput()
@@ -159,7 +162,10 @@ class UpdatePatientForm(forms.ModelForm):
             'room_number': 'Číslo pokoje',
             'birthday': 'Datum narození',
             'health_info': 'Informace o zdraví',
-            'fav_activities': 'Oblíbené aktivity'
+            'observations': 'Postřehy'
+        }
+        help_texts = {
+            'observations': 'Postřehy opatrovníku nebo informace ke klientovi poskytnuté blízkými nebo jím samotným',
         }
 
     def __init__(self, *args, **kwargs):
@@ -168,5 +174,5 @@ class UpdatePatientForm(forms.ModelForm):
         self.fields['room_number'].widget.attrs['class'] = 'form-control'
         self.fields['birthday'].widget.attrs['class'] = 'form-control'
         self.fields['health_info'].widget.attrs['class'] = 'form-control'
-        self.fields['fav_activities'].widget.attrs['class'] = 'form-control'
+        self.fields['observations'].widget.attrs['class'] = 'form-control'
 

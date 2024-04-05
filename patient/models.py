@@ -10,6 +10,7 @@ class Patient(models.Model):
     room_number = models.IntegerField()
     birthday = models.DateField()
     health_info = models.TextField()
+    observations = models.TextField(blank=True, null=True)
 
     objects = models.Manager()
 
@@ -23,7 +24,6 @@ class Patient(models.Model):
 
     medications = MedicationIntakeManager()
     contacts = ContactManager()
-    fav_activities = models.CharField(max_length=255)
 
     @property
     def first_name(self):
@@ -70,4 +70,11 @@ class MedicationIntake(models.Model):
     )
     how = models.CharField(max_length=20, choices=HOW_CHOICES)
 
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+
+
+class Activity(models.Model):
+    date = models.DateField()
+    time = models.TimeField(blank=True, null=True)
+    description = models.CharField(max_length=50)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)

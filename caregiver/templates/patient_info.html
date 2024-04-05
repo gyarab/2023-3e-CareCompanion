@@ -12,7 +12,7 @@
             <h1 class="card-title">{{ patient.first_name }} {{ patient.last_name }}</h1>
             <p class="card-text">Datum narození: {{ patient.birthday }}</p>
             <p class="card-text">Číslo pokoje: {{ patient.room_number }}</p>
-            <p class="card-text">Zdravotní informace: {{ patient.health_info }}</p>
+            <p class="card-text">Zdravotní informace: {{ patient.health_info|linebreaks }}</p>
 
             <h3>Prášky</h3>
             <ul class="list-group">
@@ -28,7 +28,9 @@
                 {% endfor %}
             </ul>
 
-            <p class="card-text pt-2" id="activity">Oblíbené aktivity: {{ patient.fav_activities }}</p>
+            {% if patient.observations %}
+            	<p class="card-text pt-2" id="activity">Postřehy o klientovi: {{ patient.observations|linebreaks }}</p>
+            {% endif %}
             <a href="{% url 'medical_cards' %}" class="btn btn-primary">ZPÁTKY</a>
         </div>
     </div>
