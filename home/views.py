@@ -174,59 +174,6 @@ def user_reset_password(request, info_on_user):
         return render(request, 'user_reset_password.html', {'form': form, 'info_on_user': info_on_user})
 
 
-# @admin_required
-# def patient_update(request, info_on_user):
-#     group, first_name, last_name = info_on_user.split('-')
-#     patient = User.objects.get(first_name=first_name, last_name=last_name).patient_profile
-#
-#     ContactFormSet = inlineformset_factory(Patient, Contact, form=ContactForm, extra=0, can_delete=True)
-#     MedicationFormSet = inlineformset_factory(Patient, MedicationIntake, form=MedicationIntakeForm, extra=0,
-#                                               can_delete=True)
-#
-#     if request.method == 'POST':
-#         patient_form = UpdatePatientForm(request.POST, instance=patient)
-#         contact_formset = ContactFormSet(request.POST, instance=patient)
-#         medication_formset = MedicationFormSet(request.POST, instance=patient)
-#
-#         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
-#             with transaction.atomic():
-#                 patient = patient_form.save()
-#
-#                 for contact_form in contact_formset:
-#                     if contact_form.has_changed():
-#                         contact = contact_form.save(commit=False)
-#                         contact.patient = patient
-#                         contact.save()
-#
-#                 for medication_form in medication_formset:
-#                     if medication_form.has_changed():
-#                         medication = medication_form.save(commit=False)
-#                         medication.patient = patient
-#                         medication.save()
-#
-#             contact_formset.save()
-#             medication_formset.save()
-#
-#             messages.success(request, 'Patient information updated successfully.')
-#             return redirect('administration')
-#         else:
-#             messages.error(request, 'There was an error updating the patient information. Please check the form.')
-#
-#     else:
-#         patient_form = UpdatePatientForm(instance=patient)
-#         patient_form.initial['date_of_admission'] = patient.date_of_admission.strftime('%Y-%m-%d')
-#         patient_form.initial['birthday'] = patient.birthday.strftime('%Y-%m-%d')
-#         contact_formset = ContactFormSet(instance=patient)
-#         medication_formset = MedicationFormSet(instance=patient)
-#
-#     return render(request, 'universal_patient_form.html', {
-#         'patient_form': patient_form,
-#         'contact_formset': contact_formset,
-#         'medication_formset': medication_formset,
-#         'creating': False
-#     })
-
-
 # TODO: hezci moznost odstraneni existujicich kontaktu pacienta pri uprave infa
 
 def universal_patient_form(request, info_on_user=None):

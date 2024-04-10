@@ -25,6 +25,12 @@ class Patient(models.Model):
     medications = MedicationIntakeManager()
     contacts = ContactManager()
 
+    class ActivityManager(models.Manager):
+        def create_activity(self, patient, date, time, description):
+            return self.create(patient=patient, date=date, time=time, description=description)
+
+    activities = ActivityManager()
+
     @property
     def first_name(self):
         return self.user.first_name

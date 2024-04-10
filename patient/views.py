@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.db.models import Q
-
 from babel.dates import format_date
+
 from caregiver.models import Caregiver
 from .decorators import patient_required
 from datetime import datetime, time, date, timezone
+from .models import Activity
 
 
 @patient_required
@@ -67,4 +68,26 @@ def contacts(request):
 
 @patient_required
 def day_schedule(request):
-    return render(request, 'day_schedule.html')
+    patient = request.user.patient_profile
+    now = datetime.now()
+    activities = patient.activity_set.filter(date__gte=now.date(), time__gte=now.time())
+
+    if activities:
+        todays_activities = []
+        other_activities = []
+
+        for activity in activities:
+            if activity.date == now.date():
+                todays_activities.append(activity)
+            else:
+                other_activities.append(activity)
+
+        context = {
+            'todays_activities': todays_activities,
+            'other_activities': other_activities
+        }
+
+    else:
+        context = {'no_activities': True}
+
+    return render(request, 'day_schedule.html', context)

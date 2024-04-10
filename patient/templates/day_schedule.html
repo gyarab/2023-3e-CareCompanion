@@ -7,6 +7,28 @@
 {% block content %}
 
     <h1>ROZVRH DNE</h1>
+
+    {% if not no_activities %}
+
+        {% if todays_activities %}
+            <h4>Dnesni rozvrh</h4>
+        	{% for activity in todays_activities %}
+        		<p>{{ activity.time }} -> {{ activity.description }}</p>
+        	{% endfor %}
+            <p>-----------</p>
+        {% endif %}
+        {% if other_activities %}
+        	<h4>Rozvrhy na dalsi dny</h4>
+        {% endif %}
+
+
+        {% else %}
+            <p>Nemate zadne rovzhy :((((((</p>
+    {% endif %}
+
+
+
+
     <a href="{% url 'index_patient' %}">ZPÁTKY</a>
 
 {% endblock %}
