@@ -38,7 +38,7 @@
                 <p>{{ patient.observations|linebreaks }}</p>
             </div>
 
-            <button id="edit-observations" class="btn btn-primary">Přidat/upravit</button>
+            <button id="edit-observations" class="btn btn-primary" style="margin-top: 0px; margin-bottom: 10px">Přidat/upravit</button>
             <div id="observations-form" style="display: none;">
                 <form method="post">
                     {% csrf_token %}
