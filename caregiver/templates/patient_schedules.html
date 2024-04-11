@@ -1,0 +1,33 @@
+{% extends 'base_caregiver.html' %}
+
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
+
+{# tady by bylo cute simply jenom seznam tech jmen a pod nima dnesni aktivity a pri kliknutim na nejaky button 'ukazat dlasi dny' by pod tim vyjeli i dalsi (v ramci tohodle url, script) #}
+{% block content %}
+
+    <h2>Rozvrhy klientu</h2>
+    <br>
+    {% for patient in patient_info %}
+        <h4>{{ patient.first_name }} {{ patient.last_name }}</h4>
+        {% for activity in patient_info.activities_info %}
+        	{% if activity.today %}
+        		<h6>Aktivity na dnesek:</h6>
+                <p>{{ activity.time }} -> {{ activity.description }}</p>
+
+                {% else %}
+                <h6>Aktiviry na dalsi dny:</h6>
+                <p>{{ activity.date }} llala</p>
+        	{% endif %}
+        {% endfor %}
+
+    {% endfor %}
+
+
+
+
+    <a class="text-center" href="{% url 'index_caregiver' %}">ZPÁTKY</a>
+
+{% endblock %}

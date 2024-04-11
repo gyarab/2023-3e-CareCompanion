@@ -69,7 +69,8 @@ def shift_schedule(request):
             upcoming_shifts_info = []
             for upcoming_shift in shifts:
                 upcoming_shifts_info.append({
-                    'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM', locale='cs_CZ'),
+                    'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM',
+                                                    locale='cs_CZ'),
                     'upcom_shift_start': upcoming_shift.start,
                     'upcom_shift_end': upcoming_shift.end,
                     'upcom_activities': upcoming_shift.activity_set.all
@@ -84,9 +85,24 @@ def shift_schedule(request):
 
 
 @caregiver_required
-def floor_map(request):
-    patients = Patient.objects.all()
-    return render(request, 'floor_map.html', {'patients': patients})
+def patient_schedules(request):
+    now = datetime.now()
+    patients_w_activities = Patient.objects.all().exclude(activity__isnull=True)
+    patient_info = []
+    activities_info = []
+
+    for patient in patients_w_activities:
+        activities = patient.activity_set.filter(date__gte=now.date())
+
+        for activity in activities:
+            if activity.date == now.date():
+                activities_info.append({'activity': activity, 'today': True})
+            else:
+                activities_info.append({'activity': activity, 'today': False})
+
+        patient_info.append({'patient': patient, 'activities_info': activities_info})
+
+    return render(request, 'patient_schedules.html', {'patient_info': patient_info})
 
 
 @caregiver_required
