@@ -88,21 +88,25 @@ def shift_schedule(request):
 def patient_schedules(request):
     now = datetime.now()
     patients_w_activities = Patient.objects.all().exclude(activity__isnull=True)
+    context = {}
     patient_info = []
-    activities_info = []
 
     for patient in patients_w_activities:
+        todays_activities = []
+        other_activities = []
         activities = patient.activity_set.filter(date__gte=now.date())
 
         for activity in activities:
             if activity.date == now.date():
-                activities_info.append({'activity': activity, 'today': True})
+                todays_activities.append({'activity': activity})
             else:
-                activities_info.append({'activity': activity, 'today': False})
+                other_activities.append({'activity': activity})
 
-        patient_info.append({'patient': patient, 'activities_info': activities_info})
+        patient_info.append({'patient': patient, 'todays_activities': todays_activities, 'other_activities': other_activities})
 
-    return render(request, 'patient_schedules.html', {'patient_info': patient_info})
+    context.update({'patient_info': patient_info})
+
+    return render(request, 'patient_schedules.html', context)
 
 
 @caregiver_required

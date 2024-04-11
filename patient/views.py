@@ -78,9 +78,9 @@ def day_schedule(request):
 
         for activity in activities:
             if activity.date == now.date():
-                todays_activities.append(activity)
+                todays_activities.append({'activity': activity})
             else:
-                other_activities.append(activity)
+                other_activities.append({'activity': activity})
 
         context = {
             'todays_activities': todays_activities,

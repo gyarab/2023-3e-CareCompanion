@@ -4,6 +4,7 @@
      <a href="{% url 'index_patient' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
 {% endblock %}
 
+{# TODO: datum i s dnem v tydnu #}
 {% block content %}
 
     <h1>ROZVRH DNE</h1>
@@ -13,16 +14,22 @@
         {% if todays_activities %}
             <h4>Dnesni rozvrh</h4>
         	{% for activity in todays_activities %}
-        		<p>{{ activity.time }} -> {{ activity.description }}</p>
+        		<p>{{ activity.activity.time }} -> {{ activity.activity.description }}</p>
         	{% endfor %}
             {% else %}
             <h4>Na dnes nemate zadne zadane aktivity</h4>
         {% endif %}
         <p>-----------</p>
-        {% if other_activities %}
-            {% for activity in other_activities %}
-            	<h3>{{ activity.date }}</h3>
-                <p>{{ activity.time }} -> {{ activity.description }}</p>
+         {% if other_activities %}
+            {% regroup other_activities by activity.date as grouped_activities %}
+            {% for date_activities in grouped_activities %}
+                <h4>{{ date_activities.grouper }}</h4>
+                {% for activity_info in date_activities.list %}
+                    <p>{{ activity_info.activity.time }} -> {{ activity_info.activity.description }}</p>
+                {% endfor %}
+                {% if not forloop.last %}
+                    <p>--------------</p>
+                {% endif %}
             {% endfor %}
         {% endif %}
 
