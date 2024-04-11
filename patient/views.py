@@ -70,7 +70,7 @@ def contacts(request):
 def day_schedule(request):
     patient = request.user.patient_profile
     now = datetime.now()
-    activities = patient.activity_set.filter(date__gte=now.date(), time__gte=now.time())
+    activities = patient.activity_set.filter(date__gte=now.date())
 
     if activities:
         todays_activities = []

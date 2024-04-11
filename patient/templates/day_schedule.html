@@ -15,12 +15,16 @@
         	{% for activity in todays_activities %}
         		<p>{{ activity.time }} -> {{ activity.description }}</p>
         	{% endfor %}
-            <p>-----------</p>
+            {% else %}
+            <h4>Na dnes nemate zadne zadane aktivity</h4>
         {% endif %}
+        <p>-----------</p>
         {% if other_activities %}
-        	<h4>Rozvrhy na dalsi dny</h4>
+            {% for activity in other_activities %}
+            	<h3>{{ activity.date }}</h3>
+                <p>{{ activity.time }} -> {{ activity.description }}</p>
+            {% endfor %}
         {% endif %}
-
 
         {% else %}
             <p>Nemate zadne rovzhy :((((((</p>
