@@ -18,13 +18,13 @@
         <form action="{{ request.path }}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-            <p><a href="">Uprava infa</a></p>
         <p><button type="button" class="btn btn-danger" onclick="redirectToPassword()">Zmena hesla</button>
             {% if group == 'klient' %}
         	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Zmena infa</button>
             {% endif %}</p>
         <p>
         <input type="submit" value="Upravit informace" class="btn btn-secondary"></p>
+        <p><a href="{% url 'delete_user' user.pk %}">Smazat ucet</a></p>
     </form>
     </div>
 

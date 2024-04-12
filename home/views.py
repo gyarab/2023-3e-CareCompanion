@@ -176,6 +176,7 @@ def user_reset_password(request, info_on_user):
 
 # TODO: hezci moznost odstraneni existujicich kontaktu pacienta pri uprave infa
 
+@admin_required
 def universal_patient_form(request, info_on_user=None):
     if info_on_user:
         # Handle patient update
@@ -265,3 +266,17 @@ def universal_patient_form(request, info_on_user=None):
         'medication_formset': medication_formset,
         'creating': creating
     })
+
+
+@admin_required
+def delete_user(request, pk):
+    user_for_deletion = User.objects.get(pk=pk)
+    if request.method == 'POST':
+        user_for_deletion.delete()
+        return redirect('display_users')
+
+    context = {
+        'first_name': user_for_deletion.first_name,
+        'last_name': user_for_deletion.last_name
+    }
+    return render(request, 'delete_user.html', context)

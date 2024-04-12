@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form action="" method="POST">
+      {% csrf_token %}
+        <h3>Prejete si smazat ucet pro uzivatele {{ first_name }} {{ last_name }}?</h3>
+        <p><input type="submit" value="Ano"> <a href="{% url 'display_users' %}">Ne</a></p>
+    </form>
+
+{% endblock %}
