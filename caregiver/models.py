@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
 
 
 class Caregiver(models.Model):
@@ -27,16 +26,4 @@ class Shift(models.Model):
     start = models.TimeField()
     end = models.TimeField()
 
-    class ActivityManager(models.Manager):
-        def create_activity(self, shift, time, description):
-            return self.create(shift=shift, time=time, description=description)
-
-    activities = ActivityManager()
-
     caregiver = models.ForeignKey(Caregiver, on_delete=models.CASCADE)
-
-
-class Activity(models.Model):
-    shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
-    time = models.TimeField()
-    description = models.CharField(max_length=255)

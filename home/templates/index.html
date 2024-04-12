@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+
+{# Kdyz je user prihlaseny mohl by tu videt vseobecny rozvrh (stejny kazdy den - snidane, obed, vecere, budicek..)#}
 {% block content %}
     <h1>Home</h1>
     {% if user.is_authenticated  %}

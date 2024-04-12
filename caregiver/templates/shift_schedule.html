@@ -12,13 +12,6 @@
         {% if today %}
         	<h2>Informace o vasi dnesni smene</h2>
             <h4>Od {{ shift_start }} do {{ shift_end }}</h4>
-            {% if activities %}
-                <h6>Napln smeny:</h6>
-                {% for activity in activities %}
-                    <p>{{ activity.time }} -> {{ activity.description }}</p>
-                {% endfor %}
-            {% endif %}
-
             <p>------------------------------------------------------------------</p>
             <br>
         {% endif %}
@@ -26,15 +19,8 @@
         {% if upcoming_shifts_info %}
             <h2>Vase nadchazejici smeny</h2>
         	{% for shift_info in upcoming_shifts_info %}
-                <h4>{{ shift_info.upcom_shift_date|capfirst }} {{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</h4>
-
-                {% if shift_info.upcom_activities %}
-                    <h6>Napln smeny:</h6>
-                    {% for activity in shift_info.upcom_activities %}
-                        <p>{{ activity.time }} -> {{ activity.description }}</p>
-                    {% endfor %}
-                {% endif %}
-
+                <h4>{{ shift_info.upcom_shift_date|capfirst }}</h4>
+                <p>{{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</p>
                 <p>--------</p>
             {% endfor %}
             {% else %}

@@ -59,8 +59,7 @@ def shift_schedule(request):
             context.update({
                 'today': True,
                 'shift_start': shift_start.time,
-                'shift_end': shift_end.time,
-                'activities': soonest_shift.activity_set.all
+                'shift_end': shift_end.time
             })
             shifts = shifts[1:]
 
@@ -72,8 +71,7 @@ def shift_schedule(request):
                     'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM',
                                                     locale='cs_CZ'),
                     'upcom_shift_start': upcoming_shift.start,
-                    'upcom_shift_end': upcoming_shift.end,
-                    'upcom_activities': upcoming_shift.activity_set.all
+                    'upcom_shift_end': upcoming_shift.end
                 })
 
             context.update({'upcoming_shifts_info': upcoming_shifts_info})

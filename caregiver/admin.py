@@ -1,21 +1,14 @@
 from django.contrib import admin
-from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
-from .models import Caregiver, Shift, Activity
-
-
-class ActivityInline(NestedStackedInline):
-    model = Activity
-    extra = 0
+from .models import Caregiver, Shift
 
 
-class ShiftInline(NestedStackedInline):
+class ShiftInline(admin.TabularInline):
     model = Shift
     extra = 0
-    inlines = [ActivityInline]
 
 
-class CaregiverAdmin(NestedModelAdmin):
+class CaregiverAdmin(admin.ModelAdmin):
     inlines = [ShiftInline]
     list_display = ('first_name', 'last_name')
 
