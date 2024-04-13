@@ -210,8 +210,6 @@ class InstituteContactForm(forms.ModelForm):
         self.fields['email'].widget.attrs['class'] = 'form-control'
 
 
-
-
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
@@ -244,10 +242,20 @@ class DayScheduleForm(forms.ModelForm):
         self.fields['description'].widget.attrs['class'] = 'form-control'
 
 
+# tady jsem chtela pridat widget na DateTime aby admin nemusel komplikovane zadavat to 'Smazat k datu',
+# bohuzel se to pak vsechno zkomplikovalo s vkladanim dat existujicich oznameni
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
         fields = ['text', 'delete_when']
         labels = {
+            'text': 'Text',
             'delete_when': 'Smazat k datu'
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs['class'] = 'form-control'
+        self.fields['delete_when'].widget.attrs['class'] = 'form-control'
+
+
