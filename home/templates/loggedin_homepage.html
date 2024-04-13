@@ -2,5 +2,47 @@
 
 {% block content %}
 
+    <h2>CareCompanion: moderni pece, tradicni sluzba.</h2>
+    <h3>Vitejte zpet ve webove aplikace vyuzivane v Domove Seniorů Rudná!</h3>
+
+    {% if announcements %}
+    	{% for ann in announcements %}
+    		<div class="alert alert-primary" role="alert">
+             {{ ann.text }}
+            </div>
+    	{% endfor %}
+    {% endif %}
+
+    {% with group=request.user.groups.first %}
+        {% if 'Admins' == group.name  %}
+            <p><a href="{% url 'administration' %}" class="btn btn-secondary">VSTUP DO APLIKACE</a></p>
+        {% elif 'Caregivers' == group.name %}
+            <p><a href="{% url 'index_caregiver' %}" class="btn btn-secondary">VSTUP DO APLIKACE</a></p>
+        {% elif 'Patients' == group.name %}
+            <p><a href="{% url 'index_patient' %}" class="btn btn-secondary">VSTUP DO APLIKACE</a></p>
+        {% endif %}
+    {% endwith %}
+
+    <h4>Trvaly rozpis dne:</h4>
+    {% for day_schedule in day_schedules %}
+    	<p>{{ day_schedule.time }} -> {{ day_schedule.description }}</p>
+    {% endfor %}
+
+    <br>
+    <h4>Kde nas najdete?</h4>
+    {% with address_url="https://www.google.com/maps/embed/v1/place?key=AIzaSyCiSPawPz4WtttRxRP3C4RXy2cxFEnJUn0&q="|add:address.street|add:",+"|add:address.zip_code|add:",+"|add:address.city|add:"&maptype=satellite" %}
+        <p>{{ address.street }}, {{ address.zip_code }} {{ address.city }}</p>
+        <iframe src="{{ address_url }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    {% endwith %}
+    <br>
+
+    <h4>Koho kontaktovat pri potizich s aplikaci?</h4>
+    <p><strong>Clena personalu</strong> nebo nase IT specialisty:</p>
+    {% for contact in contacts %}
+    	<p><strong>{{ contact.name }}</strong></p>
+        <p>Telefonni cislo: {{ contact.phone_number }}</p>
+        <p>Emailova adresa: {{ contact.email }}</p>
+        <br>
+    {% endfor %}
 
 {% endblock %}

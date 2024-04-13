@@ -10,16 +10,15 @@
     <p>Pro prihlaseni kliknete <a href="{% url 'login_user' %}">ZDE</a></p>
 
     <br>
-    <h5>Kde nas najdete?</h5>
-    {% for addr in address %}
-       {% with address_url="https://www.google.com/maps/embed/v1/place?key=AIzaSyCiSPawPz4WtttRxRP3C4RXy2cxFEnJUn0&q="|add:addr.street|add:",+"|add:addr.zip_code|add:",+"|add:addr.city|add:"&maptype=satellite" %}
-            <p>{{ addr.street }}, {{ addr.zip_code }} {{ addr.city }}</p>
-            <iframe src="{{ address_url }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        {% endwith %}
-    {% endfor %}
+    <h4>Kde nas najdete?</h4>
+    {% with address_url="https://www.google.com/maps/embed/v1/place?key=AIzaSyCiSPawPz4WtttRxRP3C4RXy2cxFEnJUn0&q="|add:address.street|add:",+"|add:address.zip_code|add:",+"|add:address.city|add:"&maptype=satellite" %}
+        <p>{{ address.street }}, {{ address.zip_code }} {{ address.city }}</p>
+        <iframe src="{{ address_url }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    {% endwith %}
     <br>
 
-    <h5>Koho kontaktovat pri potizich s aplikaci?</h5>
+    <h4>Koho kontaktovat pri potizich s aplikaci?</h4>
+    <p><strong>Clena personalu</strong> nebo nase IT specialisty:</p>
     {% for contact in contacts %}
     	<p><strong>{{ contact.name }}</strong></p>
         <p>Telefonni cislo: {{ contact.phone_number }}</p>

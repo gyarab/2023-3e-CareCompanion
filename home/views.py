@@ -16,13 +16,13 @@ from .forms import RegisterUserForm, PatientForm, ContactForm, MedicationIntakeF
 def index(request):
     context = {
         'contacts': Institute_contact.objects.all(),
-        'address': Address.objects.all()
+        'address': Address.objects.first()
     }
 
     if request.user.is_authenticated:
         context.update({
             'day_schedules': DaySchedule.objects.all(),
-            'announcements': Announcement.objects.first()
+            'announcements': Announcement.objects.all()
         })
         return render(request, 'loggedin_homepage.html', context)
     else:
