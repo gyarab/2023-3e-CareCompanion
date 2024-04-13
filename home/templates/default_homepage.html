@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{# stranka zobrazuje info co ma, ale to je vsechno. vzhled neni v tomhle kodu vubec poresen, takze si s tim nekdo snad vyhraje #}
+{% block content %}
+
+    <h2>CareCompanion: moderni pece, tradicni sluzba.</h2>
+    <h4>Vitejte na strance webove aplikace vyuzivane v Domove Seniorů Rudná</h4>
+
+    <p>Pro prihlaseni kliknete <a href="{% url 'login_user' %}">ZDE</a></p>
+
+    <br>
+    <h5>Kde nas najdete?</h5>
+    {% for addr in address %}
+       {% with address_url="https://www.google.com/maps/embed/v1/place?key=AIzaSyCiSPawPz4WtttRxRP3C4RXy2cxFEnJUn0&q="|add:addr.street|add:",+"|add:addr.zip_code|add:",+"|add:addr.city|add:"&maptype=satellite" %}
+            <p>{{ addr.street }}, {{ addr.zip_code }} {{ addr.city }}</p>
+            <iframe src="{{ address_url }}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        {% endwith %}
+    {% endfor %}
+    <br>
+
+    <h5>Koho kontaktovat pri potizich s aplikaci?</h5>
+    {% for contact in contacts %}
+    	<p><strong>{{ contact.name }}</strong></p>
+        <p>Telefonni cislo: {{ contact.phone_number }}</p>
+        <p>Emailova adresa: {{ contact.email }}</p>
+        <br>
+    {% endfor %}
+
+{% endblock %}

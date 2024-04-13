@@ -1,20 +1,32 @@
 from django.db import transaction
-from django.db.models.signals import post_save
 from django.forms import modelformset_factory, inlineformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 
+from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 from caregiver.models import Caregiver
-from patient.models import Patient, MedicationIntake, Contact
+from patient.models import Patient, MedicationIntake, Contact as Patient_contact
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, ContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
     ResetUserPasswordForm, UpdatePatientForm
 
 
 def index(request):
-    return render(request, 'index.html')
+    context = {
+        'contacts': Institute_contact.objects.all(),
+        'address': Address.objects.all()
+    }
+
+    if request.user.is_authenticated:
+        context.update({
+            'day_schedules': DaySchedule.objects.all(),
+            'announcements': Announcement.objects.first()
+        })
+        return render(request, 'loggedin_homepage.html', context)
+    else:
+        return render(request, 'default_homepage.html', context)
 
 
 def login_user(request):
@@ -73,47 +85,6 @@ def account_creation(request):
             return redirect('administration')
     else:
         return render(request, 'acc_creation.html', {'form': form})
-
-
-# @admin_required
-# def register_patient(request):
-#     ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=0)
-#     MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)
-#
-#     if request.method == 'POST':
-#         patient_form = PatientForm(request.POST)
-#         contact_formset = ContactFormSet(request.POST, prefix='contacts')
-#         medication_formset = MedicationFormSet(request.POST, prefix='medications')
-#
-#         if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
-#             with transaction.atomic():
-#                 patient = patient_form.save()
-#
-#                 for contact_form in contact_formset:
-#                     if contact_form.has_changed():
-#                         contact = contact_form.save(commit=False)
-#                         contact.patient = patient
-#                         contact.save()
-#
-#                 for medication_form in medication_formset:
-#                     if medication_form.has_changed():
-#                         medication = medication_form.save(commit=False)
-#                         medication.patient = patient
-#                         medication.save()
-#
-#             messages.success(request, 'Registrace klienta proběhla úspěšně')
-#             return redirect('administration')
-#
-#     else:
-#         patient_form = PatientForm()
-#         contact_formset = ContactFormSet(queryset=Contact.objects.none(), prefix='contacts')
-#         medication_formset = MedicationFormSet(queryset=MedicationIntake.objects.none(), prefix='medications')
-#
-#     return render(request, 'register_patient.html', {
-#         'patient_form': patient_form,
-#         'contact_formset': contact_formset,
-#         'medication_formset': medication_formset,
-#     })
 
 
 @admin_required
@@ -183,7 +154,7 @@ def universal_patient_form(request, info_on_user=None):
         group, first_name, last_name = info_on_user.split('-')
         patient = User.objects.get(first_name=first_name, last_name=last_name).patient_profile
 
-        ContactFormSet = inlineformset_factory(Patient, Contact, form=ContactForm, extra=0, can_delete=True)
+        ContactFormSet = inlineformset_factory(Patient, Patient_contact, form=ContactForm, extra=0, can_delete=True)
         MedicationFormSet = inlineformset_factory(Patient, MedicationIntake, form=MedicationIntakeForm, extra=0,
                                                   can_delete=True)
 
@@ -226,7 +197,7 @@ def universal_patient_form(request, info_on_user=None):
         creating = False
     else:
         # Handle patient registration
-        ContactFormSet = modelformset_factory(Contact, form=ContactForm, extra=0)
+        ContactFormSet = modelformset_factory(Patient_contact, form=ContactForm, extra=0)
         MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)
 
         if request.method == 'POST':
@@ -255,7 +226,7 @@ def universal_patient_form(request, info_on_user=None):
 
         else:
             patient_form = PatientForm()
-            contact_formset = ContactFormSet(queryset=Contact.objects.none(), prefix='contacts')
+            contact_formset = ContactFormSet(queryset=Patient_contact.objects.none(), prefix='contacts')
             medication_formset = MedicationFormSet(queryset=MedicationIntake.objects.none(), prefix='medications')
 
         creating = True
