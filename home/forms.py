@@ -2,7 +2,8 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django.contrib.auth.models import User, Group
 from django import forms
 
-from patient.models import Patient, Contact, MedicationIntake
+from patient.models import Patient, Contact as Patient_contact, MedicationIntake
+from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 
 
 class RegisterUserForm(UserCreationForm):
@@ -85,9 +86,9 @@ class PatientForm(forms.ModelForm):
         self.fields['observations'].widget.attrs['class'] = 'form-control'
 
 
-class ContactForm(forms.ModelForm):
+class PatientContactForm(forms.ModelForm):
     class Meta:
-        model = Contact
+        model = Patient_contact
         fields = ['relationship', 'name', 'phone_number']
         labels = {
             'relationship': 'Vztah',
@@ -192,3 +193,61 @@ class ObservationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['observations'].widget.attrs['class'] = 'form-control'
 
+
+class InstituteContactForm(forms.ModelForm):
+    class Meta:
+        model = Institute_contact
+        fields = ['name', 'phone_number', 'email']
+        labels = {
+            'name': 'Celé jméno',
+            'phone_number': 'Telefonní číslo'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['phone_number'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+
+
+
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['street', 'zip_code', 'city']
+        labels = {
+            'street': 'Ulice',
+            'zip_code': 'PSČ',
+            'city': 'Město'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['street'].widget.attrs['class'] = 'form-control'
+        self.fields['zip_code'].widget.attrs['class'] = 'form-control'
+        self.fields['city'].widget.attrs['class'] = 'form-control'
+
+
+class DayScheduleForm(forms.ModelForm):
+    class Meta:
+        model = DaySchedule
+        fields = ['time', 'description']
+        labels = {
+            'time': 'Čas',
+            'description': 'Popis'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['time'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+
+
+class AnnouncementForm(forms.ModelForm):
+    class Meta:
+        model = Announcement
+        fields = ['text', 'delete_when']
+        labels = {
+            'delete_when': 'Smazat k datu'
+        }

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" id="institute-info-form" autocomplete="off">
+    {% csrf_token %}
+
+    <h3>{{ header }} - zmena</h3>
+
+    <div id="{{ category }}-formset" data-form-prefix="{{ category }}" class="formset">
+        {{ formset.management_form }}
+        <div class="empty-form" style="display: none;">
+            {{ formset.empty_form }}
+        </div>
+        {% for form in formset %}
+            <div class="formset-{{ category }}">
+                {{ form.as_p }}
+                <br>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="button" id="add-{{ category }}" class="add-formset-item">Přidat</button>
+    <br>
+    <button type="submit" id="save-institute-info-btn">Uložit informace</button>
+</form>
+
+<script>
+    function addFormsetForm(formsetPrefix) {
+        const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
+        let totalForms = parseInt(managementForm.val());
+
+        const emptyForm = $(`#${formsetPrefix}-formset .empty-form`).html();
+        totalForms += 1;
+        managementForm.val(totalForms + 1);
+
+        const newForm = emptyForm.replace(/__prefix__/g, totalForms);
+        const formsetContainer = $(`#${formsetPrefix}-formset`);
+        formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+    }
+
+    function deleteFormsetForm(btn) {
+        $(btn).closest('.formset-' + $(btn).parent().parent().data('form-prefix')).remove();
+    }
+
+    $(document).ready(function() {
+        $('#add-{{ category }}').on('click', function() {
+            addFormsetForm('{{ category }}');
+        });
+    });
+</script>
+
+{% endblock %}

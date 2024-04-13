@@ -9,8 +9,8 @@ from .models import Contact as Institute_contact, Address, DaySchedule, Announce
 from caregiver.models import Caregiver
 from patient.models import Patient, MedicationIntake, Contact as Patient_contact
 from .decorators import admin_required
-from .forms import RegisterUserForm, PatientForm, ContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
-    ResetUserPasswordForm, UpdatePatientForm
+from .forms import RegisterUserForm, PatientForm, PatientContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
+    ResetUserPasswordForm, UpdatePatientForm, InstituteContactForm, AddressForm, DayScheduleForm, AnnouncementForm
 
 
 def index(request):
@@ -154,7 +154,8 @@ def universal_patient_form(request, info_on_user=None):
         group, first_name, last_name = info_on_user.split('-')
         patient = User.objects.get(first_name=first_name, last_name=last_name).patient_profile
 
-        ContactFormSet = inlineformset_factory(Patient, Patient_contact, form=ContactForm, extra=0, can_delete=True)
+        ContactFormSet = inlineformset_factory(Patient, Patient_contact, form=PatientContactForm, extra=0,
+                                               can_delete=True)
         MedicationFormSet = inlineformset_factory(Patient, MedicationIntake, form=MedicationIntakeForm, extra=0,
                                                   can_delete=True)
 
@@ -197,7 +198,7 @@ def universal_patient_form(request, info_on_user=None):
         creating = False
     else:
         # Handle patient registration
-        ContactFormSet = modelformset_factory(Patient_contact, form=ContactForm, extra=0)
+        ContactFormSet = modelformset_factory(Patient_contact, form=PatientContactForm, extra=0)
         MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)
 
         if request.method == 'POST':
@@ -251,3 +252,42 @@ def delete_user(request, pk):
         'last_name': user_for_deletion.last_name
     }
     return render(request, 'delete_user.html', context)
+
+
+@admin_required
+def institute_info(request):
+    contacts = Institute_contact.objects.all()
+    address = Address.objects.first()
+    day_schedules = DaySchedule.objects.all()
+    announcements = Announcement.objects.all()
+
+    context = {
+        'contacts': contacts,
+        'address': address,
+        'day_schedules': day_schedules,
+        'announcements': announcements
+    }
+
+    return render(request, 'institute_info.html', context)
+
+
+@admin_required
+def edit_institute_info(request, category):
+    category_map = {
+        'kontakty': (InstituteContactForm, Institute_contact, 'Kontakty'),
+        'adresa': (AddressForm, Address, 'Adresa'),
+        'denni-rozvrh': (DayScheduleForm, DaySchedule, 'Denní rozvrh'),
+        'oznameni': (AnnouncementForm, Announcement, 'Oznamení'),
+    }
+    form, model, header = category_map.get(category)
+
+    formset_class = modelformset_factory(model, form=form, extra=0, can_delete=True)
+    queryset = model.objects.all()
+    formset = formset_class(request.POST or None, queryset=queryset)
+
+    if formset.is_valid():
+        formset.save()
+        messages.success(request, 'Informace byly ulozeny!')
+        return redirect('institute_info')
+    else:
+        return render(request, 'edit_institute_info.html', {'formset': formset, 'header': header})

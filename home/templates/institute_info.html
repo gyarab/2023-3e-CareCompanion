@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1 >Informace o ustavu</h1>
+    <br>
+    <h3>Kontakty</h3>
+    {% for contact in contacts %}
+        <h5>{{ contact.name }}</h5>
+        <p>Telefonni cislo: {{ contact.phone_number }}</p>
+        <p>Emailova adresa: {{ contact.email }}</p>
+    {% endfor %}
+    <p><a href="{% url 'edit_institute_info' category='kontakty' %}" class="btn btn-primary">Upravit</a></p>
+
+    <br>
+    <h3>Adresa</h3>
+    <p>Ulice: {{ address.street }}</p>
+    <p>PSČ: {{ address.zip_code }}</p>
+    <p>Mesto: {{ address.city }}</p>
+    <p><a href="{% url 'edit_institute_info' category='adresa' %}" class="btn btn-primary">Upravit</a></p>
+
+    <br>
+    <h3>Pevny denni rozvrh</h3>
+    {% for day_schedule in day_schedules %}
+    	<p><strong>{{ day_schedule.time }}</strong> -> {{ day_schedule.description }}</p>
+    {% endfor %}
+    <p><a href="{% url 'edit_institute_info' category='denni-rozvrh' %}" class="btn btn-primary">Upravit</a></p>
+
+    <br>
+    <h3>Oznameni</h3>
+    {% for announcement in announcements %}
+    	<h5>Text: "{{ announcement.text }}"</h5>
+        <p>Automaticky se smaze: {{ announcement.delete_when }}</p>
+    {% endfor %}
+    <p><a href="{% url 'edit_institute_info' category='oznameni' %}" class="btn btn-primary">Upravit</a></p>
+
+{% endblock %}
