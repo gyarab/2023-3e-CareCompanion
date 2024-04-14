@@ -30,7 +30,7 @@
     <h3>Oznameni</h3>
     {% for announcement in announcements %}
     	<h5>Text: "{{ announcement.text }}"</h5>
-        <p>Automaticky se smaze: {{ announcement.delete_when }}</p>
+        <p>Automaticky se smaze: {{ announcement.delete_date }} {{ announcement.delete_time }}</p>
     {% endfor %}
     <p><a href="{% url 'edit_institute_info' category='oznameni' %}" class="btn btn-primary">Upravit</a></p>
 

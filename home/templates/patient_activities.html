@@ -1,0 +1,10 @@
+{% extends 'base_administration.html' %}
+
+{% block content %}
+
+    <h2>Upravte/pridejte/mazte klientum aktivity</h2>
+    {% for patient in patients %}
+    	<p><a href="{% url 'edit_patient_activities' patient.pk %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
+    {% endfor %}
+
+{% endblock %}

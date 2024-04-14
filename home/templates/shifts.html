@@ -1,0 +1,10 @@
+{% extends 'base_administration.html' %}
+
+{% block content %}
+
+    <h2>Upravte/pridejte/mazte opatrovnikum smeny</h2>
+    {% for caregiver in caregivers %}
+    	<p><a href="{% url 'edit_shifts' caregiver.pk %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
+    {% endfor %}
+
+{% endblock %}

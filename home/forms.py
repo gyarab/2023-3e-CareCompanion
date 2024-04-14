@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django.contrib.auth.models import User, Group
 from django import forms
 
-from patient.models import Patient, Contact as Patient_contact, MedicationIntake
+from patient.models import Patient, Contact as Patient_contact, MedicationIntake, Activity
 from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 
 
@@ -44,10 +44,6 @@ class RegisterUserForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class'] = 'form-control'
 
 
-class DateInput(forms.DateInput):
-    input_type = 'date'
-
-
 class PatientForm(forms.ModelForm):
     user = forms.ModelChoiceField(
         queryset=User.objects.filter(groups__name='Patients').exclude(patient_profile__isnull=False),
@@ -61,8 +57,8 @@ class PatientForm(forms.ModelForm):
         fields = ['user', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
         widgets = {
             'user': forms.Select(),
-            'date_of_admission': DateInput(),
-            'birthday': DateInput()
+            'date_of_admission': forms.DateInput(attrs={'type': 'date'}),
+            'birthday': forms.DateInput(attrs={'type': 'date'})
         }
         labels = {
             'date_of_admission': 'Datum přijetí',
@@ -155,8 +151,8 @@ class UpdatePatientForm(forms.ModelForm):
         model = Patient
         fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
         widgets = {
-            'date_of_admission': DateInput(),
-            'birthday': DateInput()
+            'date_of_admission': forms.DateInput(attrs={'type': 'date'}),
+            'birthday': forms.DateInput(attrs={'type': 'date'})
         }
         labels = {
             'date_of_admission': 'Datum přijetí',
@@ -235,6 +231,9 @@ class DayScheduleForm(forms.ModelForm):
             'time': 'Čas',
             'description': 'Popis'
         }
+        widgets = {
+            'time': forms.TimeInput(attrs={'type': 'time'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -242,15 +241,18 @@ class DayScheduleForm(forms.ModelForm):
         self.fields['description'].widget.attrs['class'] = 'form-control'
 
 
-# tady jsem chtela pridat widget na DateTime aby admin nemusel komplikovane zadavat to 'Smazat k datu',
-# bohuzel se to pak vsechno zkomplikovalo s vkladanim dat existujicich oznameni
 class AnnouncementForm(forms.ModelForm):
     class Meta:
         model = Announcement
         fields = ['text', 'delete_date', 'delete_time']
         labels = {
             'text': 'Text',
-            'delete_date': 'Smazat k datu a času'
+            'delete_date': 'Smazat k datu a času',
+            'delete_time': ''
+        }
+        widgets = {
+            'delete_date': forms.DateInput(attrs={'type': 'date'}),
+            'delete_time': forms.TimeInput(attrs={'type': 'time'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -260,3 +262,22 @@ class AnnouncementForm(forms.ModelForm):
         self.fields['delete_time'].widget.attrs['class'] = 'form-control'
 
 
+class PatientActivityForm(forms.ModelForm):
+    class Meta:
+        model = Activity
+        fields = ['date', 'time', 'description']
+        labels = {
+            'date': 'Datum',
+            'time': 'Čas',
+            'description': 'Popis'
+        }
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['date'].widget.attrs['class'] = 'form-control'
+        self.fields['time'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['class'] = 'form-control'

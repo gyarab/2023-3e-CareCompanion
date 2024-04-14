@@ -9,10 +9,11 @@ from django.utils import timezone
 
 from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 from caregiver.models import Caregiver
-from patient.models import Patient, MedicationIntake, Contact as Patient_contact
+from patient.models import Patient, MedicationIntake, Contact as Patient_contact, Activity
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, PatientContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
-    ResetUserPasswordForm, UpdatePatientForm, InstituteContactForm, AddressForm, DayScheduleForm, AnnouncementForm
+    ResetUserPasswordForm, UpdatePatientForm, InstituteContactForm, AddressForm, DayScheduleForm, AnnouncementForm, \
+    PatientActivityForm
 
 
 def index(request):
@@ -30,7 +31,7 @@ def index(request):
         delete_from_database(Announcement.objects.all(), upc_announcements)
 
         context.update({
-            'day_schedules': DaySchedule.objects.all(),
+            'day_schedules': DaySchedule.objects.all().order_by('time'),
             'announcements': upc_announcements
         })
         return render(request, 'loggedin_homepage.html', context)
@@ -299,9 +300,50 @@ def edit_institute_info(request, category):
     queryset = model.objects.all()
     formset = formset_class(request.POST or None, queryset=queryset)
 
+    if category == 'oznameni':
+        for form, obj in zip(formset, queryset):
+            form.initial['delete_date'] = obj.delete_date.strftime('%Y-%m-%d')
+
     if formset.is_valid():
         formset.save()
         messages.success(request, 'Informace byly ulozeny!')
         return redirect('institute_info')
     else:
         return render(request, 'edit_institute_info.html', {'formset': formset, 'header': header})
+
+
+def shifts(request):
+    caregivers = Caregiver.objects.all()
+    return render(request, 'shifts.html', {'caregivers': caregivers})
+
+
+def edit_shifts(request, pk):
+    caregiver = Caregiver.objects.get(pk=pk)
+    return render(request, 'edit_shifts.html', {'caregiver': caregiver})
+
+
+def patient_activities(request):
+    patients = Patient.objects.all()
+    return render(request, 'patient_activities.html', {'patients': patients})
+
+
+def edit_patient_activities(request, pk):
+    patient = Patient.objects.get(pk=pk)
+    activities = Activity.objects.all().filter(patient=patient)
+
+    formset_class = modelformset_factory(Activity, form=PatientActivityForm, extra=0, can_delete=True)
+    formset = formset_class(request.POST or None, queryset=activities)
+    for form, obj in zip(formset, activities):
+        form.initial['date'] = obj.date.strftime('%Y-%m-%d')
+
+    if formset.is_valid():
+        for form in formset:
+            if form.has_changed():
+                activity = form.save(commit=False)
+                activity.patient = patient
+                activity.save()
+
+        messages.success(request, 'Informace byly ulozeny!')
+        return redirect('patient_activities')
+    else:
+        return render(request, 'edit_patient_activities.html', {'patient': patient, 'formset': formset})
