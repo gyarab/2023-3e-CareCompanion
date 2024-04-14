@@ -1,30 +1,31 @@
 {% extends 'base_caregiver.html' %}
 
 {% load static %}
+
 {% block navbar %}
      <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
 {% endblock %}
 
+<!-- todo: test using multiple users (now i see just 1  accordion since i have only 1 user) -->
 {% block content %}
     <div class="container">
-        <h1 class="mt-4 text-center">KONTAKTY</h1>
+        <h1 class="mt-4 text-center">Rozvrhy Klientů</h1>
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
-                <div class="accordion" id="contactsAccordion">
+                <div id="contactsAccordion">
                     {% for info in patient_info %}
                         <div class="accordion-item">
                             <h2 class="accordion-header text-center" id="heading{{ forloop.counter }}">
                                 <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
-                                    <span>{{ info.patient.first_name }} {{ info.patient.last_name }}</span>
+                                    <span class="accordion-title">{{ info.patient.first_name }} {{ info.patient.last_name }}</span>
                                 </button>
                             </h2>
                             <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#contactsAccordion">
                                 <div class="accordion-body">
-
                                     {% if info.todays_activities %}
                                         <div class="card bg-primary mb-3">
                                             <div class="card-header text-white">
-                                                <h4 class="mb-0">Aktivity na dnesek:</h4>
+                                                <h4 class="mb-0">Aktivity na dnešek:</h4>
                                             </div>
                                             <ul class="list-group list-group-flush text-secondary">
                                                 {% for activity in info.todays_activities %}
@@ -33,7 +34,6 @@
                                             </ul>
                                         </div>
                                     {% endif %}
-
                                     {% if info.other_activities %}
                                         {% regroup info.other_activities by activity.date as grouped_activities %}
                                         {% for date_activities in grouped_activities %}
@@ -51,8 +51,7 @@
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
-
-                                    <p>--------------------------------------</p>
+                                    <hr> <!-- Replacing the line break with a horizontal rule -->
                                 </div>
                             </div>
                         </div>
@@ -67,3 +66,4 @@
         </div>
     </div>
 {% endblock %}
+
