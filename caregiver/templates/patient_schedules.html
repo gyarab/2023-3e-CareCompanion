@@ -5,38 +5,65 @@
      <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
 {% endblock %}
 
-{# TODO: datum i s dnem v tydnu #}
 {% block content %}
+    <div class="container">
+        <h1 class="mt-4 text-center">KONTAKTY</h1>
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="accordion" id="contactsAccordion">
+                    {% for info in patient_info %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header text-center" id="heading{{ forloop.counter }}">
+                                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" aria-expanded="true" aria-controls="collapse{{ forloop.counter }}">
+                                    <span>{{ info.patient.first_name }} {{ info.patient.last_name }}</span>
+                                </button>
+                            </h2>
+                            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="heading{{ forloop.counter }}" data-parent="#contactsAccordion">
+                                <div class="accordion-body">
 
-  {% for info in patient_info %}
-        <h2>{{ info.patient.first_name }} {{ info.patient.last_name }}</h2>
+                                    {% if info.todays_activities %}
+                                        <div class="card bg-primary mb-3">
+                                            <div class="card-header text-white">
+                                                <h4 class="mb-0">Aktivity na dnesek:</h4>
+                                            </div>
+                                            <ul class="list-group list-group-flush text-secondary">
+                                                {% for activity in info.todays_activities %}
+                                                    <li class="list-group-item">{{ activity.activity.time }} - {{ activity.activity.description }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% endif %}
 
-        {% if info.todays_activities %}
-            <h4>Aktivity na dnesek:</h4>
-            {% for activity in info.todays_activities %}
-                <p>{{ activity.activity.time }} -> {{ activity.activity.description }}</p>
-            {% endfor %}
-            <p>--------------</p>
-        {% endif %}
+                                    {% if info.other_activities %}
+                                        {% regroup info.other_activities by activity.date as grouped_activities %}
+                                        {% for date_activities in grouped_activities %}
+                                            {% if date_activities.grouper %}
+                                                <div class="card bg-light mb-3">
+                                                    <div class="card-header">
+                                                        <h4 class="mb-0">{{ date_activities.grouper }}</h4>
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        {% for activity_info in date_activities.list %}
+                                                            <li class="list-group-item">{{ activity_info.activity.time }} - {{ activity_info.activity.description }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
 
-        {% if info.other_activities %}
-            {% regroup info.other_activities by activity.date as grouped_activities %}
-            {% for date_activities in grouped_activities %}
-                {% if date_activities.grouper %}
-                    <h4>{{ date_activities.grouper }}</h4>
-                    {% for activity_info in date_activities.list %}
-                        <p>{{ activity_info.activity.time }} -> {{ activity_info.activity.description }}</p>
+                                    <p>--------------------------------------</p>
+                                </div>
+                            </div>
+                        </div>
                     {% endfor %}
-                    {% if not forloop.last %}
-                        <p>--------------</p>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
-        <p>--------------------------------------</p>
-    {% endfor %}
-
-    <a class="text-center" href="{% url 'index_caregiver' %}">ZPÁTKY</a>
-
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-4">
+            <div class="col-4 col-md-4">
+                <a href="{% url 'index_caregiver' %}" class="btn btn-secondary btn-block">ZPÁTKY</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
