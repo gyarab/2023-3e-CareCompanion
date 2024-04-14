@@ -20,4 +20,5 @@ class DaySchedule(models.Model):
 
 class Announcement(models.Model):
     text = models.TextField()
-    delete_when = models.DateTimeField()
+    delete_date = models.DateField()
+    delete_time = models.TimeField()

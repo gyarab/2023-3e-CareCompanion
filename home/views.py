@@ -1,9 +1,11 @@
 from django.db import transaction
+from django.db.models import Q
 from django.forms import modelformset_factory, inlineformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.utils import timezone
 
 from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 from caregiver.models import Caregiver
@@ -20,13 +22,25 @@ def index(request):
     }
 
     if request.user.is_authenticated:
+        now = timezone.now()
+        upc_announcements = Announcement.objects.filter(
+            Q(delete_date__gt=now.date()) |  # skonci v budoucnu
+            (Q(delete_date=now.date()) & Q(delete_time__gt=now.time()))  # dnesni co jeste nemaji byt mazany
+        )
+        delete_from_database(Announcement.objects.all(), upc_announcements)
+
         context.update({
             'day_schedules': DaySchedule.objects.all(),
-            'announcements': Announcement.objects.all()
+            'announcements': upc_announcements
         })
         return render(request, 'loggedin_homepage.html', context)
     else:
         return render(request, 'default_homepage.html', context)
+
+
+def delete_from_database(arr_w_all_objs, arr_w_upc_objs):
+    objs_for_deletion = arr_w_all_objs.exclude(id__in=[obj.id for obj in arr_w_upc_objs])
+    objs_for_deletion.delete()
 
 
 def login_user(request):

@@ -19,4 +19,4 @@ class DayScheduleAdmin(admin.ModelAdmin):
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('text', 'delete_when')
+    list_display = ('text', 'delete_date', 'delete_time')

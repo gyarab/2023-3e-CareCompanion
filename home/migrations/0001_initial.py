@@ -25,7 +25,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.TextField()),
-                ('delete_when', models.DateTimeField()),
+                ('delete_date', models.DateField()),
+                ('delete_time', models.TimeField()),
             ],
         ),
         migrations.CreateModel(

@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from .decorators import caregiver_required
 from patient.models import Patient
 from home.forms import ObservationForm
+from home.views import delete_from_database
 
 
 @caregiver_required
@@ -43,14 +44,16 @@ def shift_schedule(request):
     now = datetime.now()
 
     # Saves the first upcoming/current shift (either today or in the future)
-    shifts = caregiver.shift_set.filter(
+    shifts_to_display = caregiver.shift_set.filter(
         Q(date_of_shift__gt=now.date()) |  # Future shifts OR
         (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
     ).order_by('date_of_shift', 'start')
 
-    if shifts:
+    delete_from_database(caregiver.shift_set.filter(caregiver=caregiver), shifts_to_display)
+
+    if shifts_to_display:
         context.update({'any_shifts': True})
-        soonest_shift = shifts.first()
+        soonest_shift = shifts_to_display.first()
         shift_start = datetime.combine(soonest_shift.date_of_shift, soonest_shift.start)
         shift_end = datetime.combine(soonest_shift.date_of_shift, soonest_shift.end)
 
@@ -61,12 +64,12 @@ def shift_schedule(request):
                 'shift_start': shift_start.time,
                 'shift_end': shift_end.time
             })
-            shifts = shifts[1:]
+            shifts_to_display = shifts_to_display[1:]
 
         # nadchazejici smeny
-        if shifts:
+        if shifts_to_display:
             upcoming_shifts_info = []
-            for upcoming_shift in shifts:
+            for upcoming_shift in shifts_to_display:
                 upcoming_shifts_info.append({
                     'upcom_shift_date': format_date(upcoming_shift.date_of_shift, format='EEEE d. MMMM',
                                                     locale='cs_CZ'),
@@ -92,9 +95,10 @@ def patient_schedules(request):
     for patient in patients_w_activities:
         todays_activities = []
         other_activities = []
-        activities = patient.activity_set.filter(date__gte=now.date())
+        upc_activities = patient.activity_set.filter(date__gte=now.date())
+        delete_from_database(patient.activity_set.filter(patient=patient), upc_activities)
 
-        for activity in activities:
+        for activity in upc_activities:
             if activity.date == now.date():
                 todays_activities.append({'activity': activity})
             else:
