@@ -6,40 +6,70 @@
 
 {# TODO: datum i s dnem v tydnu #}
 {% block content %}
+    <div class="container">
+        <h1>ROZVRH DNE</h1>
+        {% if not no_activities %}
+            {% if todays_activities %}
+                <!-- table header -->
+                <div class="row">
+                    <div class="col">
+                        <h3>DATUM</h3>
+                    </div>
+                    <div class="col">
+                        <h3>ČAS</h3>
+                    </div>
+                    <div class="col">
+                        <h3>POPIS</h3>
+                    </div>
+                </div>
 
-    <h1>ROZVRH DNE</h1>
-
-    {% if not no_activities %}
-
-        {% if todays_activities %}
-            <h4>Dnesni rozvrh</h4>
-        	{% for activity in todays_activities %}
-        		<p>{{ activity.activity.time }} -> {{ activity.activity.description }}</p>
-        	{% endfor %}
-            {% else %}
+                <div class="row">
+                    <div class="col">
+                      <p>Dnesni rozvrh</p>
+                    </div>
+                    <div class="col">
+                        {% for activity in todays_activities %}
+                        <p>{{ activity.activity.time }}</p>
+                        {% endfor %}
+                    </div>
+                    <div class="col">
+                        {% for activity in todays_activities %}
+                            <p>{{ activity.activity.description }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+        {% else %}
             <h4>Na dnes nemate zadne zadane aktivity</h4>
         {% endif %}
-        <p>-----------</p>
-         {% if other_activities %}
+
+        {% if other_activities %}
             {% regroup other_activities by activity.date as grouped_activities %}
-            {% for date_activities in grouped_activities %}
-                <h4>{{ date_activities.grouper }}</h4>
-                {% for activity_info in date_activities.list %}
-                    <p>{{ activity_info.activity.time }} -> {{ activity_info.activity.description }}</p>
+                {% for date_activities in grouped_activities %}
+
+                    <div class="row">
+                        <div class="col">
+                            <h4>{{ date_activities.grouper }}</h4><!-- activity  date-->
+                        </div>
+                        <div class="col">
+                            {% for activity_info in date_activities.list %}
+                                <p>{{ activity_info.activity.time }}</p><!-- activity time (hour)-->
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for activity_info in date_activities.list %}<!-- activity descr-->
+                                <p>{{ activity_info.activity.description }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                 {% endfor %}
-                {% if not forloop.last %}
-                    <p>--------------</p>
-                {% endif %}
-            {% endfor %}
         {% endif %}
 
         {% else %}
             <p>Nemate zadne rovzhy :((((((</p>
-    {% endif %}
+        {% endif %}
 
-
-
-
-    <a href="{% url 'index_patient' %}">ZPÁTKY</a>
+        <a href="{% url 'index_patient' %}">ZPÁTKY</a>
+    </div>
 
 {% endblock %}
