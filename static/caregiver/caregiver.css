@@ -203,6 +203,10 @@
             border: none; /* Remove the border */
     }
 
+    div .invisible-text{
+         color: transparent;
+    }
+
 
 
 

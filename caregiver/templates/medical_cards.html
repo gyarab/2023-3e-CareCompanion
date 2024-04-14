@@ -9,11 +9,11 @@
     <h1 class="text-center">KARTY KLIENTŮ</h1>
 
     <div class="container medical-card-container">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names, room number...">
         <ul id="myUL">
             {% for patient in patients %} <!-- todo: ideally make the list alphabetical (preorder on back-end) -->
                 {% with full_name=patient.first_name|add:'-'|add:patient.last_name %}
-                    <li><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></li>
+                    <li><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.last_name }} <span class="room-number">{{ patient.room_number }}</span></a></li>
                 {% endwith %}
             {% endfor %}
         </ul>
@@ -52,6 +52,11 @@
             font-size: 18px; /* Increase the font-size */
             color: black; /* Add a black text color */
             display: block; /* Make it into a block element to fill the whole list */
+        }
+
+        #myUL li a .room-number {
+            color: white; /* Change color to white */
+            visibility: hidden; /* Hide the room number */
         }
 
         #myUL li a:hover:not(.header) {
