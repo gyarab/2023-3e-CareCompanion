@@ -4,72 +4,44 @@
      <a href="{% url 'index_patient' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
 {% endblock %}
 
-{# TODO: datum i s dnem v tydnu #}
 {% block content %}
     <div class="container">
-        <h1>ROZVRH DNE</h1>
+        <h1 class="text-center my-4">ROZVRH DNE</h1>
         {% if not no_activities %}
             {% if todays_activities %}
-                <!-- table header -->
-                <div class="row">
-                    <div class="col">
-                        <h3>DATUM</h3>
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">
+                        <h4 class="mb-0">Dnesni rozvrh</h4>
                     </div>
-                    <div class="col">
-                        <h3>ČAS</h3>
-                    </div>
-                    <div class="col">
-                        <h3>POPIS</h3>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                      <p>Dnesni rozvrh</p>
-                    </div>
-                    <div class="col">
+                    <ul class="list-group list-group-flush">
                         {% for activity in todays_activities %}
-                        <p>{{ activity.activity.time }}</p>
+                            <li class="list-group-item">{{ activity.activity.time }} - {{ activity.activity.description }}</li>
                         {% endfor %}
-                    </div>
-                    <div class="col">
-                        {% for activity in todays_activities %}
-                            <p>{{ activity.activity.description }}</p>
-                        {% endfor %}
-                    </div>
+                    </ul>
                 </div>
-        {% else %}
-            <h4>Na dnes nemate zadne zadane aktivity</h4>
-        {% endif %}
+            {% else %}
+                <h4>Na dnes nemate zadne zadane aktivity</h4>
+            {% endif %}
 
-        {% if other_activities %}
-            {% regroup other_activities by activity.date as grouped_activities %}
-                {% for date_activities in grouped_activities %}
-
-                    <div class="row">
-                        <div class="col">
-                            <h4>{{ date_activities.grouper }}</h4><!-- activity  date-->
+            {% if other_activities %}
+                {% regroup other_activities by activity.date as grouped_activities %}
+                    {% for date_activities in grouped_activities %}
+                        <div class="card bg-light mb-3">
+                            <div class="card-header">
+                                <h4 class="mb-0">{{ date_activities.grouper }}</h4>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                {% for activity_info in date_activities.list %}
+                                    <li class="list-group-item">{{ activity_info.activity.time }} - {{ activity_info.activity.description }}</li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <div class="col">
-                            {% for activity_info in date_activities.list %}
-                                <p>{{ activity_info.activity.time }}</p><!-- activity time (hour)-->
-                            {% endfor %}
-                        </div>
-                        <div class="col">
-                            {% for activity_info in date_activities.list %}<!-- activity descr-->
-                                <p>{{ activity_info.activity.description }}</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                {% endfor %}
-        {% endif %}
-
+                    {% endfor %}
+            {% endif %}
         {% else %}
             <p>Nemate zadne rovzhy :((((((</p>
         {% endif %}
 
-        <a href="{% url 'index_patient' %}">ZPÁTKY</a>
+        <a href="{% url 'index_patient' %}" class="btn btn-secondary mt-3">ZPÁTKY</a>
     </div>
-
 {% endblock %}
