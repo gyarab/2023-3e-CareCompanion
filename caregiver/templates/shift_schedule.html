@@ -8,28 +8,40 @@
 
 {% block content %}
 
-    {% if any_shifts %}
-        {% if today %}
-        	<h2>Informace o vasi dnesni smene</h2>
-            <h4>Od {{ shift_start }} do {{ shift_end }}</h4>
-            <p>------------------------------------------------------------------</p>
-            <br>
-        {% endif %}
+     <div class="container">
+        <h1 class="text-center my-4">ROZVRH DNE</h1>
+        {% if any_shifts %}
+            {% if today %}
+                <h2>Vase dnešní směna</h2>
+                <div class="card bg-info mb-3">
+                    <div class="card-header">
+                        <h4 class="mb-0">Informace o vaší dnešní směně</h4>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ shift_start }} - {{ shift_end }}</li>
+                    </ul>
+                </div>
 
-        {% if upcoming_shifts_info %}
-            <h2>Vase nadchazejici smeny</h2>
-        	{% for shift_info in upcoming_shifts_info %}
-                <h4>{{ shift_info.upcom_shift_date|capfirst }}</h4>
-                <p>{{ shift_info.upcom_shift_start }}-{{ shift_info.upcom_shift_end }}</p>
-                <p>--------</p>
-            {% endfor %}
-            {% else %}
-                <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu.</h3>
             {% endif %}
 
+            {% if upcoming_shifts_info %}
+                <h2>Vaše nadchazející směny</h2>
+                {% for shift_info in upcoming_shifts_info %}
+                        <div class="card bg-light mb-0">
+                            <div class="card-header">
+                                <h4 class="mb-0">{{ shift_info.upcom_shift_date|capfirst }}</h4>
+                            </div>
+                            <ul class="list-group list-group-flush mb-0">
+                                    <li class="list-group-item mb-0"><p class="mb-0">{{ shift_info.upcom_shift_start }} - {{ shift_info.upcom_shift_end }}</p></li>
+                            </ul>
+                        </div>
+                {% endfor %}
+            {% endif %}
         {% else %}
-            <h3>Bohuzel nemate zaregistrovane zadne nadchazejici smeny v systemu...</h3>
-    {% endif %}
+            <p>Nemate zadne rovzhy :((((((</p>
+        {% endif %}
 
-    <a href="{% url 'index_caregiver' %}">ZPÁTKY</a>
+        <a href="{% url 'index_caregiver' %}" class="btn btn-secondary mt-3">ZPÁTKY</a>
+    </div>
+
 {% endblock %}
