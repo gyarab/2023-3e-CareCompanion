@@ -1,0 +1,56 @@
+{% extends 'base_caregiver.html' %}
+
+{% block content %}
+
+    <h2>{{ patient.first_name }} {{ patient.last_name }}</h2>
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div id="activities-formset" data-form-prefix="activities" class="formset">
+            {{ formset.management_form }}
+            <div class="empty-form" style="display: none;">
+                {{ formset.empty_form }}
+            </div>
+            {% for form in formset %}
+                <div class="formset-activities">
+                    {{ form.as_p }}
+                    <input type="hidden" name="patient" value="{{ patient.id }}">
+                    <br>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add-activities" class="add-formset-item">Přidat aktivitu</button>
+        <br>
+        <input type="submit" value="Upravit informace" class="btn btn-secondary">
+    </form>
+
+    <script>
+        function addFormsetForm(formsetPrefix) {
+            const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
+            let totalForms = parseInt(managementForm.val());
+
+            const emptyForm = $(`#${formsetPrefix}-formset .empty-form`).html();
+            totalForms += 1;
+            managementForm.val(totalForms + 1);
+
+            const newForm = emptyForm.replace(/__prefix__/g, totalForms);
+            const formsetContainer = $(`#${formsetPrefix}-formset`);
+            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}</div>`);
+        }
+
+        function deleteFormsetForm(btn) {
+            $(btn).closest('.formset-activities').remove();
+        }
+
+        $(document).ready(function() {
+            $('#add-activities').on('click', function() {
+                addFormsetForm('activities');
+            });
+
+            $(document).on('click', '.delete-formset-item', function() {
+                deleteFormsetForm(this);
+            });
+        });
+    </script>
+
+{% endblock %}

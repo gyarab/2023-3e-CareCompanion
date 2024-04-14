@@ -2,11 +2,12 @@ from datetime import datetime
 from babel.dates import format_date
 
 from django.db.models import Q
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 
 from .decorators import caregiver_required
-from patient.models import Patient
-from home.forms import ObservationForm
+from patient.models import Patient, Activity
+from home.forms import ObservationForm, PatientActivityForm
 from home.views import delete_from_database
 
 
@@ -109,6 +110,29 @@ def patient_schedules(request):
     context.update({'patient_info': patient_info})
 
     return render(request, 'patient_schedules.html', context)
+
+
+@caregiver_required
+def edit_patient_schedules(request, pk):
+    patient = Patient.objects.get(pk=pk)
+    activities = Activity.objects.all().filter(patient=patient)
+
+    formset_class = modelformset_factory(Activity, form=PatientActivityForm, extra=0, can_delete=True)
+    formset = formset_class(request.POST or None, queryset=activities)
+    for form, obj in zip(formset, activities):
+        form.initial['date'] = obj.date.strftime('%Y-%m-%d')
+
+    if formset.is_valid():
+        for form in formset:
+            if form.has_changed():
+                activity = form.save(commit=False)
+                activity.patient = patient
+                activity.save()
+
+        formset.save()
+        return redirect('patient_schedules')
+    else:
+        return render(request, 'edit_patient_schedules.html', {'patient': patient, 'formset': formset})
 
 
 @caregiver_required

@@ -312,21 +312,25 @@ def edit_institute_info(request, category):
         return render(request, 'edit_institute_info.html', {'formset': formset, 'header': header})
 
 
+@admin_required
 def shifts(request):
     caregivers = Caregiver.objects.all()
     return render(request, 'shifts.html', {'caregivers': caregivers})
 
 
+@admin_required
 def edit_shifts(request, pk):
     caregiver = Caregiver.objects.get(pk=pk)
     return render(request, 'edit_shifts.html', {'caregiver': caregiver})
 
 
+@admin_required
 def patient_activities(request):
     patients = Patient.objects.all()
     return render(request, 'patient_activities.html', {'patients': patients})
 
 
+@admin_required
 def edit_patient_activities(request, pk):
     patient = Patient.objects.get(pk=pk)
     activities = Activity.objects.all().filter(patient=patient)
@@ -343,6 +347,7 @@ def edit_patient_activities(request, pk):
                 activity.patient = patient
                 activity.save()
 
+        formset.save()
         messages.success(request, 'Informace byly ulozeny!')
         return redirect('patient_activities')
     else:
