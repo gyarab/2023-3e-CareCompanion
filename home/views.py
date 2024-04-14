@@ -8,12 +8,12 @@ from django.contrib import messages
 from django.utils import timezone
 
 from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
-from caregiver.models import Caregiver
+from caregiver.models import Caregiver, Shift
 from patient.models import Patient, MedicationIntake, Contact as Patient_contact, Activity
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, PatientContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
     ResetUserPasswordForm, UpdatePatientForm, InstituteContactForm, AddressForm, DayScheduleForm, AnnouncementForm, \
-    PatientActivityForm
+    PatientActivityForm, CaregiverShiftForm
 
 
 def index(request):
@@ -321,7 +321,25 @@ def shifts(request):
 @admin_required
 def edit_shifts(request, pk):
     caregiver = Caregiver.objects.get(pk=pk)
-    return render(request, 'edit_shifts.html', {'caregiver': caregiver})
+    shifts = Shift.objects.all().filter(caregiver=caregiver)
+
+    formset_class = modelformset_factory(Shift, form=CaregiverShiftForm, extra=0, can_delete=True)
+    formset = formset_class(request.POST or None, queryset=shifts)
+    for form, obj in zip(formset, shifts):
+        form.initial['date_of_shift'] = obj.date_of_shift.strftime('%Y-%m-%d')
+
+    if formset.is_valid():
+        for form in formset:
+            if form.has_changed():
+                shift = form.save(commit=False)
+                shift.caregiver = caregiver
+                shift.save()
+
+        formset.save()
+        messages.success(request, 'Informace byly ulozeny!')
+        return redirect('shifts')
+    else:
+        return render(request, 'edit_shifts.html', {'caregiver': caregiver, 'formset': formset})
 
 
 @admin_required

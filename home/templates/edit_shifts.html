@@ -4,6 +4,49 @@
 
     <h2>{{ caregiver.first_name }} {{ caregiver.last_name }}</h2>
 
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div id="shifts-formset" data-form-prefix="shifts" class="formset">
+            {{ formset.management_form }}
+            <div class="empty-form" style="display: none;">
+                {{ formset.empty_form }}
+            </div>
+            {% for form in formset %}
+                <div class="formset-shifts">
+                    {{ form.as_p }}
+                    <input type="hidden" name="caregiver" value="{{ caregiver.id }}">
+                    <br>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="button" id="add-shifts" class="add-formset-item">Přidat směnu</button>
+        <br>
+        <input type="submit" value="Upravit informace" class="btn btn-secondary">
+    </form>
 
+    <script>
+        function addFormsetForm(formsetPrefix) {
+            const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
+            let totalForms = parseInt(managementForm.val());
+
+            const emptyForm = $(`#${formsetPrefix}-formset .empty-form`).html();
+            totalForms += 1;
+            managementForm.val(totalForms + 1);
+
+            const newForm = emptyForm.replace(/__prefix__/g, totalForms);
+            const formsetContainer = $(`#${formsetPrefix}-formset`);
+            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+        }
+
+        function deleteFormsetForm(btn) {
+            $(btn).closest('.formset-' + $(btn).parent().parent().data('form-prefix')).remove();
+        }
+
+        $(document).ready(function() {
+            $('#add-shifts').on('click', function() {
+                addFormsetForm('shifts');
+            });
+        });
+    </script>
 
 {% endblock %}

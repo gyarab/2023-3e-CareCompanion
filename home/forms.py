@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPassw
 from django.contrib.auth.models import User, Group
 from django import forms
 
+from caregiver.models import Shift
 from patient.models import Patient, Contact as Patient_contact, MedicationIntake, Activity
 from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 
@@ -281,3 +282,25 @@ class PatientActivityForm(forms.ModelForm):
         self.fields['date'].widget.attrs['class'] = 'form-control'
         self.fields['time'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['class'] = 'form-control'
+
+
+class CaregiverShiftForm(forms.ModelForm):
+    class Meta:
+        model = Shift
+        fields = ['date_of_shift', 'start', 'end']
+        labels = {
+            'date': 'Datum',
+            'start': 'Začátek',
+            'end': 'Konec'
+        }
+        widgets = {
+            'date_of_shift': forms.DateInput(attrs={'type': 'date'}),
+            'start': forms.TimeInput(attrs={'type': 'time'}),
+            'end': forms.TimeInput(attrs={'type': 'time'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['date_of_shift'].widget.attrs['class'] = 'form-control'
+        self.fields['start'].widget.attrs['class'] = 'form-control'
+        self.fields['end'].widget.attrs['class'] = 'form-control'
