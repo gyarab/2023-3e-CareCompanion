@@ -90,7 +90,7 @@ class PatientContactForm(forms.ModelForm):
         labels = {
             'relationship': 'Vztah',
             'name': 'Jméno',
-            'phone number': 'Telefonní číslo'
+            'phone_number': 'Telefonní číslo'
         }
 
     def __init__(self, *args, **kwargs):
@@ -289,7 +289,7 @@ class CaregiverShiftForm(forms.ModelForm):
         model = Shift
         fields = ['date_of_shift', 'start', 'end']
         labels = {
-            'date': 'Datum',
+            'date_of_shift': 'Datum',
             'start': 'Začátek',
             'end': 'Konec'
         }

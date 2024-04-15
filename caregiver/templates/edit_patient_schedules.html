@@ -35,7 +35,7 @@
 
             const newForm = emptyForm.replace(/__prefix__/g, totalForms);
             const formsetContainer = $(`#${formsetPrefix}-formset`);
-            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}</div>`);
+            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
         }
 
         function deleteFormsetForm(btn) {

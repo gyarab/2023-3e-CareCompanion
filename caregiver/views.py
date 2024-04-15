@@ -146,8 +146,8 @@ def what_to_do(request):
 
 
 @caregiver_required
-def activities(request):
-    return render(request, 'activities.html')
+def free_time_activities(request):
+    return render(request, 'free_time_activities.html')
 
 
 @caregiver_required
