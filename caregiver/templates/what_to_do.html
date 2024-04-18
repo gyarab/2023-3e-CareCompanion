@@ -1,26 +1,27 @@
 {% extends 'base_caregiver.html' %}
 
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
+
+
 {% block content %}
     <div class="container-fluid text-container justify-content-center">
         <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6 custom-center">
-                <h1>Co delat kdyz?</h1>
-
-                <h2>Klient spadl z postele</h2>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas aliquet accumsan leo. Etiam commodo dui eget wisi. Phasellus faucibus molestie nisl. Duis viverra diam non justo. Maecenas lorem. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Nunc dapibus tortor vel mi dapibus sollicitudin. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Phasellus et lorem id felis nonummy placerat. Donec iaculis gravida nulla. Etiam sapien elit, consequat eget, tristique non, venenatis quis, ante. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Praesent in mauris eu tortor porttitor accumsan. Cras elementum. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Donec vitae arcu.</p>
-
-                <p>Nulla accumsan, elit sit amet varius semper, nulla mauris mollis quam, tempor suscipit diam nulla vel leo. Pellentesque arcu. Nullam eget nisl. Integer tempor. Proin mattis lacinia justo. Aliquam erat volutpat. In rutrum. Phasellus et lorem id felis nonummy placerat. Nullam feugiat, turpis at pulvinar vulputate, erat libero tristique tellus, nec bibendum odio risus sit amet ante. Curabitur sagittis hendrerit ante. Duis risus. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Sed convallis magna eu sem. Integer tempor. Aliquam erat volutpat. Morbi scelerisque luctus velit. Etiam egestas wisi a erat. Fusce tellus. Etiam dui sem, fermentum vitae, sagittis id, malesuada in, quam. Nulla est.</p>
-
-                <h2>Chci umyt klienta</h2>
-                <p>.....</p>
-
-                <h2>Ztratil jsem klienta</h2>
-                <p>fsfjdsjkfjskf</p>
-
-                <a href="{% url 'manual' %}" class="btn btn-primary">ZPÁTKY</a>
+            <div class="col-1 col-sm-2"></div>
+            <div class="col-10 col-sm-8 px-sm-3 custom-center pt-1 mt-1 text-justify">
+                <h3>Okamžitá reakce</h3>
+                <p>Když pacient spadne z postele, je důležité zůstat klidným a okamžitě zajistit bezpečí okolí. Oslovte pacienta a zjistěte jeho stav vědomí a orientaci. V případě, že má pacient zranění nebo je neschopen pohybu, je důležité jej nepřesouvat, aby nedošlo k zhoršení jeho stavu, zvláště pokud si stěžuje na bolest nebo existuje podezření na zranění hlavy, páteře či zlomeniny.</p>
+                <h3>Posouzení pacienta</h3>
+                <p>Prověřte pacienta a vizuálně zhodnoťte přítomnost zranění jako jsou otevřené rány, krvácení nebo deformity. Zároveň zkontrolujte základní životní funkce jako dýchání, pulz a reakci na podněty. Informujte odpovědného lékaře o incidentu a poskytněte mu podrobný popis situace a pozorovaných příznaků pacienta.</p>
+                <h3>Dokumentace a komunikace s lékařem</h3>
+                <p>Zaznamenejte všechny informace o pádu, včetně času, okolností, které k němu vedly, vašich reakcí a přijatých opatření. Přesnost a detailnost dokumentace jsou klíčové pro správné vyhodnocení incidentu a další kroky. Po zaznamenání incidentu je důležité prozkoumat příčiny, které mohly pád způsobit, a přijmout opatření k odstranění možných rizik a zlepšení bezpečnosti pacienta.</p>
+                <h3>Podpora pacienta a prevence dalších incidentů</h3>
+                <p>Nabídněte pacientovi psychologickou podporu a ujištění, neboť pády mohou být pro pacienty velmi stresující zážitky. Po poskytnutí nezbytné lékařské péče a zajištění, že neexistují žádné další rizika, monitorujte pacienta, aby bylo možné včas odhalit jakékoli pozdější komplikace vyplývající z pádu. Navrat k běžné péči by měl být zahájen až po konzultaci s lékařem a ujištění, že pacient je v stabilním stavu.</p>
+                <a href="{% url 'manual' %}" class="btn btn-primary mb-2">ZPÁTKY</a>
             </div>
-            <div class="col-3"></div>
+            <div class="col-1 col-sm-2"></div>
         </div>
     </div>
 {% endblock %}

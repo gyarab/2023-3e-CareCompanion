@@ -1,19 +1,33 @@
 {% extends 'base_caregiver.html' %}
 
-{% block content %}
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
 
+{% block content %}
     <div class="container-fluid text-container justify-content-center">
         <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6 custom-center">
+            <div class="col-1 col-sm-2"></div>
+            <div class="col-10 col-sm-8 px-sm-3 custom-center pt-1 mt-1 text-justify">
+                <h3>Plánování aktivit</h3>
+                <p>Plánování aktivit pro pacienty by mělo vycházet z jejich osobních zájmů a fyzických omezení. Konzultujte s pacientem a jeho rodinou, aby jste zjistili, jaké aktivity má rád a jsou pro něj bezpečné. Vytvoření individuálního plánu může výrazně zlepšit kvalitu života pacienta.</p>
 
-                <h1>Co delat s klienty pri dlouhe chvili</h1>
+                <h3>Kreativní činnosti</h3>
+                <p>Zapojte pacienty do kreativních aktivit jako je malování, kreslení nebo práce s hlínou. Tyto aktivity jsou nejen zábavné, ale mohou také pomoci zlepšit motorické schopnosti a mentální zdraví. Poskytněte pacientům bezpečné materiály a dostatek prostoru pro jejich tvoření.</p>
 
-                <p>neco</p>
+                <h3>Fyzické aktivity</h3>
+                <p>Mírné fyzické aktivity jako jsou procházky nebo lehká gymnastika mohou přispět k udržení fyzické kondice a mobility pacientů. Přizpůsobte intenzitu aktivit aktuálnímu zdravotnímu stavu a výkonnosti pacienta. Vždy mějte po ruce první pomoc pro případ nečekaných komplikací.</p>
 
-                <p><a href="{% url 'manual' %}" class="btn btn-primary">ZPÁTKY</a></p>
+                <h3>Edukativní aktivity</h3>
+                <p>Zahrnout do plánu také edukativní aktivity, které mohou rozšířit znalosti pacientů nebo udržet jejich mentální agilitu. Čtení knih, poslech hudby nebo sledování dokumentárních pořadů může být jak poučné, tak i relaxační.</p>
+
+                <h3>Sociální interakce</h3>
+                <p>Podpora sociálních interakcí je klíčová. Organizujte skupinové aktivity nebo setkání s rodinou a přáteli, aby pacienti udrželi sociální kontakty a cítili se mentálně stimulováni. Respektujte však osobní preference a soukromí každého pacienta.</p>
+
+                <a href="{% url 'manual' %}" class="btn btn-primary mb-2">ZPÁTKY</a>
             </div>
-            <div class="col-3"></div>
+            <div class="col-1 col-sm-2"></div>
         </div>
     </div>
 {% endblock %}

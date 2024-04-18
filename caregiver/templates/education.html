@@ -1,16 +1,36 @@
 {% extends 'base_caregiver.html' %}
 
-{% block content %}
+{% load static %}
+{% block navbar %}
+     <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
+{% endblock %}
 
+{% block content %}
     <div class="container-fluid text-container justify-content-center">
         <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6 custom-center">
-                <p>Nasi klienti ......</p>
+            <div class="col-1 col-sm-2"></div>
+            <div class="col-10 col-sm-8 px-sm-3 custom-center pt-1 mt-1 text-justify">
+                <h3>Udržení duševního zdraví a zvládání stresu</h3>
+                <p>Pracovní prostředí zdravotních sester může být často náročné a stresující. Je klíčové, aby sestry rozvíjely strategie pro zvládání stresu nejen pro sebe, ale i pro své pacienty. Níže jsou uvedeny metody, jak efektivně zvládat stresové situace a podporovat duševní zdraví.</p>
 
-                <p><a href="{% url 'manual' %}" class="btn btn-primary">ZPÁTKY</a></p>
+                <h3>Meditace a relaxační techniky</h3>
+                <p>Implementujte pravidelné meditační a relaxační session jak pro personál, tak pro pacienty. Techniky hlubokého dýchání, vedené meditace nebo jemná jóga mohou pomoci redukovat úroveň stresu a zlepšit celkovou pohodu.</p>
+
+                <h3>Pravidelné školení a podpora</h3>
+                <p>Organizujte pravidelné workshopy a školení zaměřené na rozvoj dovedností zvládání stresu. Tím se zvýší odolnost personálu vůči stresu a zlepší se schopnost podpory pacientů v náročných situacích.</p>
+
+                <h3>Společenské aktivity</h3>
+                <p>Podporujte týmové aktivity a budování společenství mezi personálem. Společenské události, jako jsou týmové obědy nebo společné sportovní aktivity, mohou vytvářet silnější vazby a poskytovat prostor pro uvolnění od pracovního stresu.</p>
+
+                <h3>Podpůrné prostředí</h3>
+                <p>Vytvořte prostředí, kde si personál může vyjádřit své obavy a pocity bez obav z odsouzení. Zřiďte systém podpory mezi kolegy nebo profesionální poradenské služby pro ty, kteří potřebují další pomoc.</p>
+
+                <h3>Důležitost pravidelného odpočinku</h3>
+                <p>Podporujte zdravotní sestry, aby si plánovaly pravidelné přestávky během směn a dostatečný odpočinek mezi směnami. Dostatečný spánek a odpočinek jsou zásadní pro udržení dobrého zdraví a prevenci vyhoření.</p>
+
+                <a href="{% url 'manual' %}" class="btn btn-primary mb-2">ZPÁTKY</a>
             </div>
-            <div class="col-3"></div>
+            <div class="col-1 col-sm-2"></div>
         </div>
     </div>
 {% endblock %}
