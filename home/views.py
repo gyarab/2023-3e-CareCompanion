@@ -36,7 +36,8 @@ def index(request):
         })
         return render(request, 'loggedin_homepage.html', context)
     else:
-        return render(request, 'default_homepage.html', context)
+        #return render(request, 'default_homepage.html', context)
+        return render(request, 'new_homepage.html', context)
 
 
 def delete_from_database(arr_w_all_objs, arr_w_upc_objs):
