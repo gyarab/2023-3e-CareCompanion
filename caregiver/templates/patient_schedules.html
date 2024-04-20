@@ -51,7 +51,7 @@
                                             {% endif %}
                                         {% endfor %}
                                     {% endif %}
-                                    <p><a href="{% url 'edit_patient_schedules' info.patient.pk %}">UPRAVIT</a></p>
+                                    <p><a class="btn btn-secondary btn-sm" href="{% url 'edit_patient_schedules' info.patient.pk %}">UPRAVIT</a></p>
                                     <hr> <!-- Replacing the line break with a horizontal rule -->
                                 </div>
                             </div>
@@ -61,8 +61,8 @@
             </div>
         </div>
         <div class="row justify-content-center mt-4">
-            <div class="col-4 col-md-4">
-                <a href="{% url 'index_caregiver' %}" class="btn btn-secondary btn-block">ZPÁTKY</a>
+            <div class="container-fluid text-center">
+                <a href="{% url 'index_caregiver' %}" class="btn btn-primary"><i class="bi bi-arrow-left" style="margin-right: 10px;"></i>ZPÁTKY</a>
             </div>
         </div>
     </div>
