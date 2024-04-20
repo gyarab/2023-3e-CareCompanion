@@ -3,77 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareCompanion</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>CareCompanion Landing Page</title>
     <style>
-.hero-section {
-    background: cornflowerblue no-repeat center center;
-    background-size: cover;
-    color: white;
-    padding: 100px 0;
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #324755; /* Deep slate gray for text */
+            background-color: #FAF9F6; /* Soft off-white background */
+        }
+
+        header {
+            background-color: #A8BDAE; /* Soft green */
+            color: #FFFFFF; /* White text */
+            padding-top: 10px;
+            padding-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #9F775F; /* Earthy brown */
+        }
+
+        p {
+            color: #5E6F64; /* Muted teal */
+            line-height: 1.6;
+        }
+
+        section {
+            padding: 20px 0;
+        }
+
+        .feature-box {
+            background: #FFFFFF; /* White background for contrast */
+            border: 1px solid #CDD3CE; /* Light gray border */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background-color: #A8BDAE; /* Same as header for consistency */
+            color: white;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+        }
+
+        .btn.btn-light.btn-lg {
+            background-image: linear-gradient(to right, #ffffff, #CDD3CE); /* Subtle gradient from white to light gray */
+            border: none;
+            color: #5E6F64; /* Muted teal for text */
+            padding: 0.5rem 1.5rem;
+            font-size: 1.2em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn.btn-light.btn-lg:hover {
+            transform: scale(1.05); /* Slightly larger on hover */
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.15);
+            background-image: linear-gradient(to right, #CDD3CE, #ffffff); /* Inverse gradient */
+        }
+
+        @media (min-width: 768px) {
+            footer {
+                position: fixed;
+                left: 0;
+                bottom: 0;
+            }
+        }
+        
+        
+        
+        
+        
+        .button {
+  --offset: 10px;
+  --border-size: 2px;
+  display: block;
+  position: relative;
+  padding: 1.5em 3em;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0;
+  background: transparent;
+  color: #e55743;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  outline: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 var(--border-size) currentcolor;
+  transition: background 0.8s ease;
 }
-
-.features-section h3 {
-    margin-top: 20px;
+.button:hover {
+  background: rgba(100, 0, 0, 0.03);
 }
-
-
-footer {
-    background: #f8f9fa;
-    color: #6c757d;
+.button__horizontal, .button__vertical {
+  position: absolute;
+  top: var(--horizontal-offset, 0);
+  right: var(--vertical-offset, 0);
+  bottom: var(--horizontal-offset, 0);
+  left: var(--vertical-offset, 0);
+  transition: transform 0.8s ease;
+  will-change: transform;
 }
-
+.button__horizontal::before, .button__vertical::before {
+  content: "";
+  position: absolute;
+  border: inherit;
+}
+.button__horizontal {
+  --vertical-offset: calc(var(--offset) * -1);
+  border-top: var(--border-size) solid currentcolor;
+  border-bottom: var(--border-size) solid currentcolor;
+}
+.button__horizontal::before {
+  top: calc(var(--vertical-offset) - var(--border-size));
+  bottom: calc(var(--vertical-offset) - var(--border-size));
+  left: calc(var(--vertical-offset) * -1);
+  right: calc(var(--vertical-offset) * -1);
+}
+.button:hover .button__horizontal {
+  transform: scaleX(0);
+}
+.button__vertical {
+  --horizontal-offset: calc(var(--offset) * -1);
+  border-left: var(--border-size) solid currentcolor;
+  border-right: var(--border-size) solid currentcolor;
+}
+.button__vertical::before {
+  top: calc(var(--horizontal-offset) * -1);
+  bottom: calc(var(--horizontal-offset) * -1);
+  left: calc(var(--horizontal-offset) - var(--border-size));
+  right: calc(var(--horizontal-offset) - var(--border-size));
+}
+.button:hover .button__vertical {
+  transform: scaleY(0);
+}
     </style>
-    
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">CareCompanion</a>
-        </div>
-    </nav>
-
-    <header class="hero-section">
-        <div class="container text-center pt-5">
+    <header>
+        <div class="container">
             <h1>Welcome to CareCompanion</h1>
-            <p>Helping doctors deliver compassionate care to the elderly.</p>
-            <button class="btn btn-primary mt-3">Learn More</button>
+            <p style="margin-bottom: 25px">Empowering medical professionals to provide better care.</p>
+            <!-- <button class="btn btn-light btn-lg">Log In</button> -->
+            <div class="row d-inline-flex justify-content-center">
+                <button class="button">
+	                    Log In
+	                <div class="button__horizontal"></div>
+	                <div class="button__vertical"></div>
+                </button>
+            </div>
         </div>
     </header>
 
-    <section class="features-section">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>Efektivní Správa Směn</h3>
-                    <p class="text-start"> CareCompanion umožňuje lékařům snadno přehlížet své rozvrhy a pacientům zjišťovat, kteří pečovatelé jsou k dispozici. Tato funkce zajišťuje, že všichni jsou dobře informováni a operace probíhají hladce, což zvyšuje transparentnost a předvídatelnost v péči.</p>
+    <section class="container mt-4">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <h2>Overview of Shifts</h2>
+                    <p>Manage and view detailed shift schedules for caregivers and patients.</p>
                 </div>
-                <div class="col-md-4">
-                    <h3>Komplexní Karty Pacientů</h3>
-                    <p class="text-start">S lékařskými kartami CareCompanion rychle získáte přehled o medikaci pacientů, kontakty na jejich rodiny a editovatelné poznámky od zdravotnického personálu. Tento nástroj zajišťuje, že všechny informace jsou aktuální a snadno dostupné, což usnadňuje koordinaci péče.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <h2>Medical Cards</h2>
+                    <p>Access and update patient medical records, medications, and family contacts easily.</p>
                 </div>
-                <div class="col-md-4">
-                    <h3>Interaktivní Příručka pro Sestry</h3>
-                    <p class="text-start">Příručka CareCompanion poskytuje sestrám rychlá řešení běžných problémů v péči. Ať už jde o zvládání pádů, zabavení pacientů, kteří se nudí, nebo řešení psychických potíží, tento průvodce v aplikaci zajišťuje účinnou a soucitnou péči v každé situaci.</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="feature-box">
+                    <h2>Playbook</h2>
+                    <p>Guides for common care scenarios to enhance patient engagement and care.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="text-center p-3 bg-light">
-        <p>© 2024 CareCompanion</p>
+    <footer>
+        <p>Contact Us: info@carecompanion.com</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const learnMoreButton = document.querySelector('.btn-primary');
-            learnMoreButton.addEventListener('click', function() {
-                alert('Here you could present more detailed information or redirect to another page.');
-            });
+        document.querySelector('button').addEventListener('click', function() {
+            window.location.href = 'login.html'; // Redirects to a login page
         });
     </script>
-
 </body>
 </html>
