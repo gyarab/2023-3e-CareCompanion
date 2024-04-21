@@ -4,8 +4,8 @@
 
     <form action="" method="POST">
       {% csrf_token %}
-        <h3>Prejete si smazat ucet pro uzivatele {{ first_name }} {{ last_name }}?</h3>
-        <p><input type="submit" value="Ano"> <a href="{% url 'display_users' %}">Ne</a></p>
+        <h3 class="text-center">Opravdu si přejete smazat účet pro uživatele {{ first_name }} {{ last_name }}?</h3>
+        <p class="text-center mt-3"><input class="btn btn-danger" type="submit" value="Ano"> <a class="btn btn-success ml-3" href="{% url 'display_users' %}">Ne</a></p>
     </form>
 
 {% endblock %}

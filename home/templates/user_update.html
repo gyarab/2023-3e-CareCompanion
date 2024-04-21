@@ -1,6 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+
+.btn-warning2 {
+    /* Ensure the position is relative to allow absolute positioning within */
+    position: relative;
+    overflow: hidden; /* Keeps the pseudo-element inside the button */
+    transition: all 0.3s ease;
+}
+
+.btn-warning2::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.2) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+    animation: slide 9s linear infinite forwards;
+    opacity: 0.5;
+}
+
+@keyframes slide {
+    0% {
+        background-position: 0% 0;
+    }
+    100% {
+        background-position: 100px 0; /* controls the movement speed and distance */
+    }
+}
+
+</style>
 
     {% if form.errors %}
 
@@ -13,18 +52,17 @@
     {% endif %}
 
     <div class="container">
-    <h1>Uprava profilu pro {{ user.first_name }} {{ user.last_name }}</h1>
+    <h1>Úprava profilu pro {{ user.first_name }} {{ user.last_name }}</h1>
 
         <form action="{{ request.path }}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <p><button type="button" class="btn btn-danger" onclick="redirectToPassword()">Zmena hesla</button>
+        <p><button type="button" class="btn btn-danger" onclick="redirectToPassword()">Změna hesla</button>
             {% if group == 'klient' %}
-        	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Zmena infa</button>
-            {% endif %}</p>
-        <p>
+        	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Změna infa</button>
+            {% endif %}
         <input type="submit" value="Uložit" class="btn btn-secondary"></p>
-        <p><a href="{% url 'delete_user' user.pk %}">Smazat ucet</a></p>
+        <p><a class="btn btn-warning btn-warning2" href="{% url 'delete_user' user.pk %}">Smazat účet</a></p>
     </form>
     </div>
 
