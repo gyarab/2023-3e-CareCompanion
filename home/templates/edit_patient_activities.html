@@ -2,6 +2,13 @@
 
 {% block content %}
 
+<style>
+    /* Solid border */
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+</style>
+
     <h2>{{ patient.first_name }} {{ patient.last_name }}</h2>
 
     <form action="" method="POST">
@@ -15,13 +22,13 @@
                 <div class="formset-activities">
                     {{ form.as_p }}
                     <input type="hidden" name="patient" value="{{ patient.id }}">
-                    <br>
+                    <hr class="solid">
                 </div>
             {% endfor %}
         </div>
-        <button type="button" id="add-activities" class="add-formset-item">Přidat aktivitu</button>
+        <button type="button" id="add-activities" class="add-formset-item btn btn-secondary mb-2">Přidat aktivitu</button>
         <br>
-        <input type="submit" value="Uložit" class="btn btn-secondary">
+        <input type="submit" value="Uložit" class="btn btn-secondary mb-2">
     </form>
 
     <script>
@@ -35,7 +42,7 @@
 
             const newForm = emptyForm.replace(/__prefix__/g, totalForms);
             const formsetContainer = $(`#${formsetPrefix}-formset`);
-            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button></div>`);
         }
 
         function deleteFormsetForm(btn) {

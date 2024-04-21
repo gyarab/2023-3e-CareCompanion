@@ -14,13 +14,13 @@
 
 
     <div class="container">
-    <h1>Vytvoření nového účtu</h1>
+    <h1 class="mt-2">Vytvoření nového účtu</h1>
 
     <form action="{% url 'account_creation' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="REGISTROVAT" class="btn btn-secondary">
-         <a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a>
+        <input type="submit" value="REGISTROVAT" class="btn btn-secondary mb-2">
+         <a href="{% url 'administration' %}" class="btn btn-primary mb-2">ZPÁTKY</a>
     </form>
     </div>
 {% endblock %}

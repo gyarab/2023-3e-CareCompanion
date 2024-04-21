@@ -2,6 +2,13 @@
 
 {% block content %}
 
+<style>
+    /* Solid border from: https://www.w3schools.com/howto/howto_css_dividers.asp*/ 
+hr.solid {
+  border-top: 3px solid #bbb;
+}
+</style>
+
     <h2>{{ caregiver.first_name }} {{ caregiver.last_name }}</h2>
 
     <form action="" method="POST">
@@ -15,7 +22,7 @@
                 <div class="formset-shifts">
                     {{ form.as_p }}
                     <input type="hidden" name="caregiver" value="{{ caregiver.id }}">
-  
+                    <hr class="solid">
                 </div> 
             {% endfor %}
         </div>
