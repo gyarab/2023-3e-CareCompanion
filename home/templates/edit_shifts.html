@@ -15,13 +15,13 @@
                 <div class="formset-shifts">
                     {{ form.as_p }}
                     <input type="hidden" name="caregiver" value="{{ caregiver.id }}">
-                    <br>
-                </div>
+  
+                </div> 
             {% endfor %}
         </div>
-        <button type="button" id="add-shifts" class="add-formset-item">Přidat směnu</button>
+        <button type="button" id="add-shifts" class="add-formset-item btn btn-secondary mb-2">Přidat směnu</button>
         <br>
-        <input type="submit" value="Uložit" class="btn btn-secondary">
+        <input type="submit" value="Uložit" class="btn btn-secondary mb-2">
     </form>
 
     <script>
@@ -35,7 +35,7 @@
 
             const newForm = emptyForm.replace(/__prefix__/g, totalForms);
             const formsetContainer = $(`#${formsetPrefix}-formset`);
-            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button></div>`);
         }
 
         function deleteFormsetForm(btn) {
