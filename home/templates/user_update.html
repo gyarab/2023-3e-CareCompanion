@@ -61,7 +61,8 @@
             {% if group == 'klient' %}
         	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Změna infa</button>
             {% endif %}
-        <input type="submit" value="Uložit" class="btn btn-secondary"></p>
+        <input type="submit" value="Uložit" class="btn btn-secondary">
+        <a href="{% url 'display_users' %}" class="btn btn-primary">ZPÁTKY</a></p>
         <p><a class="btn btn-warning btn-warning2" href="{% url 'delete_user' user.pk %}">Smazat účet</a></p>
     </form>
     </div>
