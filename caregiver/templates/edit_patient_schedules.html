@@ -2,27 +2,40 @@
 
 {% block content %}
 
-    <h2>{{ patient.first_name }} {{ patient.last_name }}</h2>
+    <div class="container mt-4">
+        <h2>{{ patient.first_name }} {{ patient.last_name }}</h2>
 
-    <form action="" method="POST">
-        {% csrf_token %}
-        <div id="activities-formset" data-form-prefix="activities" class="formset">
-            {{ formset.management_form }}
-            <div class="empty-form" style="display: none;">
-                {{ formset.empty_form }}
-            </div>
-            {% for form in formset %}
-                <div class="formset-activities">
-                    {{ form.as_p }}
-                    <input type="hidden" name="patient" value="{{ patient.id }}">
-                    <br>
+        <form action="" method="POST" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div id="activities-formset" data-form-prefix="activities">
+                {{ formset.management_form }}
+                <div class="empty-form d-none">
+                    {{ formset.empty_form }}
                 </div>
-            {% endfor %}
-        </div>
-        <button type="button" id="add-activities" class="add-formset-item">Přidat aktivitu</button>
-        <br>
-        <input type="submit" value="Upravit informace" class="btn btn-secondary">
-    </form>
+                {% for form in formset %}
+                    <div class="mb-1 formset-activities">
+                        {{ form.as_p }}
+                        <input type="hidden" name="patient" value="{{ patient.id }}">
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Layout for buttons -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- Left aligned buttons -->
+                <div>
+                    <button type="button" id="add-activities" class="btn btn-primary">Přidat aktivitu</button>
+                    <input type="submit" value="Uložit" class="btn btn-secondary">
+                </div>
+
+                <!-- Right aligned button -->
+                <div>
+                    <a href="{% url 'patient_schedules' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-left" style="margin-right: 10px;"></i>ZPÁTKY
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <script>
         function addFormsetForm(formsetPrefix) {
@@ -35,7 +48,7 @@
 
             const newForm = emptyForm.replace(/__prefix__/g, totalForms);
             const formsetContainer = $(`#${formsetPrefix}-formset`);
-            formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+            formsetContainer.append(`<div class="mb-3 formset-${formsetPrefix}">${newForm}<button type="button" class="btn btn-danger btn-sm delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
         }
 
         function deleteFormsetForm(btn) {
