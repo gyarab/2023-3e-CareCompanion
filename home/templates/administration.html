@@ -1,11 +1,44 @@
 {% extends 'base_administration.html' %}
 
 {% block content %}
-    <h1>Jak zaregistrovat noveho klienta/opatrovnika?</h1>
-    <p>Vytvorte ucet a profil opatrovnikovi/klientovy <a href="{% url 'account_creation' %}">ZDE</a></p>
-    <p>SMENY - opatrovnici <a href="{% url 'shifts' %}">ZDE</a></p>
-     <p>AKTIVITY - klienti <a href="{% url 'patient_activities' %}">ZDE</a></p>
-    <p><a href="{% url 'display_users' %}">Uprava profilu</a></p>
-    <p><a href="{% url 'institute_info' %}">Uprava informaci o domove senireu (uvodni stranka)</a></p>
-    <p><a href="{% url 'login_user' %}">ZPÁTKY</a></p>
+<style>
+    .uniform-btn {
+        width: 100%;  /* Ensures each button stretches fully within its column */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for transform and shadow */
+    }
+
+    .uniform-btn:hover, .uniform-btn:focus {
+        transform: scale(1.05); /* Slightly enlarge button on hover/focus */
+        box-shadow: 0 0 10px rgba(0,0,0,0.15); /* Add shadow for depth */
+    }
+</style>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h1>Registrace nového klienta/opatrovníka</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'account_creation' %}" class="btn btn-success uniform-btn">Vytvořte účet a profil opatrovníkovi/klientovy</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'shifts' %}" class="btn btn-success uniform-btn">Přidejte směny opatrovníkům</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'patient_activities' %}" class="btn btn-success uniform-btn">Upravte, přidejte, mažte aktivity klientů</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'display_users' %}" class="btn btn-success uniform-btn">Uprava profilů</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'institute_info' %}" class="btn btn-success uniform-btn">Uprava informací o domově senioreu (uvodni stranka)</a>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <a href="{% url 'logout_user' %}" class="btn btn-secondary uniform-btn">Odhlásit se</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
