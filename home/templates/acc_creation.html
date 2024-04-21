@@ -20,6 +20,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="REGISTROVAT" class="btn btn-secondary">
+         <a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a>
     </form>
     </div>
 {% endblock %}

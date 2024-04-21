@@ -1,10 +1,15 @@
 {% extends 'base_administration.html' %}
 
 {% block content %}
-
-    <h2>Upravte/pridejte/mazte opatrovnikum smeny</h2>
+<style>
+    .uniform-btn {
+        width: 100%;  /* Ensures each button stretches fully within its column */
+    }
+</style>
+    <h2>Upravte/přidejte/mažte opatrovníkum směny</h2>
     {% for caregiver in caregivers %}
-    	<p><a href="{% url 'edit_shifts' caregiver.pk %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
+    	<p><a class="btn btn-secondary uniform-btn" href="{% url 'edit_shifts' caregiver.pk %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
     {% endfor %}
+    <a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a>
 
 {% endblock %}

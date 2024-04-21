@@ -1,10 +1,16 @@
 {% extends 'base_administration.html' %}
 
 {% block content %}
+ <style>
+    .uniform-btn {
+        width: 100%;  /* Ensures each button stretches fully within its column */
+    }
+</style>
 
     <h2>Upravte/pridejte/mazte klientum aktivity</h2>
     {% for patient in patients %}
-    	<p><a href="{% url 'edit_patient_activities' patient.pk %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
+    	<p><a class="btn btn-secondary uniform-btn" href="{% url 'edit_patient_activities' patient.pk %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
     {% endfor %}
+    <a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a>
 
 {% endblock %}
