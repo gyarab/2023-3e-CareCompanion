@@ -31,8 +31,8 @@ def delete_from_database(arr_w_all_objs, arr_w_upc_objs):
 
 def login_user(request):
     if request.method == 'POST':
-        username = request.POST.get("username", "")
-        password = request.POST.get("password", "")
+        username = request.POST.get("username").lower()
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
 
         if user is not None:

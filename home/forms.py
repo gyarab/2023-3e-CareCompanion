@@ -27,6 +27,8 @@ class RegisterUserForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         group = self.cleaned_data.get('groups')
+        username_lower = self.cleaned_data.get('username').lower()
+        user.username = username_lower
 
         if commit:
             user.save()
