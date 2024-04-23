@@ -33,7 +33,7 @@ def caregivers_list(request):
         if next_shift:
             shift_start = datetime.combine(next_shift.date_of_shift, next_shift.start)
             shift_end = datetime.combine(next_shift.date_of_shift, next_shift.end)
-            if shift_start <= now <= shift_end or next_shift.is_overnight_shift():
+            if shift_start <= now <= shift_end or (next_shift.is_overnight_shift() and shift_start <= now):
                 # If the shift has already started but not ended, the caregiver is on shift
                 users_shift_info.append({
                     'first_name': caregiver.first_name,
