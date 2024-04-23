@@ -1,43 +1,27 @@
 from django.db import transaction
-from django.db.models import Q
 from django.forms import modelformset_factory, inlineformset_factory
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.utils import timezone
 
-from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 from caregiver.models import Caregiver, Shift
 from patient.models import Patient, MedicationIntake, Contact as Patient_contact, Activity
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, PatientContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
-    ResetUserPasswordForm, UpdatePatientForm, InstituteContactForm, AddressForm, DayScheduleForm, AnnouncementForm, \
-    PatientActivityForm, CaregiverShiftForm
+    ResetUserPasswordForm, UpdatePatientForm, PatientActivityForm, CaregiverShiftForm
 
 
 def index(request):
-    context = {
-        'contacts': Institute_contact.objects.all(),
-        'address': Address.objects.first()
-    }
-
     if request.user.is_authenticated:
-        now = timezone.now()
-        upc_announcements = Announcement.objects.filter(
-            Q(delete_date__gt=now.date()) |  # skonci v budoucnu
-            (Q(delete_date=now.date()) & Q(delete_time__gt=now.time()))  # dnesni co jeste nemaji byt mazany
-        )
-        delete_from_database(Announcement.objects.all(), upc_announcements)
-
-        context.update({
-            'day_schedules': DaySchedule.objects.all().order_by('time'),
-            'announcements': upc_announcements
-        })
-        return render(request, 'loggedin_homepage.html', context)
+        if request.user.groups.filter(name='Admins').exists():
+            return redirect('administration')
+        elif request.user.groups.filter(name='Caregivers').exists():
+            return redirect('index_caregiver')
+        elif request.user.groups.filter(name='Patients').exists():
+            return redirect('index_patient')
     else:
-        #return render(request, 'default_homepage.html', context)
-        return render(request, 'new_homepage.html', context)
+        return render(request, 'homepage.html')
 
 
 def delete_from_database(arr_w_all_objs, arr_w_upc_objs):
@@ -76,7 +60,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request, 'Odhlášení proběhlo úspěšně')
-    return redirect('index')
+    return redirect('login_user')
 
 
 @admin_required
@@ -268,49 +252,6 @@ def delete_user(request, pk):
         'last_name': user_for_deletion.last_name
     }
     return render(request, 'delete_user.html', context)
-
-
-@admin_required
-def institute_info(request):
-    contacts = Institute_contact.objects.all()
-    address = Address.objects.first()
-    day_schedules = DaySchedule.objects.all()
-    announcements = Announcement.objects.all()
-
-    context = {
-        'contacts': contacts,
-        'address': address,
-        'day_schedules': day_schedules,
-        'announcements': announcements
-    }
-
-    return render(request, 'institute_info.html', context)
-
-
-@admin_required
-def edit_institute_info(request, category):
-    category_map = {
-        'kontakty': (InstituteContactForm, Institute_contact, 'Kontakty'),
-        'adresa': (AddressForm, Address, 'Adresa'),
-        'denni-rozvrh': (DayScheduleForm, DaySchedule, 'Denní rozvrh'),
-        'oznameni': (AnnouncementForm, Announcement, 'Oznamení'),
-    }
-    form, model, header = category_map.get(category)
-
-    formset_class = modelformset_factory(model, form=form, extra=0, can_delete=True)
-    queryset = model.objects.all()
-    formset = formset_class(request.POST or None, queryset=queryset)
-
-    if category == 'oznameni':
-        for form, obj in zip(formset, queryset):
-            form.initial['delete_date'] = obj.delete_date.strftime('%Y-%m-%d')
-
-    if formset.is_valid():
-        formset.save()
-        messages.success(request, 'Informace byly ulozeny!')
-        return redirect('institute_info')
-    else:
-        return render(request, 'edit_institute_info.html', {'formset': formset, 'header': header})
 
 
 @admin_required

@@ -4,7 +4,6 @@ from django import forms
 
 from caregiver.models import Shift
 from patient.models import Patient, Contact as Patient_contact, MedicationIntake, Activity
-from .models import Contact as Institute_contact, Address, DaySchedule, Announcement
 
 
 class RegisterUserForm(UserCreationForm):
@@ -189,78 +188,6 @@ class ObservationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['observations'].widget.attrs['class'] = 'form-control'
-
-
-class InstituteContactForm(forms.ModelForm):
-    class Meta:
-        model = Institute_contact
-        fields = ['name', 'phone_number', 'email']
-        labels = {
-            'name': 'Celé jméno',
-            'phone_number': 'Telefonní číslo'
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['class'] = 'form-control'
-        self.fields['phone_number'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-
-
-class AddressForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        fields = ['street', 'zip_code', 'city']
-        labels = {
-            'street': 'Ulice',
-            'zip_code': 'PSČ',
-            'city': 'Město'
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['street'].widget.attrs['class'] = 'form-control'
-        self.fields['zip_code'].widget.attrs['class'] = 'form-control'
-        self.fields['city'].widget.attrs['class'] = 'form-control'
-
-
-class DayScheduleForm(forms.ModelForm):
-    class Meta:
-        model = DaySchedule
-        fields = ['time', 'description']
-        labels = {
-            'time': 'Čas',
-            'description': 'Popis'
-        }
-        widgets = {
-            'time': forms.TimeInput(attrs={'type': 'time'})
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['time'].widget.attrs['class'] = 'form-control'
-        self.fields['description'].widget.attrs['class'] = 'form-control'
-
-
-class AnnouncementForm(forms.ModelForm):
-    class Meta:
-        model = Announcement
-        fields = ['text', 'delete_date', 'delete_time']
-        labels = {
-            'text': 'Text',
-            'delete_date': 'Smazat k datu a času',
-            'delete_time': ''
-        }
-        widgets = {
-            'delete_date': forms.DateInput(attrs={'type': 'date'}),
-            'delete_time': forms.TimeInput(attrs={'type': 'time'})
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['text'].widget.attrs['class'] = 'form-control'
-        self.fields['delete_date'].widget.attrs['class'] = 'form-control'
-        self.fields['delete_time'].widget.attrs['class'] = 'form-control'
 
 
 class PatientActivityForm(forms.ModelForm):
