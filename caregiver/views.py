@@ -46,7 +46,7 @@ def shift_schedule(request):
 
     shifts_to_display = caregiver.shift_set.annotate(
         is_overnight=ExpressionWrapper(
-            Q(end__lt=F('start')) | (Q(date_of_shift=now.date()) & Q(end__gt=F('start'))),
+            Q(end__lt=F('start')),
             output_field=BooleanField()
         )
     ).filter(

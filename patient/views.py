@@ -9,7 +9,8 @@ from datetime import datetime
 
 @patient_required
 def index(request):
-    return render(request, 'index_patient.html')
+    date = format_date(datetime.now(), format='EEEE d. MMMM', locale='cs_CZ')
+    return render(request, 'index_patient.html', {'date': date})
 
 
 @patient_required
@@ -20,15 +21,15 @@ def caregivers_list(request):
     for caregiver in Caregiver.objects.prefetch_related('shift_set').order_by('user__last_name'):
 
         next_shift = caregiver.shift_set.annotate(
-            is_overnight=ExpressionWrapper(
-                Q(end__lt=F('start')) | (Q(date_of_shift=now.date()) & Q(end__gt=F('start'))),
-                output_field=BooleanField()
-            )
-        ).filter(
-            Q(date_of_shift__gt=now.date()) |  # Future shifts OR
-            (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
-            # Today's shifts that have not ended or are overnight
-        ).order_by('date_of_shift', 'start').first()
+                is_overnight=ExpressionWrapper(
+                    Q(end__lt=F('start')),
+                    output_field=BooleanField()
+                )
+            ).filter(
+                Q(date_of_shift__gt=now.date()) |  # Future shifts OR
+                (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
+                # Today's shifts that have not ended or are overnight
+            ).order_by('date_of_shift', 'start').first()
 
         if next_shift:
             shift_start = datetime.combine(next_shift.date_of_shift, next_shift.start)
