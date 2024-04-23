@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, ExpressionWrapper, BooleanField, F
 from babel.dates import format_date
 
 from caregiver.models import Caregiver
 from .decorators import patient_required
-from datetime import datetime, time, date, timezone
-from .models import Activity
+from datetime import datetime
 
 
 @patient_required
@@ -20,16 +19,21 @@ def caregivers_list(request):
 
     for caregiver in Caregiver.objects.prefetch_related('shift_set').order_by('user__last_name'):
 
-        # Saves the first upcoming/current shift (either today or in the future)
-        next_shift = caregiver.shift_set.filter(
+        next_shift = caregiver.shift_set.annotate(
+            is_overnight=ExpressionWrapper(
+                Q(end__lt=F('start')) | (Q(date_of_shift=now.date()) & Q(end__gt=F('start'))),
+                output_field=BooleanField()
+            )
+        ).filter(
             Q(date_of_shift__gt=now.date()) |  # Future shifts OR
-            (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
+            (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
+            # Today's shifts that have not ended or are overnight
         ).order_by('date_of_shift', 'start').first()
 
         if next_shift:
             shift_start = datetime.combine(next_shift.date_of_shift, next_shift.start)
             shift_end = datetime.combine(next_shift.date_of_shift, next_shift.end)
-            if shift_start <= now <= shift_end:
+            if shift_start <= now <= shift_end or next_shift.is_overnight_shift():
                 # If the shift has already started but not ended, the caregiver is on shift
                 users_shift_info.append({
                     'first_name': caregiver.first_name,
@@ -80,6 +84,7 @@ def day_schedule(request):
             if activity.date == now.date():
                 todays_activities.append({'activity': activity})
             else:
+                activity.date = format_date(activity.date, format='EEEE d. MMMM', locale='cs_CZ')
                 other_activities.append({'activity': activity})
 
         context = {

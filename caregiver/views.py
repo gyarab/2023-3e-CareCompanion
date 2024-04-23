@@ -1,7 +1,7 @@
 from datetime import datetime
 from babel.dates import format_date
 
-from django.db.models import Q
+from django.db.models import Q, F, ExpressionWrapper, BooleanField
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 
@@ -44,10 +44,15 @@ def shift_schedule(request):
     context = {'caregiver': caregiver}
     now = datetime.now()
 
-    # Saves the first upcoming/current shift (either today or in the future)
-    shifts_to_display = caregiver.shift_set.filter(
+    shifts_to_display = caregiver.shift_set.annotate(
+        is_overnight=ExpressionWrapper(
+            Q(end__lt=F('start')) | (Q(date_of_shift=now.date()) & Q(end__gt=F('start'))),
+            output_field=BooleanField()
+        )
+    ).filter(
         Q(date_of_shift__gt=now.date()) |  # Future shifts OR
-        (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))  # Today's shifts that have not ended
+        (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
+        # Today's shifts that have not ended or are overnight
     ).order_by('date_of_shift', 'start')
 
     delete_from_database(caregiver.shift_set.filter(caregiver=caregiver), shifts_to_display)
@@ -103,6 +108,7 @@ def patient_schedules(request):
             if activity.date == now.date():
                 todays_activities.append({'activity': activity})
             else:
+                activity.date = format_date(activity.date, format='EEEE d. MMMM', locale='cs_CZ')
                 other_activities.append({'activity': activity})
 
         patient_info.append({'patient': patient, 'todays_activities': todays_activities, 'other_activities': other_activities})

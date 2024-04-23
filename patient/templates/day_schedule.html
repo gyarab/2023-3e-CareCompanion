@@ -28,7 +28,7 @@
                     {% for date_activities in grouped_activities %}
                         <div class="card bg-light mb-3">
                             <div class="card-header">
-                                <h4 class="mb-0">{{ date_activities.grouper }}</h4>
+                                <h4 class="mb-0">{{ date_activities.grouper|capfirst }}</h4>
                             </div>
                             <ul class="list-group list-group-flush">
                                 {% for activity_info in date_activities.list %}

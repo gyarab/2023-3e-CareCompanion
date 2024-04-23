@@ -26,4 +26,9 @@ class Shift(models.Model):
     start = models.TimeField()
     end = models.TimeField()
 
+    def is_overnight_shift(self):
+        if self.end < self.start:
+            return True
+        return False
+
     caregiver = models.ForeignKey(Caregiver, on_delete=models.CASCADE)
