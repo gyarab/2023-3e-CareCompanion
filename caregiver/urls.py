@@ -10,7 +10,7 @@ urlpatterns = [
     path('rozvrhy-klientu/<int:pk>/', views.edit_patient_schedules, name='edit_patient_schedules'),
     path('rozvrh-smeny/', views.shift_schedule, name='shift_schedule'),
     path('prirucka/', views.manual, name='manual'),
-    path('prirucka/co-delat', views.what_to_do, name='what_to_do'),
-    path('prirucka/aktivity', views.free_time_activities, name='free_time_activities'),
-    path('prirucka/rozsirte-znalosti', views.education, name='education'),
+    path('prirucka/co-delat/', views.what_to_do, name='what_to_do'),
+    path('prirucka/aktivity/', views.free_time_activities, name='free_time_activities'),
+    path('prirucka/rozsirte-znalosti/', views.education, name='education'),
 ]

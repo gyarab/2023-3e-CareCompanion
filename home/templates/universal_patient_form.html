@@ -5,7 +5,7 @@
 {% if creating %}
 	<h1>Registrace pacienta</h1>
     {% else %}
-    <h1>Uprava infa pacienta</h1>
+    <h1>Úprava infa pacienta</h1>
 {% endif %}
 
 <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
@@ -13,7 +13,7 @@
 
     {{ patient_form.as_p }}
 
-    <h3>Contacts</h3>
+    <h3>Kontakty</h3>
 
     <div id="contacts-formset" data-form-prefix="contacts" class="formset">
         {{ contact_formset.management_form }}
@@ -27,9 +27,9 @@
             </div>
         {% endfor %}
     </div>
-    <button type="button" id="add-contact">Add Contact</button>
+    <button type="button" id="add-contact">Přidat kontakt</button>
 
-    <h3>Medications</h3>
+    <h3>Medikace</h3>
 
     <div id="medications-formset" data-form-prefix="medications" class="formset">
         {{ medication_formset.management_form }}
@@ -42,7 +42,7 @@
             </div>
         {% endfor %}
     </div>
-    <button type="button" id="add-medication">Add Medication</button>
+    <button type="button" id="add-medication">Přidat medikaci</button>
 
     <button type="submit" id="register-patient-btn">Uložit</button>
 </form>

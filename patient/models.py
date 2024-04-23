@@ -70,7 +70,7 @@ class MedicationIntake(models.Model):
 
     HOW_CHOICES = (
         ('pred jidlem', 'Před jídlem'),
-        ('s jídlem', 'S jídlem'),
+        ('s jidlem', 'S jídlem'),
         ('po jidle', 'Po jídle'),
         ('jine', 'Jiné'),
     )

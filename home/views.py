@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 from caregiver.models import Caregiver, Shift
-from patient.models import Patient, MedicationIntake, Contact as Patient_contact, Activity
+from patient.models import Patient, MedicationIntake, Contact, Activity
 from .decorators import admin_required
 from .forms import RegisterUserForm, PatientForm, PatientContactForm, MedicationIntakeForm, UpdateUsersInformationForm, \
     ResetUserPasswordForm, UpdatePatientForm, PatientActivityForm, CaregiverShiftForm
@@ -71,38 +71,42 @@ def administration(request):
 @admin_required
 def account_creation(request):
     form = RegisterUserForm(request.POST or None)
+
     if form.is_valid():
         user = form.save()
         messages.success(request, 'Vytvoření účtu proběhlo úspěšně')
 
         selected_group = form.cleaned_data['groups']
-        if selected_group.name == 'Patients':
+        if selected_group == 'Patients':
             return redirect('patient_registration')
-        elif selected_group.name == 'Caregivers':
+        elif selected_group == 'Caregivers':
             Caregiver.objects.create(user=user)
             return redirect('administration')
         else:
             return redirect('administration')
+
     else:
         return render(request, 'acc_creation.html', {'form': form})
 
 
 @admin_required
 def display_users(request):
-    users = User.objects.all().order_by('last_name')
-
     patients = []
     caregivers = []
     admins = []
     unfinished_users = []
+    users = User.objects.all().order_by('last_name')
+
     for user in users:
+        groups = user.groups.values_list('name', flat=True)
+
         if getattr(user, 'patient_profile', None):
-            patients.append(user.patient_profile)
-        elif 'Caregivers' in user.groups.values_list('name', flat=True):
+            patients.append(user)
+        elif 'Caregivers' in groups:
             caregivers.append(user)
-        elif 'Admins' in user.groups.values_list('name', flat=True):
+        elif 'Admins' in groups:
             admins.append(user)
-        elif 'Patients' in user.groups.values_list('name', flat=True):
+        elif 'Patients' in groups:
             unfinished_users.append(user)
 
     context = {
@@ -118,16 +122,21 @@ def display_users(request):
 @admin_required
 def user_update(request, info_on_user):
     group, first_name, last_name = info_on_user.split('-')
-    # TODO: osetrit uzivatele se stejnym krestnim jmenem a prijemenim?
     user = User.objects.get(first_name=first_name, last_name=last_name)
     form = UpdateUsersInformationForm(request.POST or None, instance=user)
 
     if form.is_valid():
         form.save()
-        messages.success(request, 'Informace byly ulozeny!')
+        messages.success(request, 'Informace byly uloženy!')
         return redirect('display_users')
-    else:
-        return render(request, 'user_update.html', {'user': user, 'group': group, 'form': form})
+
+    context = {
+        'user': user,
+        'group': group,
+        'form': form
+    }
+
+    return render(request, 'user_update.html', context)
 
 
 @admin_required
@@ -141,103 +150,77 @@ def user_reset_password(request, info_on_user):
         messages.success(request, 'Heslo bylo zmeneno!')
         return redirect('user_update', info_on_user)
 
-    else:
-        return render(request, 'user_reset_password.html', {'form': form, 'info_on_user': info_on_user})
+    context = {
+        'form': form,
+        'info_on_user': info_on_user
+    }
 
+    return render(request, 'user_reset_password.html', context)
 
-# TODO: hezci moznost odstraneni existujicich kontaktu pacienta pri uprave infa
 
 @admin_required
 def universal_patient_form(request, info_on_user=None):
     if info_on_user:
-        # Handle patient update
         group, first_name, last_name = info_on_user.split('-')
         patient = User.objects.get(first_name=first_name, last_name=last_name).patient_profile
 
-        ContactFormSet = inlineformset_factory(Patient, Patient_contact, form=PatientContactForm, extra=0,
-                                               can_delete=True)
-        MedicationFormSet = inlineformset_factory(Patient, MedicationIntake, form=MedicationIntakeForm, extra=0,
-                                                  can_delete=True)
+        ContactFormSet = inlineformset_factory(Patient, Contact, form=PatientContactForm, extra=0, can_delete=True)
+        MedicationFormSet = inlineformset_factory(Patient, MedicationIntake, form=MedicationIntakeForm, extra=0, can_delete=True)
 
-        if request.method == 'POST':
-            patient_form = UpdatePatientForm(request.POST, instance=patient)
-            contact_formset = ContactFormSet(request.POST, instance=patient, prefix='contacts')
-            medication_formset = MedicationFormSet(request.POST, instance=patient, prefix='medications')
+        patient_form = UpdatePatientForm(request.POST or None, instance=patient)
+        contact_formset = ContactFormSet(request.POST or None, instance=patient, prefix='contacts')
+        medication_formset = MedicationFormSet(request.POST or None, instance=patient, prefix='medications')
 
-            if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
-                with transaction.atomic():
-                    patient = patient_form.save()
+        if all(form.is_valid() for form in (patient_form, contact_formset, medication_formset)):
+            save_patients_info(patient_form, contact_formset, medication_formset)
 
-                    for contact_form in contact_formset:
-                        if contact_form.has_changed():
-                            contact = contact_form.save(commit=False)
-                            contact.patient = patient
-                            contact.save()
+            messages.success(request, 'Klientovi informace byly úspěšně uloženy')
+            return redirect('display_users')
 
-                    for medication_form in medication_formset:
-                        if medication_form.has_changed():
-                            medication = medication_form.save(commit=False)
-                            medication.patient = patient
-                            medication.save()
-
-                contact_formset.save()
-                medication_formset.save()
-
-                messages.success(request, 'Patient information updated successfully.')
-                return redirect('administration')
-            else:
-                messages.error(request, 'There was an error updating the patient information. Please check the form.')
-
-        else:
-            patient_form = UpdatePatientForm(instance=patient)
-            patient_form.initial['date_of_admission'] = patient.date_of_admission.strftime('%Y-%m-%d')
-            patient_form.initial['birthday'] = patient.birthday.strftime('%Y-%m-%d')
-            contact_formset = ContactFormSet(instance=patient, prefix='contacts')
-            medication_formset = MedicationFormSet(instance=patient, prefix='medications')
-
+        patient_form.initial['date_of_admission'] = patient.date_of_admission.strftime('%Y-%m-%d')
+        patient_form.initial['birthday'] = patient.birthday.strftime('%Y-%m-%d')
         creating = False
+
     else:
-        # Handle patient registration
-        ContactFormSet = modelformset_factory(Patient_contact, form=PatientContactForm, extra=0)
+        ContactFormSet = modelformset_factory(Contact, form=PatientContactForm, extra=0)
         MedicationFormSet = modelformset_factory(MedicationIntake, form=MedicationIntakeForm, extra=0)
 
-        if request.method == 'POST':
-            patient_form = PatientForm(request.POST)
-            contact_formset = ContactFormSet(request.POST, prefix='contacts')
-            medication_formset = MedicationFormSet(request.POST, prefix='medications')
+        patient_form = PatientForm(request.POST or None)
+        contact_formset = ContactFormSet(request.POST or None, prefix='contacts')
+        medication_formset = MedicationFormSet(request.POST or None, prefix='medications')
 
-            if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
-                with transaction.atomic():
-                    patient = patient_form.save()
+        if all(form.is_valid() for form in (patient_form, contact_formset, medication_formset)):
+            save_patients_info(patient_form, contact_formset, medication_formset)
 
-                    for contact_form in contact_formset:
-                        if contact_form.has_changed():
-                            contact = contact_form.save(commit=False)
-                            contact.patient = patient
-                            contact.save()
+            messages.success(request, 'Registrace klienta proběhla úspěšně')
+            return redirect('administration')
 
-                    for medication_form in medication_formset:
-                        if medication_form.has_changed():
-                            medication = medication_form.save(commit=False)
-                            medication.patient = patient
-                            medication.save()
-
-                messages.success(request, 'Registrace klienta proběhla úspěšně')
-                return redirect('administration')
-
-        else:
-            patient_form = PatientForm()
-            contact_formset = ContactFormSet(queryset=Patient_contact.objects.none(), prefix='contacts')
-            medication_formset = MedicationFormSet(queryset=MedicationIntake.objects.none(), prefix='medications')
-
+        contact_formset.queryset = Contact.objects.none()
+        medication_formset.queryset = MedicationIntake.objects.none()
         creating = True
 
-    return render(request, 'universal_patient_form.html', {
+    context = {
         'patient_form': patient_form,
         'contact_formset': contact_formset,
         'medication_formset': medication_formset,
         'creating': creating
-    })
+    }
+
+    return render(request, 'universal_patient_form.html', context)
+
+
+def save_patients_info(patient_form, contact_formset, medication_formset):
+    with transaction.atomic():
+        patient = patient_form.save()
+
+        for formset in (contact_formset, medication_formset):
+            for form in formset:
+                if form.has_changed():
+                    instance = form.save(commit=False)
+                    instance.patient = patient
+                    instance.save()
+
+                formset.save()
 
 
 @admin_required
@@ -278,10 +261,15 @@ def edit_shifts(request, pk):
                 shift.save()
 
         formset.save()
-        messages.success(request, 'Informace byly ulozeny!')
+        messages.success(request, 'Informace byly úspěšně uloženy')
         return redirect('shifts')
-    else:
-        return render(request, 'edit_shifts.html', {'caregiver': caregiver, 'formset': formset})
+
+    context = {
+        'caregiver': caregiver,
+        'formset': formset
+    }
+
+    return render(request, 'edit_shifts.html', context)
 
 
 @admin_required
@@ -310,5 +298,10 @@ def edit_patient_activities(request, pk):
         formset.save()
         messages.success(request, 'Informace byly ulozeny!')
         return redirect('patient_activities')
-    else:
-        return render(request, 'edit_patient_activities.html', {'patient': patient, 'formset': formset})
+
+    context = {
+        'patient': patient,
+        'formset': formset
+    }
+
+    return render(request, 'edit_patient_activities.html', context)

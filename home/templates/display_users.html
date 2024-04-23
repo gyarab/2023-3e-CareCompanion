@@ -9,21 +9,25 @@
 </style>    
     <h1>LIST</h1>
 
-    <h5>Klienti</h5>
-    {% for patient in patients %}
-        {% with full_name='klient'|add:'-'|add:patient.first_name|add:'-'|add:patient.last_name %}
-            <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
-        {% endwith %}
-    {% endfor %}
-    <br>
+    {% if patients %}
+    	<h5>Klienti</h5>
+        {% for patient in patients %}
+            {% with full_name='klient'|add:'-'|add:patient.first_name|add:'-'|add:patient.last_name %}
+                <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
+            {% endwith %}
+        {% endfor %}
+        <br>
+    {% endif %}
 
-    <h5>Opatrovnici</h5>
-    {% for caregiver in caregivers %}
-      {% with full_name='opatrovnik'|add:'-'|add:caregiver.first_name|add:'-'|add:caregiver.last_name %}
-            <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
-      {% endwith %}
-    {% endfor %}
-    <br>
+    {% if caregivers %}
+    	<h5>Opatrovníci</h5>
+        {% for caregiver in caregivers %}
+          {% with full_name='opatrovnik'|add:'-'|add:caregiver.first_name|add:'-'|add:caregiver.last_name %}
+                <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ caregiver.first_name }} {{ caregiver.last_name }}</a></p>
+          {% endwith %}
+        {% endfor %}
+        <br>
+    {% endif %}
 
     <h5>Admini</h5>
     {% for admin in admins %}
@@ -34,9 +38,9 @@
     <br>
 
     {% if unfinished_users %}
-    	<h5>Nedokoncene ucty klientu</h5>
+    	<h5>Nedokončené účty klientů</h5>
         {% for unfinished_user in unfinished_users %}
-            <p><a href="{% url 'patient_registration' %}">{{ unfinished_user.first_name }} {{ unfinished_user.last_name }}</a></p>
+            <p><a class="btn btn-secondary uniform-btn" href="{% url 'patient_registration' %}">{{ unfinished_user.first_name }} {{ unfinished_user.last_name }}</a></p>
         {% endfor %}
     {% endif %}
     <p><a href="{% url 'administration' %}" class="btn btn-primary">ZPÁTKY</a></p>

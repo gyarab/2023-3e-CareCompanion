@@ -17,14 +17,14 @@
             </tr>
         </thead>
         <tbody>
-            {% for user_info in users_shift_info %}
+            {% for caregiver_info in caregivers_shift_info %}
             <tr>
-                <td>{{ user_info.first_name }}</td>
-                <td>{{ user_info.last_name }}</td>
-                <td>{% if user_info.on_shift %} Ano {% else %} Ne {% endif %}</td>
-                <td>{% if user_info.on_shift %} Do {{ user_info.shift_end }}
-                    {% elif user_info.no_upc_shifts %} Žádné nadcházející směny nejsou registrované
-                    {% else %} Další směna: {{ user_info.next_shift_date }} od {{ user_info.next_shift_start }} do {{ user_info.next_shift_end }} {% endif %}
+                <td>{{ caregiver_info.first_name }}</td>
+                <td>{{ caregiver_info.last_name }}</td>
+                <td>{% if caregiver_info.on_shift %} Ano {% else %} Ne {% endif %}</td>
+                <td>{% if caregiver_info.on_shift %} Do {{ caregiver_info.shift_end }}
+                    {% elif caregiver_info.no_upc_shifts %} Žádné nadcházející směny nejsou registrované
+                    {% else %} Další směna: {{ caregiver_info.next_shift_date }} od {{ caregiver_info.next_shift_start }} do {{ caregiver_info.next_shift_end }} {% endif %}
                 </td>
             </tr>
             {% endfor %}

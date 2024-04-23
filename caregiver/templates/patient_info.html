@@ -14,7 +14,7 @@
             <p class="card-text">Číslo pokoje: {{ patient.room_number }}</p>
             <p class="card-text">Zdravotní informace: {{ patient.health_info|linebreaks }}</p>
 
-            <h3>Prášky</h3>
+            <h3>Medikace</h3>
             <ul class="list-group">
                 {% for medication_intake in patient.medicationintake_set.all %}
                     <li class="list-group-item">{{ medication_intake.medication }} ({{ medication_intake.when }}, {{ medication_intake.how }})</li>

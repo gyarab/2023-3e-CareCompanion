@@ -7,7 +7,7 @@
     }
 </style>
 
-    <h2>Upravte/pridejte/mazte klientum aktivity</h2>
+    <h2>Upravte/přidejte/mažte klientům aktivity</h2>
     {% for patient in patients %}
     	<p><a class="btn btn-secondary uniform-btn" href="{% url 'edit_patient_activities' patient.pk %}">{{ patient.first_name }} {{ patient.last_name }}</a></p>
     {% endfor %}

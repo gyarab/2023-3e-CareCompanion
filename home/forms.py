@@ -7,11 +7,17 @@ from patient.models import Patient, Contact as Patient_contact, MedicationIntake
 
 
 class RegisterUserForm(UserCreationForm):
-    groups = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
+    GROUP_CHOICES = (
+        ('Patients', 'Klient'),
+        ('Admins', 'Admin'),
+        ('Caregivers', 'Opatrovník'),
+    )
+
+    groups = forms.ChoiceField(
+        choices=GROUP_CHOICES,
         widget=forms.Select,
         required=True,
-        label='Typ uživatele'
+        label='Typ uživatele',
     )
 
     first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
@@ -26,7 +32,8 @@ class RegisterUserForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        group = self.cleaned_data.get('groups')
+        group_name = self.cleaned_data.get('groups')
+        group = Group.objects.get(name=group_name)
         username_lower = self.cleaned_data.get('username').lower()
         user.username = username_lower
 
@@ -44,6 +51,36 @@ class RegisterUserForm(UserCreationForm):
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
+
+
+class UpdateUsersInformationForm(UserChangeForm):
+    password = None
+    first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
+    last_name = forms.CharField(max_length=30, required=True, label='Příjmení')
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username')
+        labels = {
+            'username': 'Uživatelské jméno'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs['class'] = 'form-control'
+        self.fields['last_name'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+
+
+class ResetUserPasswordForm(SetPasswordForm):
+    class Meta:
+        model = User
+        fields = ['new_password1', 'new_password2']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['new_password1'].widget.attrs['class'] = 'form-control'
+        self.fields['new_password2'].widget.attrs['class'] = 'form-control'
 
 
 class PatientForm(forms.ModelForm):
@@ -116,36 +153,6 @@ class MedicationIntakeForm(forms.ModelForm):
         self.fields['medication'].widget.attrs['class'] = 'form-control'
         self.fields['when'].widget.attrs['class'] = 'form-control'
         self.fields['how'].widget.attrs['class'] = 'form-control'
-
-
-class UpdateUsersInformationForm(UserChangeForm):
-    password = None
-    first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
-    last_name = forms.CharField(max_length=30, required=True, label='Příjmení')
-
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'username')
-        labels = {
-            'username': 'Uživatelské jméno'
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-
-
-class ResetUserPasswordForm(SetPasswordForm):
-    class Meta:
-        model = User
-        fields = ['new_password1', 'new_password2']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['new_password1'].widget.attrs['class'] = 'form-control'
-        self.fields['new_password2'].widget.attrs['class'] = 'form-control'
 
 
 class UpdatePatientForm(forms.ModelForm):
