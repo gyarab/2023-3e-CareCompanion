@@ -18,7 +18,7 @@ def caregivers_list(request):
     now = datetime.now()
     users_shift_info = []
 
-    for caregiver in Caregiver.objects.prefetch_related('shift_set'):
+    for caregiver in Caregiver.objects.prefetch_related('shift_set').order_by('user__last_name'):
 
         # Saves the first upcoming/current shift (either today or in the future)
         next_shift = caregiver.shift_set.filter(

@@ -21,7 +21,7 @@ def index(request):
 
 @caregiver_required
 def medical_cards(request):
-    patients = Patient.objects.all()
+    patients = Patient.objects.all().order_by('user__last_name')
     return render(request, 'medical_cards.html', {'patients': patients})
 
 
@@ -89,7 +89,7 @@ def shift_schedule(request):
 @caregiver_required
 def patient_schedules(request):
     now = datetime.now()
-    patients_w_activities = Patient.objects.all().exclude(activity__isnull=True)
+    patients_w_activities = Patient.objects.all().order_by('user__last_name')
     context = {}
     patient_info = []
 

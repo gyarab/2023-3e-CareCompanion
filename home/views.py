@@ -89,7 +89,7 @@ def account_creation(request):
 
 @admin_required
 def display_users(request):
-    users = User.objects.all()
+    users = User.objects.all().order_by('last_name')
 
     patients = []
     caregivers = []
@@ -256,7 +256,7 @@ def delete_user(request, pk):
 
 @admin_required
 def shifts(request):
-    caregivers = Caregiver.objects.all()
+    caregivers = Caregiver.objects.all().order_by('user__last_name')
     return render(request, 'shifts.html', {'caregivers': caregivers})
 
 
@@ -286,7 +286,7 @@ def edit_shifts(request, pk):
 
 @admin_required
 def patient_activities(request):
-    patients = Patient.objects.all()
+    patients = Patient.objects.all().order_by('user__last_name')
     return render(request, 'patient_activities.html', {'patients': patients})
 
 
