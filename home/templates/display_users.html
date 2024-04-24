@@ -29,13 +29,16 @@
         <br>
     {% endif %}
 
-    <h5>Admini</h5>
-    {% for admin in admins %}
-             {% with full_name='admin'|add:'-'|add:admin.first_name|add:'-'|add:admin.last_name %}
-            <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ admin.first_name }} {{ admin.last_name }}</a></p>
-      {% endwith %}
-    {% endfor %}
-    <br>
+
+    {% if admins %}
+        <h5>Admini</h5>
+        {% for admin in admins %}
+                {% with full_name='admin'|add:'-'|add:admin.first_name|add:'-'|add:admin.last_name %}
+                    <p><a class="btn btn-secondary uniform-btn" href="{% url 'user_update' full_name %}">{{ admin.first_name }} {{ admin.last_name }}</a></p>
+                {% endwith %}
+        {% endfor %}
+        <br>
+    {% endif %}
 
     {% if unfinished_users %}
     	<h5>Nedokončené účty klientů</h5>
