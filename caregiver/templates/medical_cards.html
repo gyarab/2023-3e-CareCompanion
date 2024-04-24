@@ -6,12 +6,14 @@
 
 {% block content %}
 
-    <h1 class="text-center">KARTY KLIENTŮ</h1>
+    <h1 class="text-center">Karty klientů</h1>
 
     <div class="container medical-card-container">
-        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names, room number...">
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Hledat podle jména, čísla pokoje...">
         <ul id="myUL">
-            {% for patient in patients %} <!-- todo: ideally make the list alphabetical (preorder on back-end) -->
+            <!-- Projde všechny klienty -->
+            {% for patient in patients %}
+                <!-- Inicializace proměnné 'full_name', kterou vložime do url -->
                 {% with full_name=patient.first_name|add:'-'|add:patient.last_name %}
                     <li><a href="{% url 'patient_info' full_name %}">{{ patient.first_name }} {{ patient.last_name }} <span class="room-number">{{ patient.room_number }}</span></a></li>
                 {% endwith %}

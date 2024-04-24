@@ -28,7 +28,7 @@
                 {% endfor %}
             </ul>
 
-            {# jestli Patient nema zadne observations tak se nic nezobrazi #}
+            <!--Jestli u klienta nejsou žídné postřehy, tak se nic nezobrazí -->
             <h3 class="pt-2">Postřehy o klientovi:</h3>
             {% if not form.instance.observations %}
                 <div id="current-observations" style="display: none;">
@@ -60,11 +60,11 @@
 
 <script>
     document.getElementById("edit-observations").addEventListener("click", function() {
-        {#schova vypsane postrehy#}
+        // Schová vypsané postřehy
         document.getElementById("current-observations").style.display = "none";
-        {#schova button na editovani#}
+        // Schová button na úpravu
         document.getElementById("edit-observations").style.display = "none";
-        {#zobrazi formu#}
+        // Zpbrazí formulář
         document.getElementById("observations-form").style.display = "block";
     });
 </script>

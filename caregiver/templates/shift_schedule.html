@@ -9,10 +9,12 @@
 {% block content %}
 
      <div class="container">
-        <h1 class="text-center my-4">ROZVRH DNE</h1>
+        <h1 class="text-center my-4">Směny</h1>
+         <!-- Jesli má opatrovník nějaké zaregistrované směny -->
         {% if any_shifts %}
+             <!-- Jesli je směna dnes, zobrazí se oddělěně -->
             {% if today %}
-                <h2>Vase dnešní směna</h2>
+                <h2>Vaše dnešní směna</h2>
                 <div class="card bg-info mb-3">
                     <div class="card-header">
                         <h4 class="mb-0">Informace o vaší dnešní směně</h4>
@@ -24,6 +26,7 @@
 
             {% endif %}
 
+            <!-- Ostatní nadcházející směny -->
             {% if upcoming_shifts_info %}
                 <h2>Vaše nadchazející směny</h2>
                 {% for shift_info in upcoming_shifts_info %}
@@ -37,9 +40,9 @@
                         </div>
                 {% endfor %}
             {% endif %}
+        <!-- Jesli nemá opatrovník nějaké zaregistrované směny -->
         {% else %}
-            <h4>Nemáte v systému zadané žádné směny</h4>
-            <br>
+            <p class="text-center">V systému nemáte zadané žádné kontakty</p>
         {% endif %}
 
         <div class="container-fluid text-center">

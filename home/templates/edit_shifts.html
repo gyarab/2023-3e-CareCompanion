@@ -8,19 +8,23 @@ hr.solid {
   border-top: 3px solid #bbb;
 }
 </style>
-
+    <!-- Celé jméno opatrovníka -->
     <h2>{{ caregiver.first_name }} {{ caregiver.last_name }}</h2>
 
+    <!-- Formulář pro úpravu směn -->
     <form action="" method="POST">
         {% csrf_token %}
         <div id="shifts-formset" data-form-prefix="shifts" class="formset">
             {{ formset.management_form }}
+            <!-- Schovaná prázdná forma pro JavaScript klonování -->
             <div class="empty-form" style="display: none;">
                 {{ formset.empty_form }}
             </div>
+             <!-- Projde všechny formsets a zobrazí je -->
             {% for form in formset %}
                 <div class="formset-shifts">
                     {{ form.as_p }}
+                     <!-- Schovaný input pro vložení caregiver ID -->
                     <input type="hidden" name="caregiver" value="{{ caregiver.id }}">
                     <hr class="solid">
                 </div> 
@@ -33,7 +37,9 @@ hr.solid {
         <a href="{% url 'shifts' %}" class="btn btn-primary">ZPÁTKY</a></p>
     </form>
 
+    <!-- JavaScript -->
     <script>
+         // Funkce na přidání nového formsetu
         function addFormsetForm(formsetPrefix) {
             const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
             let totalForms = parseInt(managementForm.val());
@@ -44,14 +50,23 @@ hr.solid {
 
             const newForm = emptyForm.replace(/__prefix__/g, totalForms);
             const formsetContainer = $(`#${formsetPrefix}-formset`);
+            // Kód, který se vloží do html:
+            // <div class="mb-3 formset-${formsetPrefix}">
+            //     ${newForm}
+            //     <button type="button" class="btn btn-danger btn-sm delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button>
+            // </div>
+
             formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button></div>`);
         }
 
+        // Funkce pro smazání formsetu
         function deleteFormsetForm(btn) {
             $(btn).closest('.formset-' + $(btn).parent().parent().data('form-prefix')).remove();
         }
 
+        // Přiřazuje funkce btns
         $(document).ready(function() {
+            // Zavolá fci na přidání formsetu
             $('#add-shifts').on('click', function() {
                 addFormsetForm('shifts');
             });

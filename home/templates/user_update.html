@@ -58,6 +58,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <p><button type="button" class="btn btn-danger" onclick="redirectToPassword()">Změna hesla</button>
+            <!-- Jestli je rozkliknutý uživatel klient, zobrazí se tlačítko na úpravu klientského infa -->
             {% if group == 'klient' %}
         	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Změna infa</button>
             {% endif %}
@@ -67,12 +68,15 @@
     </form>
     </div>
 
+    <!-- JavaScript -->
     <script>
-    function redirectToPassword() {
-        window.location.replace(window.location + 'zmena-hesla/');
-    }
-    function redirectToInfo() {
-        window.location.replace(window.location + 'zmena-infa/');
-    }
+        // Přidá současné url 'zmena-hesla/' -> přesměrování na resetování hesla konkrétního uživatele
+        function redirectToPassword() {
+            window.location.replace(window.location + 'zmena-hesla/');
+        }
+        // Přidá současné url 'zmena-infa/' -> přesměrování na úpravu infa klientů
+        function redirectToInfo() {
+            window.location.replace(window.location + 'zmena-infa/');
+        }
     </script>
 {% endblock %}

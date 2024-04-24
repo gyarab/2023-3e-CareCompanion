@@ -10,35 +10,41 @@
 
 <form method="post" enctype="multipart/form-data" id="patient-registration-form" autocomplete="off">
     {% csrf_token %}
-
+     <!-- Formulář pro klientské info -->
     {{ patient_form.as_p }}
 
     <h3>Kontakty</h3>
-
+    <!-- Formulář pro konktakty -->
     <div id="contacts-formset" data-form-prefix="contacts" class="formset">
         {{ contact_formset.management_form }}
+        <!-- Schovaná prázdná forma pro JavaScript klonování -->
         <div class="empty-form" style="display: none;">
             {{ contact_formset.empty_form }}
         </div>
+         <!-- Projde všechny formsets a zobrazí je -->
         {% for form in contact_formset %}
             <div class="formset-contacts">
                 {{ form.as_p }}
-                <br>
+                <!-- Schovaný input pro vložení patient ID -->
+                <input type="hidden" name="patient" value="{{ patient.id }}">
             </div>
         {% endfor %}
     </div>
     <button type="button" id="add-contact" class="add-formset-item btn btn-secondary mb-2">Přidat kontakt</button>
 
     <h3>Medikace</h3>
-
+    <!-- Formulář pro medikace -->
     <div id="medications-formset" data-form-prefix="medications" class="formset">
         {{ medication_formset.management_form }}
         <div class="empty-form" style="display: none;">
             {{ medication_formset.empty_form }}
         </div>
+        <!-- Schovaná prázdná forma pro JavaScript klonování -->
         {% for form in medication_formset %}
             <div class="formset-medications">
                 {{ form.as_p }}
+                <!-- Schovaný input pro vložení patient ID -->
+                <input type="hidden" name="patient" value="{{ patient.id }}">
             </div>
         {% endfor %}
     </div>
@@ -47,13 +53,15 @@
      <input type="submit" value="Uložit" class="btn btn-secondary mb-2">
 </form>
 
+<!-- JavaScript -->
 <script>
-
+    // Jestli je klient vytvářen: při načtení stránky formuláře resetuju, aby byly prázdné
     {% if creating %}
         document.addEventListener('DOMContentLoaded', function() {
         resetForm();
     });
 
+    // Resetuje formuláře
     function resetForm() {
         $('#patient-registration-form')[0].reset();
         $('.formset-contacts').empty();
@@ -61,6 +69,7 @@
     }
     {% endif %}
 
+     // Funkce na přidání nového formsetu
     function addFormsetForm(formsetPrefix) {
         const managementForm = $(`#${formsetPrefix}-formset [id$='-TOTAL_FORMS']`);
         let totalForms = parseInt(managementForm.val());
@@ -71,26 +80,29 @@
 
         const newForm = emptyForm.replace(/__prefix__/g, totalForms);
         const formsetContainer = $(`#${formsetPrefix}-formset`);
+         // Kód, který se vloží do html:
+         // <div class="mb-3 formset-${formsetPrefix}">
+         //     ${newForm}
+         //     <button type="button" class="btn btn-danger btn-sm delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button>
+         // </div>
 
-        {#<div class="formset-${formsetPrefix}">#}
-        {#    ${newForm}#}
-        {#    <button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button>#}
-        {#</div>#}
         formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button></div>`);
 
     }
 
+     // Funkce pro smazání formsetu
     function deleteFormsetForm(btn) {
         $(btn).closest('.formset-' + $(btn).parent().parent().data('form-prefix')).remove();
     }
 
-
+    // Přiřazuje funkce btns
     $(document).ready(function() {
-
+        // Zavolá fci na přidání formsetu kontaktů
         $('#add-contact').on('click', function() {
             addFormsetForm('contacts');
         });
 
+        // Zavolá fci na přidání formsetu medikací
         $('#add-medication').on('click', function() {
             addFormsetForm('medications');
         });

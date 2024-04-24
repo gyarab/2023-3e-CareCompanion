@@ -6,6 +6,9 @@ from caregiver.models import Shift
 from patient.models import Patient, Contact as Patient_contact, MedicationIntake, Activity
 
 
+# Vytvoření všech formulářů, které se v projektu používají
+
+# Univerzální formulář pro ModelForm, která bootstrapuje všechny jeho fields
 class DefaultBootstrapForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,6 +16,7 @@ class DefaultBootstrapForm(forms.ModelForm):
             self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
+# Formulář pro registraci uživatelského účtu
 class RegisterUserForm(UserCreationForm):
     GROUP_CHOICES = (
         ('Patients', 'Klient'),
@@ -40,7 +44,9 @@ class RegisterUserForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         group_name = self.cleaned_data.get('groups')
+        # Z vyplňeného formuláře získáme skupinu (typ) uživatele, který byl vytvořen
         group = Group.objects.get(name=group_name)
+        # Zadané username převedeme na malá písmena
         username_lower = self.cleaned_data.get('username').lower()
         user.username = username_lower
 
@@ -49,12 +55,14 @@ class RegisterUserForm(UserCreationForm):
             user.groups.set([group])
         return user
 
+    # Nevyužijeme 'DefaultBootstrapForm', protože tato forma není třídy 'forms.ModelForm'
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name in self.fields:
             self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
+# Formulář pro úpravu informací již vytvořených uživatelských účtů
 class UpdateUsersInformationForm(UserChangeForm):
     password = None
     first_name = forms.CharField(max_length=30, required=True, label='Křestní jméno')
@@ -73,6 +81,7 @@ class UpdateUsersInformationForm(UserChangeForm):
             self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
+# Formulář pro resetování hesla
 class ResetUserPasswordForm(SetPasswordForm):
     class Meta:
         model = User
@@ -84,8 +93,10 @@ class ResetUserPasswordForm(SetPasswordForm):
         self.fields['new_password2'].widget.attrs['class'] = 'form-control'
 
 
+# Formulář pro vytvoření klienta - modelu Patient
 class PatientForm(DefaultBootstrapForm):
     user = forms.ModelChoiceField(
+        # Nabízení uživatelé jsou ti, kteří mají skupinu 'Patients' a ještě nemají přiřazený vlastní model Patient
         queryset=User.objects.filter(groups__name='Patients').exclude(patient_profile__isnull=False),
         widget=forms.Select,
         required=True,
@@ -112,6 +123,7 @@ class PatientForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro klientské kontakty
 class PatientContactForm(DefaultBootstrapForm):
     class Meta:
         model = Patient_contact
@@ -123,6 +135,7 @@ class PatientContactForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro klientskou medikaci
 class MedicationIntakeForm(DefaultBootstrapForm):
     class Meta:
         model = MedicationIntake
@@ -134,6 +147,7 @@ class MedicationIntakeForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro úpravu existujících klientů
 class UpdatePatientForm(DefaultBootstrapForm):
     class Meta:
         model = Patient
@@ -154,6 +168,7 @@ class UpdatePatientForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro postřehy o klientovi
 class ObservationForm(DefaultBootstrapForm):
     class Meta:
         model = Patient
@@ -166,6 +181,7 @@ class ObservationForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro klientské rozvrhy
 class PatientActivityForm(DefaultBootstrapForm):
     class Meta:
         model = Activity
@@ -181,6 +197,7 @@ class PatientActivityForm(DefaultBootstrapForm):
         }
 
 
+# Formulář pro směny opatrovníků
 class CaregiverShiftForm(DefaultBootstrapForm):
     class Meta:
         model = Shift

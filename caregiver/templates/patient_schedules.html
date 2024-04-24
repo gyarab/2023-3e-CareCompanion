@@ -6,10 +6,9 @@
      <a href="{% url 'index_caregiver' %}"><img src="{% static 'CareLogo.png' %}" alt="Italian Trulli"></a>
 {% endblock %}
 
-<!-- todo: test using multiple users (now i see just 1  accordion since i have only 1 user) -->
 {% block content %}
     <div class="container">
-        <h1 class="mt-4 text-center">Rozvrhy Klientů</h1>
+        <h1 class="mt-4 text-center">Rozvrhy klientů</h1>
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <div id="contactsAccordion">
@@ -35,7 +34,9 @@
                                         </div>
                                     {% endif %}
                                     {% if info.other_activities %}
+                                        <!-- Uskupení podle datumu -->
                                         {% regroup info.other_activities by activity.date as grouped_activities %}
+                                        <!-- Výpis rozvrhů se stejným datumem pod jedním nadpisem -->
                                         {% for date_activities in grouped_activities %}
                                             {% if date_activities.grouper %}
                                                 <div class="card bg-light mb-3">
