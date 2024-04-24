@@ -4,7 +4,7 @@ from babel.dates import format_date
 
 from caregiver.models import Caregiver
 from home.decorators import patient_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 @patient_required
@@ -16,18 +16,22 @@ def index(request):
 @patient_required
 def caregivers_list(request):
     now = datetime.now()
+    yesterday = now - timedelta(days=1)
     caregivers_shift_info = []
 
     for caregiver in Caregiver.objects.prefetch_related('shift_set').order_by('user__last_name'):
 
         next_shift = caregiver.shift_set.annotate(
+                # returne overnight shifty, ktere zacly vcera a jeste neskoncily nebo ty, ktere zacinaji dnes
                 is_overnight=ExpressionWrapper(
-                    Q(end__lt=F('start')),
+                    (Q(date_of_shift=yesterday) & Q(start__gt=F('end')) & Q(end__gt=now.time())) |
+                    (Q(date_of_shift=now.date()) & Q(start__gt=F('end'))),
                     output_field=BooleanField()
                 )
             ).filter(
                 Q(date_of_shift__gt=now.date()) |
-                (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
+                Q(is_overnight=True) |
+                (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))
             ).order_by('date_of_shift', 'start').first()
 
         if next_shift:

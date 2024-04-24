@@ -6,6 +6,13 @@ from caregiver.models import Shift
 from patient.models import Patient, Contact as Patient_contact, MedicationIntake, Activity
 
 
+class DefaultBootstrapForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
+
+
 class RegisterUserForm(UserCreationForm):
     GROUP_CHOICES = (
         ('Patients', 'Klient'),
@@ -42,15 +49,10 @@ class RegisterUserForm(UserCreationForm):
             user.groups.set([group])
         return user
 
-    # Bootstrap
     def __init__(self, *args, **kwargs):
-        super(RegisterUserForm, self).__init__(*args, **kwargs)
-        self.fields['groups'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['username'].widget.attrs['class'] = 'form-control'
-        self.fields['password1'].widget.attrs['class'] = 'form-control'
-        self.fields['password2'].widget.attrs['class'] = 'form-control'
+        super().__init__(*args, **kwargs)
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
 class UpdateUsersInformationForm(UserChangeForm):
@@ -67,9 +69,8 @@ class UpdateUsersInformationForm(UserChangeForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['username'].widget.attrs['class'] = 'form-control'
+        for field_name in self.fields:
+            self.fields[field_name].widget.attrs['class'] = 'form-control'
 
 
 class ResetUserPasswordForm(SetPasswordForm):
@@ -83,7 +84,7 @@ class ResetUserPasswordForm(SetPasswordForm):
         self.fields['new_password2'].widget.attrs['class'] = 'form-control'
 
 
-class PatientForm(forms.ModelForm):
+class PatientForm(DefaultBootstrapForm):
     user = forms.ModelChoiceField(
         queryset=User.objects.filter(groups__name='Patients').exclude(patient_profile__isnull=False),
         widget=forms.Select,
@@ -110,18 +111,8 @@ class PatientForm(forms.ModelForm):
             'observations': 'Postřehy opatrovníku nebo informace ke klientovi poskytnuté blízkými nebo jím samotným',
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['user'].widget.attrs['class'] = 'form-control'
-        self.fields['user'].widget.attrs['label'] = 'Uzivatel'
-        self.fields['date_of_admission'].widget.attrs['class'] = 'form-control'
-        self.fields['room_number'].widget.attrs['class'] = 'form-control'
-        self.fields['birthday'].widget.attrs['class'] = 'form-control'
-        self.fields['health_info'].widget.attrs['class'] = 'form-control'
-        self.fields['observations'].widget.attrs['class'] = 'form-control'
 
-
-class PatientContactForm(forms.ModelForm):
+class PatientContactForm(DefaultBootstrapForm):
     class Meta:
         model = Patient_contact
         fields = ['relationship', 'name', 'phone_number']
@@ -131,14 +122,8 @@ class PatientContactForm(forms.ModelForm):
             'phone_number': 'Telefonní číslo'
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['relationship'].widget.attrs['class'] = 'form-control'
-        self.fields['name'].widget.attrs['class'] = 'form-control'
-        self.fields['phone_number'].widget.attrs['class'] = 'form-control'
 
-
-class MedicationIntakeForm(forms.ModelForm):
+class MedicationIntakeForm(DefaultBootstrapForm):
     class Meta:
         model = MedicationIntake
         fields = ['medication', 'when', 'how']
@@ -148,14 +133,8 @@ class MedicationIntakeForm(forms.ModelForm):
             'how': 'Jak'
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['medication'].widget.attrs['class'] = 'form-control'
-        self.fields['when'].widget.attrs['class'] = 'form-control'
-        self.fields['how'].widget.attrs['class'] = 'form-control'
 
-
-class UpdatePatientForm(forms.ModelForm):
+class UpdatePatientForm(DefaultBootstrapForm):
     class Meta:
         model = Patient
         fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
@@ -174,16 +153,8 @@ class UpdatePatientForm(forms.ModelForm):
             'observations': 'Postřehy opatrovníku nebo informace ke klientovi poskytnuté blízkými nebo jím samotným',
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['date_of_admission'].widget.attrs['class'] = 'form-control'
-        self.fields['room_number'].widget.attrs['class'] = 'form-control'
-        self.fields['birthday'].widget.attrs['class'] = 'form-control'
-        self.fields['health_info'].widget.attrs['class'] = 'form-control'
-        self.fields['observations'].widget.attrs['class'] = 'form-control'
 
-
-class ObservationForm(forms.ModelForm):
+class ObservationForm(DefaultBootstrapForm):
     class Meta:
         model = Patient
         fields = ['observations']
@@ -191,15 +162,11 @@ class ObservationForm(forms.ModelForm):
             'observations': ''
         }
         help_texts = {
-            'observations': 'Jakákoliv vypozorovaná zajímavá fakta ke klientovi (např. zájmy, oblícená témata a aktivty atd.)'
+            'observations': 'Jakákoliv vypozorovaná zajímavá fakta ke klientovi (např. zájmy, oblíbená témata, aktivity..)'
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['observations'].widget.attrs['class'] = 'form-control'
 
-
-class PatientActivityForm(forms.ModelForm):
+class PatientActivityForm(DefaultBootstrapForm):
     class Meta:
         model = Activity
         fields = ['date', 'time', 'description']
@@ -213,14 +180,8 @@ class PatientActivityForm(forms.ModelForm):
             'time': forms.TimeInput(attrs={'type': 'time'})
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['date'].widget.attrs['class'] = 'form-control'
-        self.fields['time'].widget.attrs['class'] = 'form-control'
-        self.fields['description'].widget.attrs['class'] = 'form-control'
 
-
-class CaregiverShiftForm(forms.ModelForm):
+class CaregiverShiftForm(DefaultBootstrapForm):
     class Meta:
         model = Shift
         fields = ['date_of_shift', 'start', 'end']
@@ -234,9 +195,3 @@ class CaregiverShiftForm(forms.ModelForm):
             'start': forms.TimeInput(attrs={'type': 'time'}),
             'end': forms.TimeInput(attrs={'type': 'time'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['date_of_shift'].widget.attrs['class'] = 'form-control'
-        self.fields['start'].widget.attrs['class'] = 'form-control'
-        self.fields['end'].widget.attrs['class'] = 'form-control'

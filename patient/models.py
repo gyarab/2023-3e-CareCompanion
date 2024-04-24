@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from datetime import datetime
-
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='patient_profile')

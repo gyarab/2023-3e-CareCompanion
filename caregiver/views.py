@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from babel.dates import format_date
 
 from django.db.models import Q, F, ExpressionWrapper, BooleanField
@@ -49,17 +49,20 @@ def patient_info(request, full_name_of_patient):
 @caregiver_required
 def shift_schedule(request):
     now = datetime.now()
+    yesterday = now - timedelta(days=1)
     caregiver = request.user.caregiver_profile
     context = {'caregiver': caregiver}
 
     shifts_to_display = caregiver.shift_set.annotate(
         is_overnight=ExpressionWrapper(
-            Q(end__lt=F('start')),
+            (Q(date_of_shift=yesterday) & Q(start__gt=F('end')) & Q(end__gt=now.time())) |
+            (Q(date_of_shift=now.date()) & Q(start__gt=F('end'))),
             output_field=BooleanField()
         )
     ).filter(
         Q(date_of_shift__gt=now.date()) |
-        (Q(date_of_shift=now.date()) & (Q(end__gt=now.time()) | Q(is_overnight=True)))
+        Q(is_overnight=True) |
+        (Q(date_of_shift=now.date()) & Q(end__gt=now.time()))
     ).order_by('date_of_shift', 'start')
 
     delete_from_database(caregiver.shift_set.filter(caregiver=caregiver), shifts_to_display)
@@ -71,7 +74,7 @@ def shift_schedule(request):
         shift_end = datetime.combine(soonest_shift.date_of_shift, soonest_shift.end)
 
         # smeny dnes (probihaji nebo jeste budou)
-        if shift_start <= now <= shift_end or soonest_shift.date_of_shift == now.date():
+        if shift_start <= now <= shift_end or soonest_shift.is_overnight_shift():
             context.update({
                 'today': True,
                 'shift_start': shift_start.time,

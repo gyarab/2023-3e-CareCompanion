@@ -27,7 +27,7 @@
             </div>
         {% endfor %}
     </div>
-    <button type="button" id="add-contact">Přidat kontakt</button>
+    <button type="button" id="add-contact" class="add-formset-item btn btn-secondary mb-2">Přidat kontakt</button>
 
     <h3>Medikace</h3>
 
@@ -42,9 +42,9 @@
             </div>
         {% endfor %}
     </div>
-    <button type="button" id="add-medication">Přidat medikaci</button>
-
-    <button type="submit" id="register-patient-btn">Uložit</button>
+    <button type="button" id="add-medication" class="add-formset-item btn btn-secondary mb-2">Přidat medikaci</button>
+    <br>
+     <input type="submit" value="Uložit" class="btn btn-secondary mb-2">
 </form>
 
 <script>
@@ -74,9 +74,9 @@
 
         {#<div class="formset-${formsetPrefix}">#}
         {#    ${newForm}#}
-        {#    <button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button>#}
+        {#    <button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button>#}
         {#</div>#}
-        formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item" onclick="deleteFormsetForm(this)">Delete</button></div>`);
+        formsetContainer.append(`<div class="formset-${formsetPrefix}">${newForm}<button type="button" class="delete-formset-item btn btn-danger mb-2" onclick="deleteFormsetForm(this)">Delete</button></div>`);
 
     }
 
