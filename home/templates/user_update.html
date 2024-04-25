@@ -57,14 +57,16 @@
         <form action="{{ request.path }}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <p><button type="button" class="btn btn-danger" onclick="redirectToPassword()">Změna hesla</button>
+        <p>
             <!-- Jestli je rozkliknutý uživatel klient, zobrazí se tlačítko na úpravu klientského infa -->
             {% if group == 'klient' %}
         	    <button type="button" class="btn btn-success" onclick="redirectToInfo()">Změna infa</button>
             {% endif %}
-        <input type="submit" value="Uložit" class="btn btn-secondary">
-        <a href="{% url 'display_users' %}" class="btn btn-primary">ZPÁTKY</a></p>
-        <p><a class="btn btn-warning btn-warning2" href="{% url 'delete_user' user.pk %}">Smazat účet</a></p>
+            <button type="button" class="btn btn-danger" onclick="redirectToPassword()">Změna hesla</button>
+            <a class="btn btn-warning btn-warning2" href="{% url 'delete_user' user.pk %}">Smazat účet</a>
+        </p>
+        <p><input type="submit" value="Uložit" class="btn btn-secondary"></p>
+        <p><a href="{% url 'display_users' %}" class="btn btn-primary">ZPÁTKY</a></p>
     </form>
     </div>
 

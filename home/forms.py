@@ -105,14 +105,13 @@ class PatientForm(DefaultBootstrapForm):
 
     class Meta:
         model = Patient
-        fields = ['user', 'date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
+        fields = ['user', 'room_number', 'birthday', 'health_info', 'observations']
         widgets = {
             'user': forms.Select(),
             'date_of_admission': forms.DateInput(attrs={'type': 'date'}),
             'birthday': forms.DateInput(attrs={'type': 'date'})
         }
         labels = {
-            'date_of_admission': 'Datum přijetí',
             'room_number': 'Číslo pokoje',
             'birthday': 'Datum narození',
             'health_info': 'Informace o zdraví',
@@ -151,9 +150,8 @@ class MedicationIntakeForm(DefaultBootstrapForm):
 class UpdatePatientForm(DefaultBootstrapForm):
     class Meta:
         model = Patient
-        fields = ['date_of_admission', 'room_number', 'birthday', 'health_info', 'observations']
+        fields = ['room_number', 'birthday', 'health_info', 'observations']
         widgets = {
-            'date_of_admission': forms.DateInput(attrs={'type': 'date'}),
             'birthday': forms.DateInput(attrs={'type': 'date'})
         }
         labels = {

@@ -17,7 +17,7 @@
             <h3>Medikace</h3>
             <ul class="list-group">
                 {% for medication_intake in patient.medicationintake_set.all %}
-                    <li class="list-group-item">{{ medication_intake.medication }} ({{ medication_intake.when }}, {{ medication_intake.how }})</li>
+                    <li class="list-group-item">{{ medication_intake.medication }} ({{ medication_intake.get_when_display }}, {{ medication_intake.get_how_display }})</li>
                 {% endfor %}
             </ul>
 

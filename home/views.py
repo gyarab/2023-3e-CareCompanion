@@ -190,16 +190,35 @@ def universal_patient_form(request, info_on_user=None):
         contact_formset = ContactFormSet(request.POST or None, instance=patient, prefix='contacts')
         medication_formset = MedicationFormSet(request.POST or None, instance=patient, prefix='medications')
 
-        # Jestli jsou všechny formuláře validní (admin se snaži něco uložit), zavolá se funkce na ukládání infa klienta
-        if all(form.is_valid() for form in (patient_form, contact_formset, medication_formset)):
-            save_patients_info(patient_form, contact_formset, medication_formset)
+        # Jestli jsou všechny formuláře validní (admin se snaži něco uložit), všechny se uloží
+        if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
+            with transaction.atomic():
+                patient = patient_form.save()
+
+                # Projde oba formsets kontakty a medikace
+                # Podmínky .has_changed() kontrolují zda se formset nějakým způsobem nezměnil
+                # V případě těhle formsets (konktakty a medikace) máme možnost přidávat nové formsets
+                # Taková akce by triggrovala tuto podmínku a uložila 'nový' formset správně
+                for contact_form in contact_formset:
+                    if contact_form.has_changed():
+                        contact = contact_form.save(commit=False)
+                        contact.patient = patient
+                        contact.save()
+
+                for medication_form in medication_formset:
+                    if medication_form.has_changed():
+                        medication = medication_form.save(commit=False)
+                        medication.patient = patient
+                        medication.save()
+
+            contact_formset.save()
+            medication_formset.save()
 
             messages.success(request, 'Klientovi informace byly úspěšně uloženy')
             return redirect('display_users')
 
-        # V případě, že se stránka teprve načítá (nic se neukládá), se správně zformátují datumy,
-        # aby se daly vložit do formuláře
-        patient_form.initial['date_of_admission'] = patient.date_of_admission.strftime('%Y-%m-%d')
+        # V případě, že se stránka teprve načítá (nic se neukládá), se správně zformátuje datum,
+        # aby se dal vložit do formuláře
         patient_form.initial['birthday'] = patient.birthday.strftime('%Y-%m-%d')
         creating = False
 
@@ -212,8 +231,28 @@ def universal_patient_form(request, info_on_user=None):
         contact_formset = ContactFormSet(request.POST or None, prefix='contacts')
         medication_formset = MedicationFormSet(request.POST or None, prefix='medications')
 
-        if all(form.is_valid() for form in (patient_form, contact_formset, medication_formset)):
-            save_patients_info(patient_form, contact_formset, medication_formset)
+        if patient_form.is_valid() and contact_formset.is_valid() and medication_formset.is_valid():
+            with transaction.atomic():
+                patient = patient_form.save()
+
+                # Projde oba formsets kontakty a medikace
+                # Podmínky .has_changed() kontrolují zda se formset nějakým způsobem nezměnil
+                # V případě těhle formsets (konktakty a medikace) máme možnost přidávat nové formsets
+                # Taková akce by triggrovala tuto podmínku a uložila 'nový' formset správně
+                for contact_form in contact_formset:
+                    if contact_form.has_changed():
+                        contact = contact_form.save(commit=False)
+                        contact.patient = patient
+                        contact.save()
+
+                for medication_form in medication_formset:
+                    if medication_form.has_changed():
+                        medication = medication_form.save(commit=False)
+                        medication.patient = patient
+                        medication.save()
+
+            contact_formset.save()
+            medication_formset.save()
 
             messages.success(request, 'Registrace klienta proběhla úspěšně')
             return redirect('administration')
@@ -230,24 +269,6 @@ def universal_patient_form(request, info_on_user=None):
     }
 
     return render(request, 'universal_patient_form.html', context)
-
-
-# Po jednom ukládá všechny formuláře, které se týkají klienta - klientské info, kontakty, medikace
-def save_patients_info(patient_form, contact_formset, medication_formset):
-    with transaction.atomic():
-        patient = patient_form.save()
-
-        for formset in (contact_formset, medication_formset):
-            for form in formset:
-                # Tato podmínka .has_changed() kontroluje zda se formset nějakým způsobem nezměnil
-                # V případě těhle formsets (konktakty a medikace) máme možnost přidávat nové formsets
-                # Taková akce by triggrovala tuto podmínku a uložila 'nový' formset správně
-                if form.has_changed():
-                    instance = form.save(commit=False)
-                    instance.patient = patient
-                    instance.save()
-
-                formset.save()
 
 
 # Smazání konkrétního uživatele
@@ -278,7 +299,7 @@ def shifts(request):
 # Možnost úpravy a mazání již uložených směn a přidání nových
 @admin_required
 def edit_shifts(request, pk):
-    # Díky rimary key z url zjistíme opatrovníka i všechny jeho směny
+    # Díky primary key z url zjistíme opatrovníka i všechny jeho směny
     caregiver = Caregiver.objects.get(pk=pk)
     shifts = Shift.objects.all().filter(caregiver=caregiver)
 

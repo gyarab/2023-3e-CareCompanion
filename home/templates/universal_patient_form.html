@@ -51,6 +51,10 @@
     <button type="button" id="add-medication" class="add-formset-item btn btn-secondary mb-2">Přidat medikaci</button>
     <br>
      <input type="submit" value="Uložit" class="btn btn-secondary mb-2">
+     {% if not creating %}
+     	<br>
+        <p><a href="{% url 'display_users' %}" class="btn btn-primary">ZPÁTKY</a></p>
+     {% endif %}
 </form>
 
 <!-- JavaScript -->

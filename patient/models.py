@@ -6,7 +6,6 @@ from django.db import models
 class Patient(models.Model):
     # Vztah jeden-na-jednoho s modelem User
     user = models.OneToOneField(User, on_delete=models.CASCADE, default='', related_name='patient_profile')
-    date_of_admission = models.DateField()
     room_number = models.IntegerField()
     birthday = models.DateField()
     health_info = models.TextField()
@@ -60,7 +59,8 @@ class Contact(models.Model):
     )
     relationship = models.CharField(max_length=20, choices=RELATIONSHIP_CHOICES)
     name = models.CharField(max_length=25)
-    phone_number = models.IntegerField(null=True)
+    # Model phone_number je CharField z důvodu hezčího zobrazení na frontendu
+    phone_number = models.CharField(null=True, max_length=15)
     # Asociace kontaktu s klientem
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
 
@@ -79,10 +79,10 @@ class MedicationIntake(models.Model):
     when = models.CharField(max_length=20, choices=WHEN_CHOICES)
 
     HOW_CHOICES = (
-        ('pred jidlem', 'Před jídlem'),
-        ('s jidlem', 'S jídlem'),
-        ('po jidle', 'Po jídle'),
-        ('jine', 'Jiné'),
+        ('pred jidlem', 'před jídlem'),
+        ('s jidlem', 's jídlem'),
+        ('po jidle', 'po jídle'),
+        ('jine', 'jiné'),
     )
     how = models.CharField(max_length=20, choices=HOW_CHOICES)
     # Asociace medikace s klientem
