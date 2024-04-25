@@ -1,4 +1,4 @@
-   .tile {
+   .tile { /* tile css genereted using chat-gpt and later edited. prompt used: "using bootstrap give me basic layout for a menu cosnising of tiles"*/
       border: 1px solid #ccc;
       margin-bottom: 20px;
       text-align: center;
@@ -118,13 +118,6 @@
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        /*
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        apply if we want the map to be centred on the page
-         */
     }
 
     h1 .map-h1 {
